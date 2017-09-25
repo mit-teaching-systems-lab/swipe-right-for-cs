@@ -1,5 +1,25 @@
-.App {
+.Title {
   text-align: center;
+  background-color: lime;
+}
+
+.Instructions-header{
+  text-align: center;
+  background-color: lime;
+  height: 50px;
+  color: purple;
+  padding: 20px;
+  font-size: 140%;
+
+}
+
+.Instructions-body{
+  background-color: lime;
+  padding: 20px;
+  height: 400px;
+  font-size: 100%;
+  color: purple;
+
 }
 
 .App-logo {
@@ -8,17 +28,33 @@
 }
 
 .App-header {
-  background-color: #222;
+  background-color: lime;
   height: 150px;
   padding: 20px;
-  color: white;
+  color: red;
 }
 
 .App-intro {
-  font-size: large;
+  font-size: 600%;
+  text-align: center;
+  background-color: lime;
+  color: red;
+
 }
 
-@keyframes App-logo-spin {
+p {
+  font-size: 100%;
+}
+
+button{
+  font-size:100%;
+  text-align: center;
+  background-color: lime;
+
+
+}
+
+/* @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
+} */
