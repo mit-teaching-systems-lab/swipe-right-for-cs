@@ -19,30 +19,18 @@ class App extends Component{
     if (this.state.page === 0) {
       return <Title onDone = {this.onPageChange.bind(this)} />; 
     }
-    else {
-      console.log("Hello World");
 
       return <Instructions OnDone = {this.onPageChange.bind(this)} />;
     }
   }
-}
+
 
 class Title extends Component {
 
-  newState() {
-    console.log("Hello World");
-  }
 
   render() {
-    /*if (this.state)*/
     return (
       <div className="Title">
-        {/*
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>cheesy first change</h2> -->
-        </div> 
-        */}
 
         <p className="App-intro">
           Swipe Right for CS!    
@@ -77,16 +65,6 @@ class Instructions extends Component {
 
   }
 
-}
-
-class Profile extends Component{
-  render(){
-    return(
-
-      <button onClick = {this.props.onDone} > OKAY </button>
-
-       )
-  }
 }
 
 
