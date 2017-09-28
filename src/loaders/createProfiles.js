@@ -18,7 +18,11 @@ function imageFor(label) {
 
 // Take profile templates, and the set of manipulations and zip them together
 // into concrete profiles for a game.
+//
+// Returns no students on input array length mismatch.
 function createProfiles(profileTemplates, manipulations) {
+  if (profileTemplates.length !== manipulations.length) return [];
+
   return _.zip(profileTemplates, manipulations).map(([profileTemplate, manipulation]) => {
     return {
       profileName: manipulation.name,

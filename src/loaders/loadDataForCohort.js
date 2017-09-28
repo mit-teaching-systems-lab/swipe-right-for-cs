@@ -18,7 +18,6 @@ function parseAndReturn(workshopCode, texts) {
   const [profileTemplatesText, manipulationsText] = texts;
   const profileTemplates = parseCsvSync(profileTemplatesText, { columns: true });
   const allManipulations = parseCsvSync(manipulationsText, { columns: true, 'auto_parse': true });
-
   return cohortAndStudents(workshopCode, profileTemplates, allManipulations);
 }
 
