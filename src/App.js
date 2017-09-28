@@ -54,6 +54,7 @@ class App extends Component {
           <h2>cheesy first change</h2>
         </div>
         <Swipeable
+          height={200}
           onSwipeLeft={this.onSwipeLeft.bind(this, question, argument)}
           onSwipeRight={this.onSwipeRight.bind(this, question, argument)}>
           hello!
