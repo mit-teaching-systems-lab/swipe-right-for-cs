@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
+import _ from 'lodash';
 import parseCsvSync from 'csv-parse/lib/sync';
 import './App.css';
-import profilesFile from './profiles/profilesFile.csv';
+import profileTemplatesFile from './data/profileTemplates.csv';
+import manipulationsFile from './data/manipulations.csv';
+import hashCode from './hashCode.js';
 import createProfiles from './createProfiles.js';
 import IntroductionPhase from './IntroductionPhase.js';
 import StudentsPhase from './StudentsPhase.js';
 
 
-
+// Describes the major phases of the whole game
 const Phases = {
   INTRODUCTION: 'INTRODUCTION',
   STUDENTS: 'STUDENTS',
@@ -24,88 +27,58 @@ class App extends Component {
       email: 'unknown@mit.edu',
       workshopCode: 'foo',
       sessionId: uuid.v4(),
-      profileTemplates: null,
       phase: Phases.INTRODUCTION,
+      students: null,
       logs: []
     };
     this.onDoneIntroduction = this.onDoneIntroduction.bind(this);
     this.onDoneStudents = this.onDoneStudents.bind(this);
     this.onInteraction = this.onInteraction.bind(this);
-    this.onProfileText = this.onProfileText.bind(this);
-    this.onProfileError = this.onProfileError.bind(this);
+    this.onData = this.onData.bind(this);
+    this.onDataError = this.onDataError.bind(this);
   }
 
   componentDidMount() {
-    fetch(profilesFile)
-      .then(r => r.text()).then(this.onProfileText)
-      .catch(this.onProfileError);
+    const promises = [
+      fetch(profileTemplatesFile).then(r => r.text()),
+      fetch(manipulationsFile).then(r => r.text())
+    ];
+    Promise.all(promises)
+      .then(this.onData)
+      .catch(this.onDataError);
   }
 
   // Describe context of the game session
   session() {
-    const {email, workshopCode, sessionId} = this.state;
+    const {email, workshopCode, cohortNumber, sessionId} = this.state;
     return {
       email,
       workshopCode,
+      cohortNumber,
       sessionId,
       clientTimestampMs: new Date().getTime(),
       location: window.location.toString()
     };
   }
 
-  students() {
-    const {profileTemplates} = this.state;
-    const manipulations = [
-      {
-        Name: 'Jamal',
-        He: 'He',
-        he: 'he',
-        his: 'his',
-        him: 'him',
-        imageKey: 'A'
-      },
-      {
-        Name: 'Andre',
-        He: 'He',
-        he: 'he',
-        his: 'his',
-        him: 'him',
-        imageKey: 'B'
-      },
-      {
-        Name: 'Luisa',
-        He: 'She',
-        he: 'she',
-        his: 'her',
-        him: 'her',
-        imageKey: 'C'
-      },
-      {
-        Name: 'Bob',
-        He: 'He',
-        he: 'he',
-        his: 'his',
-        him: 'him',
-        imageKey: 'D'
-      },
-      {
-        Name: 'Tom',
-        He: 'He',
-        he: 'he',
-        his: 'his',
-        him: 'him',
-        imageKey: 'E'
-      }
-    ];
-    return createProfiles(profileTemplates, manipulations);
+  onData(texts) {
+    // Load data
+    const [profileTemplatesText, manipulationsText] = texts;
+    const profileTemplates = parseCsvSync(profileTemplatesText, { columns: true });
+    const allManipulations = parseCsvSync(manipulationsText, { columns: true, 'auto_parse': true });
+
+    // Determine cohort
+    const {workshopCode} = this.state;
+    const cohortCount = 1 + _.maxBy(allManipulations, 'cohort_number').cohort_number - _.minBy(allManipulations, 'cohort_number').cohort_number;
+    const cohortNumber = hashCode(workshopCode) % cohortCount;
+
+    // Pick particular manipulations and apply them
+    const manipulations = _.filter(allManipulations, { 'cohort_number': cohortNumber });
+    const students = createProfiles(profileTemplates, manipulations);
+    this.setState({cohortNumber, students});
   }
 
-  onProfileText(text) {
-    const profileTemplates = parseCsvSync(text, { columns: true });
-    this.setState({profileTemplates});
-  }
-
-  onProfileError(err) {
+  onDataError(err) {
     console.error(err); // eslint-disable-line no-console
   }
 
@@ -129,14 +102,15 @@ class App extends Component {
   }
 
   render() {
-    const {phase} = this.state;
-    return (
-      <div className="App">
-        {phase === Phases.INTRODUCTION && this.renderIntroduction()}
-        {phase === Phases.STUDENTS && this.renderStudents()}
-        {phase === Phases.DISCUSS && (<div>Discuss! (TODO)</div>)}
-      </div>
-    );
+    return <div className="App">{this.renderScreen()}</div>;
+  }
+
+  renderScreen() {
+    const {phase, students} = this.state;
+    if (phase === Phases.INTRODUCTION) return this.renderIntroduction();
+    if (!students) return this.renderLoading();
+    if (phase === Phases.STUDENTS) return this.renderStudents();
+    if (phase === Phases.DISCUSS) return <div>Discuss! (TODO)</div>;
   }
 
   renderIntroduction() {
@@ -144,8 +118,13 @@ class App extends Component {
       onInteraction={this.onInteraction}
       onDone={this.onDoneIntroduction} />;
   }
+
+  renderLoading() {
+    return <div>Loading...</div>;
+  }
+
   renderStudents() {
-    const students = this.students();
+    const {students} = this.state;
     return (
       <StudentsPhase
         students={students}

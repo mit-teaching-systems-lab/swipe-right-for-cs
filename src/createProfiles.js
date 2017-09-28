@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import renderTemplate from './renderTemplate.js';
-import ProfileA from './profiles/A.png';
-import ProfileB from './profiles/B.png';
-import ProfileC from './profiles/C.png';
-import ProfileD from './profiles/D.png';
-import ProfileE from './profiles/E.png';
+import ProfileA from './data/A.png';
+import ProfileB from './data/B.png';
+import ProfileC from './data/C.png';
+import ProfileD from './data/D.png';
+import ProfileE from './data/E.png';
 
 function imageFor(label) {
   return {
@@ -21,9 +21,15 @@ function imageFor(label) {
 function createProfiles(profileTemplates, manipulations) {
   return _.zip(profileTemplates, manipulations).map(([profileTemplate, manipulation]) => {
     return {
-      profileName: manipulation.Name,
-      profileImageSrc: imageFor(manipulation.imageKey),
-      profileText: renderTemplate(profileTemplate.profile_template, manipulation),
+      profileName: manipulation.name,
+      profileImageSrc: imageFor(manipulation.image_key),
+      profileText: renderTemplate(profileTemplate.profile_template, {
+        Name: manipulation.name,
+        He: _.capitalize(manipulation.he),
+        he: manipulation.he,
+        his: manipulation.his,
+        him: manipulation.him
+      }),
       argumentTexts: [
         profileTemplate.argument_1,
         profileTemplate.argument_2,
