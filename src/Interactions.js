@@ -7,5 +7,5 @@ const Interactions = {
   swipeRight({question, argument}) {
     return {question, argument, type: 'SWIPE_RIGHT' };
   },
-}
+};
 export default Interactions;

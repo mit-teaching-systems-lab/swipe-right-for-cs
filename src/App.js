@@ -33,7 +33,7 @@ class App extends Component {
   // Log an interaction to the server, along with context about the session
   doLogInteraction(interaction) {
     const session = this.session();
-    console.log('doLogInteraction', {interaction, session});
+    console.log('doLogInteraction', {interaction, session}); // eslint-disable-line no-console
   }
 
   onSwipeLeft(question, argument) {
