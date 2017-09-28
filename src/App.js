@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import uuid from 'uuid';
-import Swipeable from './Swipeable.js';
-import Interactions from './Interactions.js';
 
+
+import Turn from './Turn.js';
+import ProfileA from './profiles/A.png';
+import ProfileB from './profiles/B.png';
+import ProfileC from './profiles/C.png';
+import ProfileD from './profiles/D.png';
+import ProfileE from './profiles/E.png';
+
+
+function imageFor(label) {
+  return {
+    a: ProfileA,
+    b: ProfileB,
+    c: ProfileC,
+    d: ProfileD,
+    e: ProfileE
+  }[label.toLowerCase()];
+}
 
 class App extends Component {
   constructor(props) {
@@ -14,8 +29,8 @@ class App extends Component {
       workshopCode: 'foo',
       sessionId: uuid.v4()
     };
-    this.onSwipeLeft = this.onSwipeLeft.bind(this);
-    this.onSwipeRight = this.onSwipeRight.bind(this);
+    this.onDoneTurn = this.onDoneTurn.bind(this);
+    this.onInteraction = this.onInteraction.bind(this);
   }
 
   // Describe context of the game session
@@ -31,34 +46,28 @@ class App extends Component {
   }
 
   // Log an interaction to the server, along with context about the session
-  doLogInteraction(interaction) {
+  onInteraction(interaction) {
     const session = this.session();
-    console.log('doLogInteraction', {interaction, session}); // eslint-disable-line no-console
+    console.log('onInteraction', {interaction, session}); // eslint-disable-line no-console
   }
 
-  onSwipeLeft(question, argument) {
-    this.doLogInteraction(Interactions.swipeLeft({question, argument}));
-  }
-
-  onSwipeRight(question, argument) {
-    this.doLogInteraction(Interactions.swipeRight({question, argument}));
+  onDoneTurn(interaction) {
+    this.onInteraction(interaction);
   }
 
   render() {
-    const question = { profile: 'sarah' };
-    const argument = { text: 'do it!' };
+    const exampleTurn = {
+      profileName: "Jamal",
+      profileImageSrc: imageFor('A'),
+      profileText: "Jamal spent the entire summer camping and hiking through various terrains.  He became particularly fond of beaches and returned as an expert on tidal pools, crabs and sand dollars.",
+      argumentText: "It's a great resume-booster for any job or career you're interested in if you can work with computer really well."
+    };
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>cheesy first change</h2>
-        </div>
-        <Swipeable
-          height={200}
-          onSwipeLeft={this.onSwipeLeft.bind(this, question, argument)}
-          onSwipeRight={this.onSwipeRight.bind(this, question, argument)}>
-          hello!
-        </Swipeable>
+        <Turn
+          {...exampleTurn}
+          onDone={this.onDoneTurn}
+        />
       </div>
     );
   }

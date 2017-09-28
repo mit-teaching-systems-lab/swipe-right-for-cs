@@ -39,9 +39,9 @@ class Swipeable extends Component {
     const {children, onSwipeLeft, onSwipeRight} = this.props;
     return (
       <div className="Swipeable-items">
-        <div onClick={onSwipeLeft}>left</div>
+        <div style={{color: 'blue'}} onClick={onSwipeLeft}>left</div>
         {children}
-        <div onClick={onSwipeRight}>right</div>
+        <div style={{color: 'blue'}} onClick={onSwipeRight}>right</div>
       </div>
     );
   }
