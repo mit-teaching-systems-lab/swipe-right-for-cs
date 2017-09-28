@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
-import _ from 'lodash';
-import parseCsvSync from 'csv-parse/lib/sync';
 import './App.css';
-import profileTemplatesFile from './data/profileTemplates.csv';
-import manipulationsFile from './data/manipulations.csv';
-import hashCode from './hashCode.js';
-import createProfiles from './createProfiles.js';
 import IntroductionPhase from './IntroductionPhase.js';
 import StudentsPhase from './StudentsPhase.js';
+import {loadDataForCohort} from './loaders/loadDataForCohort.js';
 
 
 // Describes the major phases of the whole game
@@ -34,17 +29,14 @@ class App extends Component {
     this.onDoneIntroduction = this.onDoneIntroduction.bind(this);
     this.onDoneStudents = this.onDoneStudents.bind(this);
     this.onInteraction = this.onInteraction.bind(this);
-    this.onData = this.onData.bind(this);
+    this.onDataLoaded = this.onDataLoaded.bind(this);
     this.onDataError = this.onDataError.bind(this);
   }
 
   componentDidMount() {
-    const promises = [
-      fetch(profileTemplatesFile).then(r => r.text()),
-      fetch(manipulationsFile).then(r => r.text())
-    ];
-    Promise.all(promises)
-      .then(this.onData)
+    const {workshopCode} = this.state;
+    loadDataForCohort(workshopCode)
+      .then(this.onDataLoaded)
       .catch(this.onDataError);
   }
 
@@ -61,20 +53,8 @@ class App extends Component {
     };
   }
 
-  onData(texts) {
-    // Load data
-    const [profileTemplatesText, manipulationsText] = texts;
-    const profileTemplates = parseCsvSync(profileTemplatesText, { columns: true });
-    const allManipulations = parseCsvSync(manipulationsText, { columns: true, 'auto_parse': true });
-
-    // Determine cohort
-    const {workshopCode} = this.state;
-    const cohortCount = 1 + _.maxBy(allManipulations, 'cohort_number').cohort_number - _.minBy(allManipulations, 'cohort_number').cohort_number;
-    const cohortNumber = hashCode(workshopCode) % cohortCount;
-
-    // Pick particular manipulations and apply them
-    const manipulations = _.filter(allManipulations, { 'cohort_number': cohortNumber });
-    const students = createProfiles(profileTemplates, manipulations);
+  onDataLoaded(loadedData) {
+    const {cohortNumber, students} = loadedData;
     this.setState({cohortNumber, students});
   }
 

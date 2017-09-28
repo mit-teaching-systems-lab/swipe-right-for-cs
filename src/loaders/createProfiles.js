@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import renderTemplate from './renderTemplate.js';
-import ProfileA from './data/A.png';
-import ProfileB from './data/B.png';
-import ProfileC from './data/C.png';
-import ProfileD from './data/D.png';
-import ProfileE from './data/E.png';
+import ProfileA from '../files/A.png';
+import ProfileB from '../files/B.png';
+import ProfileC from '../files/C.png';
+import ProfileD from '../files/D.png';
+import ProfileE from '../files/E.png';
 
 function imageFor(label) {
   return {
