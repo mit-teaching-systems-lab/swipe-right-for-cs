@@ -20,25 +20,33 @@ class Turn extends Component {
     return {profileName, profileText, profileImageSrc, argumentText};
   }
 
+  onSwipe(interaction) {
+    const {onDone, onInteraction} = this.props;
+    onInteraction(interaction);
+    onDone(interaction);
+  }
   onSwipeLeft() {
-    this.props.onDone(Interactions.swipeLeft(this.turn()));
+    this.onSwipe(Interactions.swipeLeft(this.turn()));
   }
 
   onSwipeRight() {
-    this.props.onDone(Interactions.swipeRight(this.turn()));
+    this.onSwipe(Interactions.swipeRight(this.turn()));
   }
 
   render() {
     const {profileName, profileText, profileImageSrc, argumentText} = this.props;
     return (
       <div className="Turn">
-        <div>{profileName}</div>
-        <img
-          width="100%"
-          src={profileImageSrc}
-          alt={profileName} />
-        <div>{profileText}</div>
+        <div className="Turn-student">
+          <img
+            width={280}
+            height={334}
+            src={profileImageSrc}
+            alt={profileName} />
+          <div>{profileText}</div>
+        </div>
         <Swipeable
+          key={argumentText}
           height={200}
           onSwipeLeft={this.onSwipeLeft}
           onSwipeRight={this.onSwipeRight}>
@@ -53,6 +61,7 @@ Turn.propTypes = {
   profileImageSrc: PropTypes.string.isRequired,
   profileText: PropTypes.string.isRequired,
   argumentText: PropTypes.string.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onDone: PropTypes.func.isRequired
 };
 export default Turn;
