@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Media from 'react-media';
 import './MobileSimulator.css';
+import dragscroll from './util/dragscroll.js';
 import topImage from './img/top.png';
 import bottomImage from './img/bottom.png';
+
 
 // CSS adapted from https://framework7.io/examples/
 class MobileSimulator extends Component {
@@ -16,6 +18,11 @@ class MobileSimulator extends Component {
   onClickFake() {
     alert('Not really...');
   }
+
+  componentDidMount() {
+    dragscroll(document.getElementsByClassName('MobileSimulator-dragscroll'));
+  }
+
   render() {
     const {minWidth, minHeight} = this.props;
     const query = `(min-width: ${minWidth}px) and (min-height: ${minHeight}px)`;
@@ -37,7 +44,7 @@ class MobileSimulator extends Component {
               width="100%"
               height={64}
               onClick={this.onClickFake} />
-            <div className="MobileSimulator-background">
+            <div className="MobileSimulator-background MobileSimulator-dragscroll">
               {children}
             </div>
             <img

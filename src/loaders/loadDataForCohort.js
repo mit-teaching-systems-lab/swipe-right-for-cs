@@ -7,20 +7,24 @@ import createProfiles from './createProfiles.js';
 
 
 export async function loadDataForCohort(workshopCode) {
-  const texts = [
-    await fetch(profileTemplatesFile).then(r => r.text()),
-    await fetch(manipulationsFile).then(r => r.text())
-  ];
-  return parseAndReturn(workshopCode, texts);
-}
-
-function parseAndReturn(workshopCode, texts) {
-  const [profileTemplatesText, manipulationsText] = texts;
-  const profileTemplates = parseCsvSync(profileTemplatesText, { columns: true });
-  const allManipulations = parseCsvSync(manipulationsText, { columns: true, 'auto_parse': true });
+  const {profileTemplates, allManipulations} = await fetchBoth();
   return cohortAndStudents(workshopCode, profileTemplates, allManipulations);
 }
 
+export async function fetchBoth() {
+  const texts = await fetchTexts();
+  const [profileTemplatesText, manipulationsText] = texts;
+  const profileTemplates = parseCsvSync(profileTemplatesText, { columns: true });
+  const allManipulations = parseCsvSync(manipulationsText, { columns: true, 'auto_parse': true });
+  return {profileTemplates, allManipulations}; 
+}
+
+async function fetchTexts() {
+  return [
+    await fetch(profileTemplatesFile).then(r => r.text()),
+    await fetch(manipulationsFile).then(r => r.text())
+  ];
+}
 
 // Determine cohort, apply manipulations
 export function cohortAndStudents(workshopCode, profileTemplates, allManipulations) {

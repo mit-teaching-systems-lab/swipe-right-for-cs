@@ -39,8 +39,7 @@ class Turn extends Component {
       <div className="Turn">
         <div className="Turn-student">
           <img
-            width={280}
-            height={334}
+            height={230}
             src={profileImageSrc}
             alt={profileName} />
           <div>{profileText}</div>
