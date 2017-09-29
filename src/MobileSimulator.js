@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Media from 'react-media';
+import Animated from 'animated/lib/targets/react-dom';
 import './MobileSimulator.css';
 import dragscroll from './util/dragscroll.js';
 import topImage from './img/top.png';
@@ -11,12 +12,24 @@ import bottomImage from './img/bottom.png';
 class MobileSimulator extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      animScale: new Animated.Value(1)
+    };
     this.renderResponsiveFrame = this.renderResponsiveFrame.bind(this);
-    this.onClickFake = this.onClickFake.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
   }
 
-  onClickFake() {
-    alert('Not really...');
+  onMouseDown() {
+    const {animScale} = this.state;
+    Animated.spring(animScale, { toValue: 1.1 }).start();
+  }
+
+  onMouseUp() {
+    const {animScale} = this.state;
+    animScale.stopAnimation(value =>
+      Animated.spring(animScale, { toValue: 1 }).start()
+    );
   }
 
   componentDidMount() {
@@ -33,32 +46,41 @@ class MobileSimulator extends Component {
     const {children} = this.props;
     if (!isNotWide) return children;
     
+    const {animScale} = this.state;
     return (
       <div className="MobileSimulator">
-        <div className="MobileSimulator-phone">
-          <div className="MobileSimulator-safari">
-            <img
-              className="MobileSimulator-top"
-              alt="Menu"
-              src={topImage}
-              width="100%"
-              height={64}
-              onClick={this.onClickFake} />
-            <div className="MobileSimulator-background MobileSimulator-dragscroll">
-              {children}
+        <Animated.div style={{transform: [{scale: animScale}]}}>
+          <div className="MobileSimulator-phone">
+            <div className="MobileSimulator-safari">
+              <img
+                className="MobileSimulator-top"
+                alt="Menu"
+                src={topImage}
+                width="100%"
+                height={64}
+                onMouseDown={this.onMouseDown}
+                onMouseOut={this.onMouseUp}
+                onMouseUp={this.onMouseUp} />
+              <div className="MobileSimulator-background MobileSimulator-dragscroll">
+                {children}
+              </div>
+              <img
+                className="MobileSimulator-bottom"
+                alt="Buttons"
+                src={bottomImage}
+                width="100%"
+                height={42}
+                onMouseDown={this.onMouseDown}
+                onMouseOut={this.onMouseUp}
+                onMouseUp={this.onMouseUp} />
             </div>
-            <img
-              className="MobileSimulator-bottom"
-              alt="Buttons"
-              src={bottomImage}
-              width="100%"
-              height={42}
-              onClick={this.onClickFake} />
+            <div
+              className="MobileSimulator-button"
+              onMouseDown={this.onMouseDown}
+              onMouseOut={this.onMouseUp}
+              onMouseUp={this.onMouseUp} />
           </div>
-          <div
-            className="MobileSimulator-button"
-            onClick={this.onClickFake} />
-        </div>
+        </Animated.div>
       </div>
     );
   }
