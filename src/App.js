@@ -85,7 +85,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <MobileSimulator minWidth={450} minHeight={400}>
+        <MobileSimulator minWidth={800} minHeight={400}>
           {this.renderScreen()}
         </MobileSimulator>
       </div>
