@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
 import './App.css';
+import MobileSimulator from './MobileSimulator.js';
 import IntroductionPhase from './IntroductionPhase.js';
 import StudentsPhase from './StudentsPhase.js';
 import {loadDataForCohort} from './loaders/loadDataForCohort.js';
@@ -82,7 +83,13 @@ class App extends Component {
   }
 
   render() {
-    return <div className="App">{this.renderScreen()}</div>;
+    return (
+      <div className="App">
+        <MobileSimulator minWidth={450} minHeight={400}>
+          {this.renderScreen()}
+        </MobileSimulator>
+      </div>
+    );
   }
 
   renderScreen() {

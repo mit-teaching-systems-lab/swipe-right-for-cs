@@ -1,23 +1,14 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
-
-html, body, #root {
-  height: 100%;
-}
-
-#root.fake-container {
+.MobileSimulator {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
 }
 
-.fake {
+.MobileSimulator-phone {
   position: relative;
   width: 320px;
-  height: 568px !important;
+  height: 568px;
   background: #111;
   box-shadow: 0px 0px 0px 2px #aaa;
   z-index: 1000;
@@ -25,7 +16,7 @@ html, body, #root {
   border-radius: 55px;
 }
 
-.fake:before {
+.MobileSimulator-phone:before {
   content: '';
   width: 60px;
   height: 10px;
@@ -37,8 +28,7 @@ html, body, #root {
   top: 40px;
 }
 
-.fake:after {
-  content: '';
+.MobileSimulator-button {
   position: absolute;
   width: 60px;
   height: 60px;
@@ -48,4 +38,29 @@ html, body, #root {
   border-radius: 100%;
   box-sizing: border-box;
   border: 5px solid #333;
+}
+
+.MobileSimulator-safari {
+  position: relative;
+  height: 100%;
+  background: white;
+}
+
+.MobileSimulator-background {
+  position: relative;
+  height: 444px;
+  overflow: scroll;
+}
+
+.MobileSimulator-safari:after {
+  content: 'swipe-right-for-cs.teachingsystemslab.org';
+  font-size: 12px;
+  position: relative;
+  top: -483px;
+}
+
+.MobileSimulator-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
