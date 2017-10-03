@@ -1,24 +1,82 @@
-.App {
+
+.Title {
+  display:flex;
+  flex-direction: column;
+  align-items: stretch;
   text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+  background-color: #00ffff;
+  padding-top:80px;
+  padding-bottom: 0px;
 }
 
 .App-intro {
-  font-size: large;
+  font-size: 600%;
+  text-align: center;
+  margin-top: 0;
+  background-color: #00ffff;
+  color: #662e9e;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.Instructions{
+  display:flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  background-color: #00ffff;
+  height:550px;
+  padding-bottom:20px;
 }
+
+.Instructions-header{
+  margin-top:0;
+  margin-bottom:0;
+  text-align: center;
+  background-color: #00ffff;
+  color: #662e9e;
+  padding: 40px;
+  font-size: 25px;
+}
+
+.Instructions-body{
+  background-color: #00ffff;
+  flex-direction:column;
+  align-items:center;
+  padding: 20px;
+  height: 200px;
+  font-size: 100%;
+  color: #662e9e;
+}
+
+.Student{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
+  padding-top:40px;
+  height: 568px;
+  background-color: #00ffff;
+}
+
+.Student-Profile{
+  padding-top: 50px;
+  padding-bottom: 90px;
+  text-align:center;
+  margin-right:10px;
+  margin-left:10px;
+  background-color: #00ffff;
+}
+
+p {
+  font-size: 100%;
+}
+
+button{
+  align-self: center;
+  margin-bottom:40px;
+  background-color: #00ffff;
+}
+
+img{
+  max-width: 50%;
+}
+
