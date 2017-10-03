@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import pic from './draft-pic.jpg';
 import './App.css';
 
 class App extends Component{
@@ -10,7 +11,9 @@ class App extends Component{
     };
   }
   onPageChange() {
-    this.setState( {
+    console.log(this.state.page)
+
+    this.setState(  {
       page: this.state.page + 1
     } );
   }
@@ -19,14 +22,18 @@ class App extends Component{
     if (this.state.page === 0) {
       return <Title onDone = {this.onPageChange.bind(this)} />; 
     }
+    if (this.state.page === 1) {
+      return <Instructions onDone = {this.onPageChange.bind(this)} />;
+    }
+    if (this.state.page === 2){
+      return <Student onDone = {this.onPageChange.bind(this)} />
+    }
 
-      return <Instructions OnDone = {this.onPageChange.bind(this)} />;
     }
   }
 
 
 class Title extends Component {
-
 
   render() {
     return (
@@ -42,30 +49,61 @@ class Title extends Component {
       </div>
     );
   }
-}
+} 
+
+Title.propTypes = {
+  onDone: React.PropTypes.func.isRequired
+};
 
 class Instructions extends Component {
   render(){
     return (
       <div className = "Instructions">
-        <div className = "Instructions-header">
-          <p> Round 1: Meet some students! </p>
-        </div>
+        <p className = "Instructions-header">
+           Round 1: Meet some students! 
+        </p>
+        
 
-        <div className = "Instructions-body">
-          <p> For each student, read their profile and take on their perspective. Once you've read some reasons teachers might use to convince them to take </p>
+        <p className = "Instructions-body"> For each student, read their profile and take on their perspective. Once you've read some reasons teachers might use to convince them to take a computer science course. </p>
+        
+        <button onClick = {this.props.onDone} > READY? </button>
 
-        </div>
       
-      <button onClick = {this.props.onDone} > OKAY </button>
 
 
       </div>
-    )
+    );
 
   }
 
 }
 
+Instructions.propTypes = {
+  onDone: React.PropTypes.func.isRequired
+};
+
+class Student extends Component{
+  render(){
+    return(
+    <div className = "Student">
+      <p> SAM </p>
+      <img src= {pic} alt = 'Pic' />
+
+      <div className = "Student-Profile">
+        <p> I led a team of 10 people through building a catapult for shop class! </p>
+      </div>
+        
+        <button onClick = {this.props.onDone} > OKAY </button>
+
+
+    </div>
+    );
+  }
+
+}
+
+Student.propTypes = {
+  onDone: React.PropTypes.func.isRequired
+};
 
 export default App;
