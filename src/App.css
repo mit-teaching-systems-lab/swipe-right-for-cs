@@ -1,3 +1,4 @@
+
 .Title {
   display:flex;
   flex-direction: column;
@@ -33,8 +34,7 @@
   background-color: #00ffff;
   color: #662e9e;
   padding: 40px;
-  font-size: 140%;
-  font-family: Times;
+  font-size: 25px;
 }
 
 .Instructions-body{
@@ -44,7 +44,6 @@
   padding: 20px;
   height: 200px;
   font-size: 100%;
-  font-family: "Trebuchet MS";
   color: #662e9e;
 }
 
