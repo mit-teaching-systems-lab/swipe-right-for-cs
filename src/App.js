@@ -11,7 +11,6 @@ class App extends Component{
     };
   }
   onPageChange() {
-    console.log(this.state.page)
 
     this.setState(  {
       page: this.state.page + 1
