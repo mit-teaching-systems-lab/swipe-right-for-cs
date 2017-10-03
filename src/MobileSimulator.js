@@ -20,6 +20,10 @@ class MobileSimulator extends Component {
     this.onMouseUp = this.onMouseUp.bind(this);
   }
 
+  componentDidMount() {
+    dragscroll(document.getElementsByClassName('MobileSimulator-dragscroll'));
+  }
+  
   onMouseDown() {
     const {animScale} = this.state;
     Animated.spring(animScale, { toValue: 1.1 }).start();
@@ -30,10 +34,6 @@ class MobileSimulator extends Component {
     animScale.stopAnimation(value =>
       Animated.spring(animScale, { toValue: 1 }).start()
     );
-  }
-
-  componentDidMount() {
-    dragscroll(document.getElementsByClassName('MobileSimulator-dragscroll'));
   }
 
   render() {
