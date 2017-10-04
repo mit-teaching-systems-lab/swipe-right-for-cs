@@ -5,10 +5,13 @@ import MobileSimulator from './MobileSimulator.js';
 import IntroductionPhase from './IntroductionPhase.js';
 import StudentsPhase from './StudentsPhase.js';
 import {loadDataForCohort} from './loaders/loadDataForCohort.js';
+import pic from './draft-pic.jpg';
+import PropTypes from 'prop-types';
 
 
 // Describes the major phases of the whole game
 const Phases = {
+  TITLE: 'TITLE',
   INTRODUCTION: 'INTRODUCTION',
   STUDENTS: 'STUDENTS',
   DISCUSS: 'DISCUSS',
@@ -23,7 +26,7 @@ class App extends Component {
       email: 'unknown@mit.edu',
       workshopCode: 'foo',
       sessionId: uuid.v4(),
-      phase: Phases.INTRODUCTION,
+      phase: Phases.TITLE,
       students: null,
       logs: []
     };
@@ -94,10 +97,15 @@ class App extends Component {
 
   renderScreen() {
     const {phase, students} = this.state;
+    if (phase === Phases.TITLE) return this.renderTitle();
     if (phase === Phases.INTRODUCTION) return this.renderIntroduction();
     if (!students) return this.renderLoading();
     if (phase === Phases.STUDENTS) return this.renderStudents();
     if (phase === Phases.DISCUSS) return <div>Discuss! (TODO)</div>;
+  }
+
+  renderTitle() {
+    return <Title />;
   }
 
   renderIntroduction() {

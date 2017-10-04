@@ -1,0 +1,21 @@
+import React, { Component } from 'react';
+
+
+class Title extends Component {
+  render() {
+    return (
+      <div className="Title">
+        <p className="Title-intro">
+          Swipe Right for CS!    
+        </p>
+        <button onClick={this.props.onDone}>CLICK ME TO PLAY</button>
+      </div>
+    );
+  }
+} 
+
+Title.propTypes = {
+  onDone: PropTypes.func.isRequired
+};
+
+export default Title;

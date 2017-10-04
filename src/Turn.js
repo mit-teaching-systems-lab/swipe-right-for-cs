@@ -38,11 +38,12 @@ class Turn extends Component {
     return (
       <div className="Turn">
         <div className="Turn-student">
+          <p>{profileName}</p>
           <img
             height={230}
             src={profileImageSrc}
             alt={profileName} />
-          <div>{profileText}</div>
+          <div className="Turn-profile">{profileText}</div>
         </div>
         <Swipeable
           key={argumentText}
