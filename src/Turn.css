@@ -1,0 +1,17 @@
+.Turn {
+  background-color: #00ffff;
+}
+
+.Turn-student {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
+}
+
+.Turn-profile {
+  text-align:center;
+  margin-right:10px;
+  margin-left:10px;
+  background-color: #00ffff;
+}

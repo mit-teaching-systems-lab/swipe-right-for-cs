@@ -1,0 +1,30 @@
+.IntroductionPhase {
+  display:flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  background-color: #00ffff;
+  height:550px;
+  padding-bottom:20px;
+  padding: 20px;
+}
+
+.IntroductionPhase-header{
+  margin-top:0;
+  margin-bottom:0;
+  text-align: center;
+  background-color: #00ffff;
+  color: #662e9e;
+  padding: 40px;
+  font-size: 25px;
+}
+
+.IntroductionPhase-body{
+  background-color: #00ffff;
+  flex-direction:column;
+  align-items:center;
+  padding: 20px;
+  height: 200px;
+  font-size: 100%;
+  color: #662e9e;
+}

@@ -1,0 +1,11 @@
+.Swipeable {
+  display: flex;
+  align-items: center;
+}
+
+.Swipeable-items {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  height: 100%;
+}

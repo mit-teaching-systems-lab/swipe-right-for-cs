@@ -4,18 +4,28 @@
   "private": true,
   "devDependencies": {
     "eslint": "^4.7.2",
+    "eslint-plugin-react": "^7.4.0",
+    "jest-fetch-mock": "^1.2.1",
+    "raw-loader": "^0.5.1",
     "react-scripts": "1.0.13"
   },
   "dependencies": {
+    "animated": "^0.2.0",
+    "csv-parse": "^1.2.3",
     "prop-types": "^15.6.0",
+    "raf": "^3.3.2",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "react-media": "^1.6.1",
+    "uuid": "^3.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "npm run lint && react-scripts test --env=jsdom",
+    "test": "npm run lint && npm run jest",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext jsx --ext js -c .eslintrc src"
+    "lint": "eslint --ext jsx --ext js -c .eslintrc src",
+    "jest": "react-scripts test --env=jsdom",
+    "coverage": "react-scripts test --env=jsdom --coverage"
   }
 }
