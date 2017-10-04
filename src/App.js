@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import uuid from 'uuid';
 import './App.css';
 import MobileSimulator from './MobileSimulator.js';
+import Title from './Title.js';
 import IntroductionPhase from './IntroductionPhase.js';
 import StudentsPhase from './StudentsPhase.js';
 import {loadDataForCohort} from './loaders/loadDataForCohort.js';
-import pic from './draft-pic.jpg';
-import PropTypes from 'prop-types';
+
 
 
 // Describes the major phases of the whole game
@@ -30,6 +30,7 @@ class App extends Component {
       students: null,
       logs: []
     };
+    this.onDoneTitle = this.onDoneTitle.bind(this);
     this.onDoneIntroduction = this.onDoneIntroduction.bind(this);
     this.onDoneStudents = this.onDoneStudents.bind(this);
     this.onInteraction = this.onInteraction.bind(this);
@@ -64,6 +65,10 @@ class App extends Component {
 
   onDataError(err) {
     console.error(err); // eslint-disable-line no-console
+  }
+
+  onDoneTitle() {
+    this.setState({ phase: Phases.INTRODUCTION });
   }
 
   onDoneIntroduction() {
@@ -105,7 +110,7 @@ class App extends Component {
   }
 
   renderTitle() {
-    return <Title />;
+    return <Title onDone={this.onDoneTitle} />;
   }
 
   renderIntroduction() {
