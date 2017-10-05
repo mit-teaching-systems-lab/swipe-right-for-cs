@@ -27,7 +27,8 @@ class Swipeable extends Component {
     return (
       <div className="Swipeable" style={{height: height}}>
         <Animated.div
-          style={{position: 'relative', top: animTop}}>
+          className="Swipeable-spring"
+          style={{top: animTop}}>
           {this.renderSwipeable()}
         </Animated.div>
       </div>

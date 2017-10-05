@@ -8,7 +8,7 @@
   "scripts": {
     "start": "yarn run dev",
     "test": "yarn run lint && cd client && yarn run test",
-    "heroku-prebuild": "cd client && YARN_PRODUCTION=false yarn install --frozen-lockfile",
+    "heroku-prebuild": "yarn install && cd client && YARN_PRODUCTION=false yarn install --frozen-lockfile",
     "heroku-postbuild": "cd client && yarn run build",
     "dev": "concurrently \"yarn run server\" \"yarn run client\"",
     "server": "node server/index.js",

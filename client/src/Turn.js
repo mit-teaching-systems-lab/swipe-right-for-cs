@@ -38,16 +38,15 @@ class Turn extends Component {
     return (
       <div className="Turn">
         <div className="Turn-student">
-          <p>{profileName}</p>
           <img
-            height={230}
+            height={180}
             src={profileImageSrc}
             alt={profileName} />
           <div className="Turn-profile">{profileText}</div>
         </div>
         <Swipeable
           key={argumentText}
-          height={150}
+          height={120}
           onSwipeLeft={this.onSwipeLeft}
           onSwipeRight={this.onSwipeRight}>
           <div>{argumentText}</div>

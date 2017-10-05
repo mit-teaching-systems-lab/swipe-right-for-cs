@@ -3,6 +3,11 @@
   align-items: center;
 }
 
+.Swipeable-spring {
+  position: 'relative';
+  height: 100%;
+}
+
 .Swipeable-items {
   display: flex;
   justify-content: space-between;

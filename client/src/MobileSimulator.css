@@ -7,6 +7,10 @@
   user-select: none;
 }
 
+.MobileSimulator-not-wide {
+  height: 100%;
+}
+
 .MobileSimulator-phone {
   position: relative;
   width: 320px;
@@ -42,27 +46,25 @@
   border: 5px solid #333;
 }
 
+/* positions it within the image */
+.MobileSimulator-safari:before {
+  content: 'swipe-right-for-cs.teachingsystemslab.org';
+  font-size: 12px;
+  position: relative;
+  top: 46px;
+}
+
 .MobileSimulator-safari {
   position: relative;
   height: 100%;
-  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .MobileSimulator-background {
   position: relative;
   height: 444px;
   overflow: scroll;
-}
-
-.MobileSimulator-safari:after {
-  content: 'swipe-right-for-cs.teachingsystemslab.org';
-  font-size: 12px;
-  position: relative;
-  top: -483px;
-}
-
-.MobileSimulator-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
 }

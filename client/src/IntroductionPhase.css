@@ -1,12 +1,10 @@
 .IntroductionPhase {
+  height: 100%;
   display:flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
   background-color: #00ffff;
-  height:550px;
-  padding-bottom:20px;
-  padding: 20px;
 }
 
 .IntroductionPhase-header {
@@ -24,7 +22,6 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  height: 200px;
   font-size: 100%;
   color: #662e9e;
 }
