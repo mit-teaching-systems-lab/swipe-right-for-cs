@@ -13,7 +13,8 @@
     "dev": "concurrently \"yarn run server\" \"yarn run client\"",
     "server": "node server/index.js",
     "client": "cd client && yarn run start",
-    "lint": "eslint --ext js -c server/.eslintrc server"
+    "lint": "eslint --ext js -c server/.eslintrc server",
+    "ngrok": "ngrok http 3000 -host-header=\"localhost:8080\""
   },
   "cacheDirectories": [
     "node_modules",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "concurrently": "^3.5.0",
     "eslint": "^4.8.0",
-    "eslint-plugin-node": "^5.2.0"
+    "eslint-plugin-node": "^5.2.0",
+    "ngrok": "^2.2.22"
   }
 }
