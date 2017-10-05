@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import __shuffle from 'lodash/shuffle';
+import __flatten from 'lodash/flatten';
 import parseCsvSync from 'csv-parse/lib/sync';
 import profileTemplatesFile from '../files/profileTemplates.csv';
 import sortedVariantsFile from '../files/sortedVariants.csv';
@@ -36,7 +37,7 @@ export function cohortAndStudents(workshopCode, profileTemplates, variants) {
   const rotatedVariants = rotatedVariantsForProfiles(cohortNumber, profileTemplates, variants);
 
   // Within a game, randomly shuffle the order of variants shown
-  const shuffledVariants = _.shuffle(rotatedVariants);
+  const shuffledVariants = __shuffle(rotatedVariants);
 
   // Create actual concrete student profiles
   const students = createProfiles(profileTemplates, shuffledVariants);
@@ -49,7 +50,7 @@ export function cohortAndStudents(workshopCode, profileTemplates, variants) {
 // cohorts see a consistent set of students, and the balancing depends on the number of cohorts,
 // number of profiles, and the order of the variants.
 export function rotatedVariantsForProfiles(cohortNumber, profileTemplates, variants) {
-  const cohortVariants = _.flatten([
+  const cohortVariants = __flatten([
     variants.slice(cohortNumber, variants.length),
     variants.slice(0, cohortNumber)
   ]);
