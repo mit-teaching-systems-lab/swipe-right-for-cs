@@ -1,4 +1,5 @@
 .Title {
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -13,7 +14,6 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  height: 100%;
   margin-top: 0;
   background-color: #00ffff;
   color: #662e9e;

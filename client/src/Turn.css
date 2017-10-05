@@ -1,5 +1,7 @@
 .Turn {
-  background-color: #00ffff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .Turn-student {
@@ -7,11 +9,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: stretch;
+  flex: 1;
 }
 
 .Turn-profile {
   text-align:center;
   margin-right:10px;
   margin-left:10px;
-  background-color: #00ffff;
 }

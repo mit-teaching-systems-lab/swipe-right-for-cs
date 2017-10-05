@@ -10,7 +10,9 @@ class Title extends Component {
         <p className="Title-intro">
           Swipe Right for CS!    
         </p>
-        <button onClick={this.props.onDone}>CLICK ME TO PLAY</button>
+        <button
+          className="button"
+          onClick={this.props.onDone}>CLICK ME TO PLAY</button>
       </div>
     );
   }

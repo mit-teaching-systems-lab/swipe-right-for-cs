@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Student from './Student.js';
+import './StudentsPhase.css';
 
 
 // Show the phase where we're going through students.
