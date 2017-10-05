@@ -49,7 +49,7 @@ class Turn extends Component {
           height={120}
           onSwipeLeft={this.onSwipeLeft}
           onSwipeRight={this.onSwipeRight}>
-          <div>{argumentText}</div>
+          <div className="Turn-argument">{argumentText}</div>
         </Swipeable>
       </div>
     );
