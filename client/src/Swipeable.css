@@ -4,13 +4,28 @@
 }
 
 .Swipeable-spring {
-  position: 'relative';
+  position: relative;
   height: 100%;
 }
 
-.Swipeable-items {
+.Swipeable-views {
   display: flex;
   justify-content: space-between;
-  border: 1px solid #ccc;
+  height: 100%;
+}
+
+.Swipeable-left {
+  background-color: green;
+  height: 100%;
+}
+
+.Swipeable-children {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.Swipeable-right {
+  background-color: orange;
   height: 100%;
 }
