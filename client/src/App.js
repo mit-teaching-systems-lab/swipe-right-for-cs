@@ -8,7 +8,6 @@ import StudentsPhase from './StudentsPhase.js';
 import {loadDataForCohort} from './loaders/loadDataForCohort.js';
 
 
-
 // Describes the major phases of the whole game
 const Phases = {
   TITLE: 'TITLE',
@@ -87,6 +86,7 @@ class App extends Component {
     const session = this.session();
     const log = {interaction, session};
     console.log('onLog', log); // eslint-disable-line no-console
+    if (window.Rollbar) window.Rollbar.info('onLog', log);
     this.setState({ logs: logs.concat(log) });
   }
 
