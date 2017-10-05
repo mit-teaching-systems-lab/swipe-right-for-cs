@@ -5,8 +5,6 @@
   align-items: stretch;
   text-align: center;
   background-color: #00ffff;
-  padding-top:80px;
-  padding-bottom: 0px;
 }
 
 .Title-intro {
@@ -14,7 +12,6 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  margin-top: 0;
   background-color: #00ffff;
   color: #662e9e;
 }
