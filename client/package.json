@@ -1,0 +1,35 @@
+{
+  "name": "swipe-right-for-cs-client",
+  "version": "0.1.0",
+  "license": "MIT",
+  "engines": {
+    "node": "6.11.x"
+  },
+  "devDependencies": {
+    "eslint": "^4.8.0",
+    "eslint-plugin-react": "^7.4.0",
+    "jest-fetch-mock": "^1.2.1",
+    "raf": "^3.3.2",
+    "raw-loader": "^0.5.1",
+    "react-scripts": "1.0.13"
+  },
+  "dependencies": {
+    "animated": "^0.2.0",
+    "csv-parse": "^1.2.3",
+    "prop-types": "^15.6.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-media": "^1.6.1",
+    "uuid": "^3.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "yarn run lint && yarn run jest",
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext jsx --ext js -c .eslintrc src",
+    "jest": "react-scripts test --env=jsdom",
+    "coverage": "react-scripts test --env=jsdom --coverage"
+  },
+  "proxy": "http://localhost:4000"
+}
