@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import __zip from 'lodash/zip';
+import __capitalize from 'lodash/capitalize';
 import renderTemplate from './renderTemplate.js';
 import HM1 from '../files/HM1.png';
 import HF1 from '../files/HF1.png';
@@ -33,13 +34,13 @@ function imageFor(label) {
 function createProfiles(profileTemplates, variants) {
   if (profileTemplates.length !== variants.length) return [];
 
-  return _.zip(profileTemplates, variants).map(([profileTemplate, variant]) => {
+  return __zip(profileTemplates, variants).map(([profileTemplate, variant]) => {
     return {
       profileName: variant.name,
       profileImageSrc: imageFor(variant.image_key),
       profileText: renderTemplate(profileTemplate.profile_template, {
         Name: variant.name,
-        He: _.capitalize(variant.he),
+        He: __capitalize(variant.he),
         he: variant.he,
         his: variant.his,
         him: variant.him

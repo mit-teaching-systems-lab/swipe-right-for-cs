@@ -11,7 +11,8 @@
     "jest-fetch-mock": "^1.2.1",
     "raf": "^3.3.2",
     "raw-loader": "^0.5.1",
-    "react-scripts": "1.0.13"
+    "react-scripts": "1.0.13",
+    "source-map-explorer": "^1.5.0"
   },
   "dependencies": {
     "animated": "^0.2.0",
@@ -31,7 +32,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint --ext jsx --ext js -c .eslintrc src",
     "jest": "react-scripts test --env=jsdom",
-    "coverage": "react-scripts test --env=jsdom --coverage"
+    "coverage": "react-scripts test --env=jsdom --coverage",
+    "analyze": "yarn run build && source-map-explorer build/static/js/main.*"
   },
   "proxy": "http://localhost:4000"
 }
