@@ -6,6 +6,12 @@ import SwipeableViews from 'react-swipeable-views';
 import {bindKeyboard} from 'react-swipeable-views-utils';
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
+const styles = {
+  fullSize: {
+    width: '100%', // for text that doesn't take full width
+    height: '100%' // for mobile Safari
+  }
+};
 
 // A card that springs up and then can be swiped left or right,
 // handling those animations and interactions and calling back to
@@ -73,12 +79,14 @@ class Swipeable extends Component {
         className="Swipeable-views"
         enableMouseEvents={true}
         springConfig={springConfig}
+        slideStyle={styles.fullSize} 
+        containerStyle={styles.fullSize}
         index={swipeIndex}
         onChangeIndex={this.onChangeIndex}
         onTransitionEnd={this.onTransitionEnd}>
-        <div className="Swipeable-left" />
+        <div className="Swipeable-left">&nbsp;</div>
         <div className="Swipeable-children">{children}</div>
-        <div className="Swipeable-right" />
+        <div className="Swipeable-right">&nbsp;</div>
       </BindKeyboardSwipeableViews>
     );
   }
