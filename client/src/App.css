@@ -1,9 +1,4 @@
-p {
-  font-size: 100%;
-}
-
-button{
-  align-self: center;
-  margin-bottom:40px;
+.App {
+  height: 100%;
   background-color: #00ffff;
 }

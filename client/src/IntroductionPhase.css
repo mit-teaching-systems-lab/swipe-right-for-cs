@@ -9,7 +9,7 @@
   padding: 20px;
 }
 
-.IntroductionPhase-header{
+.IntroductionPhase-header {
   margin-top:0;
   margin-bottom:0;
   text-align: center;
@@ -19,10 +19,10 @@
   font-size: 25px;
 }
 
-.IntroductionPhase-body{
+.IntroductionPhase-body {
   background-color: #00ffff;
-  flex-direction:column;
-  align-items:center;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
   height: 200px;
   font-size: 100%;

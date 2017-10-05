@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Turn from './Turn.js';
-
+import './Student.css';
 
 
 
