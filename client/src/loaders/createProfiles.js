@@ -1,38 +1,48 @@
 import _ from 'lodash';
 import renderTemplate from './renderTemplate.js';
-import ProfileA from '../files/A.png';
-import ProfileB from '../files/B.png';
-import ProfileC from '../files/C.png';
-import ProfileD from '../files/D.png';
-import ProfileE from '../files/E.png';
+import HM1 from '../files/HM1.png';
+import HF1 from '../files/HF1.png';
+import BM1 from '../files/BM1.png';
+import BF1 from '../files/BF1.png';
+import CM1 from '../files/CM1.png';
+import CF2 from '../files/CF2.png';
+import WM1 from '../files/WM1.png';
+import WF1 from '../files/WF1.png';
+import IM1 from '../files/IM1.png';
+import IF1 from '../files/IF1.png';
 
 function imageFor(label) {
   return {
-    a: ProfileA,
-    b: ProfileB,
-    c: ProfileC,
-    d: ProfileD,
-    e: ProfileE
-  }[label.toLowerCase()];
+    BM1,
+    BF1,
+    HM1,
+    HF1,
+    CM1,
+    CF2,
+    WM1,
+    WF1,
+    IM1,
+    IF1
+  }[label.toUpperCase()];
 }
 
 // Take profile templates, and the set of manipulations and zip them together
 // into concrete profiles for a game.
 //
 // Returns no students on input array length mismatch.
-function createProfiles(profileTemplates, manipulations) {
-  if (profileTemplates.length !== manipulations.length) return [];
+function createProfiles(profileTemplates, variants) {
+  if (profileTemplates.length !== variants.length) return [];
 
-  return _.zip(profileTemplates, manipulations).map(([profileTemplate, manipulation]) => {
+  return _.zip(profileTemplates, variants).map(([profileTemplate, variant]) => {
     return {
-      profileName: manipulation.name,
-      profileImageSrc: imageFor(manipulation.image_key),
+      profileName: variant.name,
+      profileImageSrc: imageFor(variant.image_key),
       profileText: renderTemplate(profileTemplate.profile_template, {
-        Name: manipulation.name,
-        He: _.capitalize(manipulation.he),
-        he: manipulation.he,
-        his: manipulation.his,
-        him: manipulation.him
+        Name: variant.name,
+        He: _.capitalize(variant.he),
+        he: variant.he,
+        his: variant.his,
+        him: variant.him
       }),
       argumentTexts: [
         profileTemplate.argument_1,
