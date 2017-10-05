@@ -44,7 +44,7 @@ class MobileSimulator extends Component {
 
   renderResponsiveFrame(isNotWide) {
     const {children} = this.props;
-    if (!isNotWide) return children;
+    if (!isNotWide) return <div className="MobileSimulator-not-wide Global-background-color">{children}</div>;
     
     const {animScale} = this.state;
     return (
@@ -61,7 +61,7 @@ class MobileSimulator extends Component {
                 onMouseDown={this.onMouseDown}
                 onMouseOut={this.onMouseUp}
                 onMouseUp={this.onMouseUp} />
-              <div className="MobileSimulator-background MobileSimulator-dragscroll">
+              <div className="MobileSimulator-background MobileSimulator-dragscroll Global-background-color">
                 {children}
               </div>
               <img
