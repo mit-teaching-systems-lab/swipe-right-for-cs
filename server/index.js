@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -26,6 +27,7 @@ app.use(function enforceHTTPS(request, response, next) {
   return next();
 });
 
+app.use(bodyParser.json());
 
 // Endpoints
 app.get('/api/hello', (req, res) => {
