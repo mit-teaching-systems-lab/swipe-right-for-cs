@@ -15,7 +15,7 @@
   color: #662e9e;
   padding: 20px;
   padding-bottom: 0px;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .IntroductionPhase-body {
@@ -25,4 +25,13 @@
   padding: 20px;
   font-size: 100%;
   color: #662e9e;
+}
+
+
+.IntroductionPhase-swipe {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

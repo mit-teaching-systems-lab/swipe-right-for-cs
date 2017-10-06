@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import __compact from 'lodash/compact';
 import './Swipeable.css';
 import PropTypes from 'prop-types';
 import Animated from 'animated/lib/targets/react-dom';
@@ -13,7 +14,7 @@ const styles = {
   }
 };
 
-// A card that springs up and then can be swiped left or right,
+// A card that springs up and then can be swiped right (and optionall left),
 // handling those animations and interactions and calling back to
 // the props when either occurs.
 class Swipeable extends Component {
@@ -42,8 +43,8 @@ class Swipeable extends Component {
   onTransitionEnd() {
     const {swipeIndex} = this.state;
     const {onSwipeLeft, onSwipeRight} = this.props;
-    if (swipeIndex === 0) return onSwipeLeft();
-    if (swipeIndex === 2) return onSwipeRight();
+    if (onSwipeRight && swipeIndex === 0) return onSwipeRight();
+    if (swipeIndex === 2) return onSwipeLeft();
   }
 
   render() {
@@ -63,7 +64,7 @@ class Swipeable extends Component {
   }
 
   renderSwipeable() {
-    const {children} = this.props;
+    const {children, onSwipeLeft} = this.props;
     const {swipeIndex} = this.state;
 
     // shortening the duration from
@@ -74,8 +75,14 @@ class Swipeable extends Component {
       delay: '0s'
     };
     
+    const elements = __compact([
+      <div key="left" className="Swipeable-left">&nbsp;</div>,
+      <div key="children" className="Swipeable-children">{children}</div>,
+      onSwipeLeft && <div key="right" className="Swipeable-right">&nbsp;</div>
+    ]);
     return (
       <BindKeyboardSwipeableViews
+        resistance={true}
         className="Swipeable-views"
         enableMouseEvents={true}
         springConfig={springConfig}
@@ -84,9 +91,7 @@ class Swipeable extends Component {
         index={swipeIndex}
         onChangeIndex={this.onChangeIndex}
         onTransitionEnd={this.onTransitionEnd}>
-        <div className="Swipeable-left">&nbsp;</div>
-        <div className="Swipeable-children">{children}</div>
-        <div className="Swipeable-right">&nbsp;</div>
+        {elements}
       </BindKeyboardSwipeableViews>
     );
   }
@@ -95,8 +100,8 @@ class Swipeable extends Component {
 Swipeable.propTypes = {
   children: PropTypes.node.isRequired,
   height: PropTypes.number.isRequired,
-  onSwipeLeft: PropTypes.func.isRequired,
-  onSwipeRight: PropTypes.func.isRequired
+  onSwipeRight: PropTypes.func.isRequired,
+  onSwipeLeft: PropTypes.func
 };
 
 export default Swipeable;

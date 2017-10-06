@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './IntroductionPhase.css';
 import Interactions from './Interactions.js';
+import Swipeable from './Swipeable.js';
 
 
 // Show the introduction, manage state transitions
@@ -9,10 +10,10 @@ import Interactions from './Interactions.js';
 class IntroductionPhase extends Component {
   constructor(props) {
     super(props);
-    this.onPlay = this.onPlay.bind(this);
+    this.onSwipeRight = this.onSwipeRight.bind(this);
   }
 
-  onPlay() {
+  onSwipeRight() {
     const {onInteraction, onDone} = this.props;
     onInteraction(Interactions.play());
     onDone();
@@ -24,17 +25,22 @@ class IntroductionPhase extends Component {
         <p className="IntroductionPhase-header">
            Round 1: Meet some students! 
         </p>
-        <p className="IntroductionPhase-body">
-          <div>For each high school student, read their profile and empathize with what they might care about and get excited about.</div>
-          <div>You will see some ways that teachers might use to persuade them to take a computer science course.</div>
+        <div className="IntroductionPhase-body">
+          <p>
+            For each high school student, read their profile and empathize with what
+            they might care about and get excited about.  You will see some ways
+            that teachers might use to persuade them to take a computer science
+            course.
+          </p>
+          <div><b>Swipe the argument right if you think the argument would deeply resonate with that student</b>.</div>
           <br />
-          <div>Swipe right if you think the argument would <b>deeply resonate with that student</b>.</div>
-          <br />
-          <div>If not, swipe left.</div>
-        </p>
-        <button
-          className="button"
-          onClick={this.props.onDone}>READY?</button>
+          <div>If not, swipe the argument left.</div>
+        </div>
+        <Swipeable
+          height={120}
+          onSwipeRight={this.onSwipeRight}>
+          <div className="IntroductionPhase-swipe">Swipe to play!</div>
+        </Swipeable>
       </div>
     );
   }
