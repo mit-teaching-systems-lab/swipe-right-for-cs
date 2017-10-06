@@ -2,7 +2,7 @@
   height: 100%;
   display:flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   background-color: #00ffff;
 }
@@ -10,7 +10,6 @@
 .IntroductionPhase-header {
   margin-top:0;
   margin-bottom:0;
-  text-align: center;
   background-color: #00ffff;
   color: #662e9e;
   padding: 20px;
@@ -25,6 +24,7 @@
   padding: 20px;
   font-size: 100%;
   color: #662e9e;
+  flex: 1;
 }
 
 

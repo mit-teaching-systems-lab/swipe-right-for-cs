@@ -19,6 +19,7 @@
     "csv-parse": "^1.2.3",
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
+    "react-delay": "^0.0.4",
     "react-dom": "^15.6.1",
     "react-media": "^1.6.1",
     "react-motion": "^0.5.2",

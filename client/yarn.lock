@@ -5151,6 +5151,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-delay@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/react-delay/-/react-delay-0.0.4.tgz#602046f99bd50bbb39be7b9d949ae05fc5ec56e1"
+
 react-dev-utils@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.0.1.tgz#106ae3d29f811c169d459bb9215a5933b7e11fb6"

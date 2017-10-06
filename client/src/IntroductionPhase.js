@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './IntroductionPhase.css';
 import Interactions from './Interactions.js';
+import Delay from 'react-delay';
 import Swipeable from './Swipeable.js';
 
 
@@ -28,7 +29,7 @@ class IntroductionPhase extends Component {
         <div className="IntroductionPhase-body">
           <p>
             For each high school student, read their profile and empathize with what
-            they might care about and get excited about.  You will see some ways
+            they really care about, or what they would really get excited about.  You will see some ways
             that teachers might use to persuade them to take a computer science
             course.
           </p>
@@ -36,11 +37,13 @@ class IntroductionPhase extends Component {
           <br />
           <div>If not, swipe the argument left.</div>
         </div>
-        <Swipeable
-          height={120}
-          onSwipeRight={this.onSwipeRight}>
-          <div className="IntroductionPhase-swipe">Swipe to play!</div>
-        </Swipeable>
+        <Delay wait={2000}>
+          <Swipeable
+            height={120}
+            onSwipeRight={this.onSwipeRight}>
+            <div className="IntroductionPhase-swipe">Swipe to play!</div>
+          </Swipeable>
+        </Delay>
       </div>
     );
   }
