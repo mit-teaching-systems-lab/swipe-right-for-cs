@@ -7,9 +7,9 @@ import hashCode from '../util/hashCode.js';
 import createProfiles from './createProfiles.js';
 
 
-export async function loadDataForCohort(workshopCode) {
+export async function loadDataForCohort(workshopCode, options = {}) {
   const {profileTemplates, variants} = await fetchBoth();
-  return cohortAndStudents(workshopCode, profileTemplates, variants);
+  return cohortAndStudents(workshopCode, profileTemplates, variants, options);
 }
 
 export async function fetchBoth() {
@@ -28,9 +28,13 @@ async function fetchTexts() {
 }
 
 // Determine cohort, apply manipulations, shuffle order on each game
-export function cohortAndStudents(workshopCode, profileTemplates, variants) {
+export function cohortAndStudents(workshopCode, profileTemplates, variants, options = {}) {
+  // Tune number of arguments, cohorts, max profiles shown
+  const argumentCount = options.argumentCount || 5;
+  const cohortCount = options.cohortCount || 10;
+  const maxProfileCount = options.maxProfileCount || 10;
+
   // Bucket into cohorts
-  const cohortCount = 10;
   const cohortNumber = hashCode(workshopCode) % cohortCount;
 
   // Rotate the variants shown to each cohort
@@ -39,8 +43,17 @@ export function cohortAndStudents(workshopCode, profileTemplates, variants) {
   // Within a game, randomly shuffle the order of variants shown
   const shuffledVariants = __shuffle(rotatedVariants);
 
+  // Within a game, randomly shuffle the order of profiles shown
+  const shuffledProfileTemplates = __shuffle(profileTemplates);
+
+  // If there is a mismatch between the number of profiles and variants,
+  // log that and show the top n profiles.
+  const profileCount = Math.min(maxProfileCount, shuffledVariants.length, shuffledProfileTemplates.length);
+  const slicedProfileTemplates = shuffledProfileTemplates.slice(0, profileCount);
+  const slicedVariants = shuffledVariants.slice(0, profileCount);
+
   // Create actual concrete student profiles
-  const students = createProfiles(profileTemplates, shuffledVariants);
+  const students = createProfiles(slicedProfileTemplates, slicedVariants, argumentCount);
   return {cohortNumber, students};
 }
 

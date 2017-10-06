@@ -1,16 +1,22 @@
 import fs from 'fs';
+import __uniq from 'lodash/uniq';
 import {
   loadDataForCohort,
   rotatedVariantsForProfiles
 } from './loadDataForCohort.js';
 
+function mockCsvFetches() {
+  fetch.mockResponseOnce(fs.readFileSync('./src/files/profileTemplates.csv').toString());
+  fetch.mockResponseOnce(fs.readFileSync('./src/files/sortedVariants.csv').toString());
+}
+
 describe('loadDataForCohort', () => {
   it('has valid data files checked in', async () => {
-    fetch.mockResponseOnce(fs.readFileSync('./src/files/profileTemplates.csv').toString());
-    fetch.mockResponseOnce(fs.readFileSync('./src/files/sortedVariants.csv').toString());
-    const {cohortNumber, students} = await loadDataForCohort('foo');
+    mockCsvFetches();
+    const {cohortNumber, students} = await loadDataForCohort('foo', { argumentCount: 3 });
     expect(cohortNumber).toEqual(4);
-    expect(students.length).toEqual(5);
+    expect(students.length).toEqual(10);
+    expect(__uniq(students.map(s => s.argumentTexts.length))).toEqual([3]);
   });
 });
 
