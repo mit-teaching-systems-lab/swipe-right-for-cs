@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './IntroductionPhase.css';
 import Interactions from './Interactions.js';
 import Delay from 'react-delay';
-import Swipeable from './Swipeable.js';
+import Swipeable from './components/Swipeable.js';
 
 
 // Show the introduction, manage state transitions

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Delay from 'react-delay';
-import Bounceable from './Bounceable.js';
 import Interactions from './Interactions.js';
+import Bounceable from './components/Bounceable.js';
 import fullConsentFile from './files/fullConsentText.txt';
 import './ConsentPhase.css';
 // import Swipeable from './Swipeable.js';

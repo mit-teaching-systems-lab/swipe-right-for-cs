@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
 import './App.css';
-import MobileSimulator from './MobileSimulator.js';
+import MobileSimulator from './components/MobileSimulator.js';
 import Title from './Title.js';
 import ConsentPhase from './ConsentPhase.js';
 import IntroductionPhase from './IntroductionPhase.js';

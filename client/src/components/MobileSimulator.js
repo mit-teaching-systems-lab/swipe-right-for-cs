@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Media from 'react-media';
 import Animated from 'animated/lib/targets/react-dom';
 import './MobileSimulator.css';
-import dragscroll from './util/dragscroll.js';
-import topImage from './img/top.png';
-import bottomImage from './img/bottom.png';
+import dragscroll from '../util/dragscroll.js';
+import topImage from '../img/top.png';
+import bottomImage from '../img/bottom.png';
 
 
 // CSS adapted from https://framework7.io/examples/

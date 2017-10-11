@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Delay from 'react-delay';
 import './Title.css';
-import Swipeable from './Swipeable.js';
+import Swipeable from './components/Swipeable.js';
 
 class Title extends Component {
   constructor(props) {

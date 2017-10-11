@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Turn.css';
 import Delay from 'react-delay';
-import Swipeable from './Swipeable.js';
+import Swipeable from './components/Swipeable.js';
 import Interactions from './Interactions.js';
 
 
