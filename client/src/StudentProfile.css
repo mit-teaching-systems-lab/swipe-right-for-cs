@@ -9,7 +9,7 @@
 
 .StudentProfile-image {
   width: 100%;
-  height: 100%;
+  flex: 1;
   background-size: contain;
   background-repeat: no-repeat;
   background-position-x: center;
@@ -19,4 +19,5 @@
 .StudentProfile-profile {
   text-align: center;
   margin: 10px;
+  height: 100px;
 }
