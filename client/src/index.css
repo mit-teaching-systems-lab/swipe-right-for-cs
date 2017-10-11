@@ -6,6 +6,7 @@ body {
 
 html, body, #root {
   height: 100%;
+  color: #662e9e;
 }
 
 button.button {
@@ -14,7 +15,6 @@ button.button {
 
 .Global-background-color {
   background-color: white;
-  color: #662e9e;
 }
 
 .Global-header-font {

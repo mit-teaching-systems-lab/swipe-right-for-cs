@@ -27,11 +27,10 @@ class IntroductionPhase extends Component {
            Round 1: Meet some students! 
         </p>
         <div className="IntroductionPhase-body">
-          <p>
-            For each high school student, read their profile and empathize with what
-            they really care about, or what they would really get excited about.  You will see some ways
-            that teachers might use to persuade them to take a computer science
-            course.
+          <p className="IntroductionPhase-copy">
+            {`The following high school students are not currently interested in enrolling in a CS course.
+            Start by reading the short profile of the student, and thinking of what they really care about, or what they would get excited about.
+            You'll then see some things that teachers might say to persuade them to take a computer science course.`}
           </p>
           <div><b>Swipe the argument right if you think the argument would deeply resonate with that student</b>.</div>
           <br />

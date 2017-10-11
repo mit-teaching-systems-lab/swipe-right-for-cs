@@ -5,6 +5,11 @@ import Swipeable from './components/Swipeable.js';
 import Interactions from './Interactions.js';
 import './DiscussPhase.css';
 
+const copyText = `Turn and talk with a partner about the students you encountered.
+
+How could you connect these capable young people's strengths and interests to computer science?`;
+
+
 // Show the phase where folks talk in pairs about students.
 class DiscussPhase extends Component {
   constructor(props) {
@@ -24,10 +29,8 @@ class DiscussPhase extends Component {
       <div className="DiscussPhase">
         <div className="DiscussPhase-content">
           <div>
-            <p className="Global-header-font">Round 2</p>
-            <p>Turn and talk with a partner about the students you encountered.  What assumptions did you make about those students?</p>
-            <p>{"When discussing, practice using as 'asset framing' and describing students as competent and capable young people."}</p>
-            <p>What could you say to connect interests to each other?</p>
+            <p className="Global-header-font">Round 2: Discuss</p>
+            <p className="Discuss-copy">{copyText}</p>
           </div>
           <div className="DiscussPhase-students">
             {students.map((student) => {

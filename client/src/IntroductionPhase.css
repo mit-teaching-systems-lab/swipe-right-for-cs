@@ -2,7 +2,6 @@
   height: 100%;
   display:flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
 }
 
@@ -20,7 +19,6 @@
   font-size: 100%;
   flex: 1;
 }
-
 
 .IntroductionPhase-swipe {
   height: 100%;

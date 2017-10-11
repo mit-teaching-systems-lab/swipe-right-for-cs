@@ -7,7 +7,7 @@ import '../index.css';
 export function LargePhone(props) {
   const {children} = props;
   return (
-    <div style={{width: 374, height: 667, border: '1px solid black', overflow: 'hidden'}}>{children}</div>
+    <div style={{width: 375, height: 667, border: '1px solid black', overflow: 'hidden'}}>{children}</div>
   );
 }
 LargePhone.propTypes = {
@@ -17,7 +17,7 @@ LargePhone.propTypes = {
 export function SmallPhone(props) {
   const {children} = props;
   return (
-    <div style={{width: 374, height: 444, border: '1px solid black', overflow: 'hidden'}}>{children}</div>
+    <div style={{width: 320, height: 444, border: '1px solid black', overflow: 'hidden'}}>{children}</div>
   );
 }
 SmallPhone.propTypes = {
