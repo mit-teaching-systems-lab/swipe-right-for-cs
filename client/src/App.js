@@ -3,6 +3,7 @@ import uuid from 'uuid';
 import './App.css';
 import MobileSimulator from './MobileSimulator.js';
 import Title from './Title.js';
+import ConsentPhase from './ConsentPhase.js';
 import IntroductionPhase from './IntroductionPhase.js';
 import StudentsPhase from './StudentsPhase.js';
 import {loadDataForCohort} from './loaders/loadDataForCohort.js';
@@ -30,6 +31,7 @@ class App extends Component {
       logs: []
     };
     this.onDoneTitle = this.onDoneTitle.bind(this);
+    this.onDoneConsent = this.onDoneConsent.bind(this);
     this.onDoneIntroduction = this.onDoneIntroduction.bind(this);
     this.onDoneStudents = this.onDoneStudents.bind(this);
     this.onInteraction = this.onInteraction.bind(this);
@@ -67,6 +69,10 @@ class App extends Component {
   }
 
   onDoneTitle() {
+    this.setState({ phase: Phases.CONSENT });
+  }
+
+  onDoneConsent() {
     this.setState({ phase: Phases.INTRODUCTION });
   }
 
@@ -103,6 +109,7 @@ class App extends Component {
   renderScreen() {
     const {phase, students} = this.state;
     if (phase === Phases.TITLE) return this.renderTitle();
+    if (phase === Phases.CONSENT) return this.renderConsent();
     if (phase === Phases.INTRODUCTION) return this.renderIntroduction();
     if (!students) return this.renderLoading();
     if (phase === Phases.STUDENTS) return this.renderStudents();
@@ -111,6 +118,12 @@ class App extends Component {
 
   renderTitle() {
     return <Title onDone={this.onDoneTitle} />;
+  }
+
+  renderConsent() {
+    return <ConsentPhase
+      onInteraction={this.onInteraction}
+      onDone={this.onDoneConsent} />;
   }
 
   renderIntroduction() {

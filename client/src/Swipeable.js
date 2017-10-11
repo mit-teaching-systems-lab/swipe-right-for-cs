@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import __compact from 'lodash/compact';
 import './Swipeable.css';
 import PropTypes from 'prop-types';
-import Animated from 'animated/lib/targets/react-dom';
+import Bounceable from './Bounceable.js';
 import SwipeableViews from 'react-swipeable-views';
 import {bindKeyboard} from 'react-swipeable-views-utils';
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
@@ -21,19 +21,10 @@ class Swipeable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      swipeIndex: 1,
-      animTop: new Animated.Value(props.height),
+      swipeIndex: 1
     };
     this.onChangeIndex = this.onChangeIndex.bind(this);
     this.onTransitionEnd = this.onTransitionEnd.bind(this);
-  }
-
-  componentDidMount() {
-    const {animTop} = this.state;
-    Animated.spring(animTop, {
-      toValue: 0.0,
-      speed: 20
-    }).start();
   }
 
   onChangeIndex(index) {
@@ -49,16 +40,12 @@ class Swipeable extends Component {
 
   render() {
     const {height} = this.props;
-    const {animTop} = this.state;
 
-    // Spring up
     return (
       <div className="Swipeable" style={{height: height}}>
-        <Animated.div
-          className="Swipeable-spring"
-          style={{top: animTop}}>
+        <Bounceable height={height}>
           {this.renderSwipeable()}
-        </Animated.div>
+        </Bounceable>
       </div>
     );
   }

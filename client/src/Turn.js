@@ -60,7 +60,7 @@ class Turn extends Component {
         <Delay wait={500}>
           <Swipeable
             key={argumentText}
-            height={120}
+            height={140}
             onSwipeLeft={this.onSwipeLeft}
             onSwipeRight={this.onSwipeRight}>
             <div className="Turn-argument">{argumentText}</div>

@@ -9,10 +9,8 @@
 .IntroductionPhase-header {
   margin-top:0;
   margin-bottom:0;
-  color: #662e9e;
   padding: 20px;
   padding-bottom: 0px;
-  font-size: 20px;
 }
 
 .IntroductionPhase-body {
@@ -20,7 +18,6 @@
   align-items: center;
   padding: 20px;
   font-size: 100%;
-  color: #662e9e;
   flex: 1;
 }
 

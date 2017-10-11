@@ -1,0 +1,25 @@
+.ConsentPhase {
+  margin: 20px;
+  margin-top: 10px;
+}
+
+.ConsentPhase-more {
+  color: blue;
+}
+
+.ConsentPhase-choices {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.ConsentPhase-choices > div {
+  color: blue;
+}
+
+.ConsentPhase-full-consent {
+  white-space: pre-wrap;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}

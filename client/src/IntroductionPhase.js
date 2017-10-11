@@ -23,7 +23,7 @@ class IntroductionPhase extends Component {
   render() {
     return (
       <div className="IntroductionPhase">
-        <p className="IntroductionPhase-header">
+        <p className="IntroductionPhase-header Global-header-font">
            Round 1: Meet some students! 
         </p>
         <div className="IntroductionPhase-body">

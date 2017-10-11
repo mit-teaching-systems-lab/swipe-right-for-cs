@@ -14,4 +14,9 @@ button.button {
 
 .Global-background-color {
   background-color: white;
+  color: #662e9e;
+}
+
+.Global-header-font {
+  font-size: 20px;
 }
