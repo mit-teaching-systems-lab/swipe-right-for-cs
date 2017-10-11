@@ -17,8 +17,20 @@ class Turn extends Component {
   }
 
   turn() {
-    const {profileName, profileText, profileImageSrc, argumentText} = this.props;
-    return {profileName, profileText, profileImageSrc, argumentText};
+    const {
+      profileKey,
+      profileName,
+      profileText,
+      profileImageSrc,
+      argumentText
+    } = this.props;
+    return {
+      profileKey,
+      profileName,
+      profileText,
+      profileImageSrc,
+      argumentText
+    };
   }
 
   onSwipe(interaction) {
@@ -59,6 +71,7 @@ class Turn extends Component {
   }
 }
 Turn.propTypes = {
+  profileKey: PropTypes.string.isRequired,
   profileName: PropTypes.string.isRequired,
   profileImageSrc: PropTypes.string.isRequired,
   profileText: PropTypes.string.isRequired,
