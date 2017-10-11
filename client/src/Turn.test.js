@@ -7,6 +7,7 @@ function testProps(props = {}) {
   return {
     ...props,
     ...turn,
+    swipeHeight: 140,
     onInteraction: jest.fn(),
     onDone: jest.fn()
   };

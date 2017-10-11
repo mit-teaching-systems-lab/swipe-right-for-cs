@@ -1,3 +1,34 @@
 .Student { 
   height: 100%
 }
+
+.Student-rating {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.Student-choices-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.Student-choices {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+}
+
+.Student-choices > li {
+  flex: 1;
+  color: blue;
+  font-size: 13px;
+  list-style: none;
+  margin: 10px;
+}

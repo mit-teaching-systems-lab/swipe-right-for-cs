@@ -49,7 +49,7 @@ class Turn extends Component {
 
   render() {
     const {profileName, profileText, profileImageSrc, argumentText} = this.props;
-    const height = 140;
+    const {swipeHeight} = this.props;
     return (
       <div className="Turn">
         <StudentProfile
@@ -57,11 +57,11 @@ class Turn extends Component {
           profileImageSrc={profileImageSrc}
           profileName={profileName}
           profileText={profileText} />
-        <div style={{height}}>
+        <div style={{height: swipeHeight}}>
           <Delay wait={500}>
             <Swipeable
               key={argumentText}
-              height={height}
+              height={swipeHeight}
               onSwipeLeft={this.onSwipeLeft}
               onSwipeRight={this.onSwipeRight}>
               <div className="Turn-argument">{argumentText}</div>
@@ -78,6 +78,7 @@ Turn.propTypes = {
   profileImageSrc: PropTypes.string.isRequired,
   profileText: PropTypes.string.isRequired,
   argumentText: PropTypes.string.isRequired,
+  swipeHeight: PropTypes.number.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onDone: PropTypes.func.isRequired
 };

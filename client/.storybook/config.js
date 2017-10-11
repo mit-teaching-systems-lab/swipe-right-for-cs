@@ -4,6 +4,7 @@ function loadStories() {
   require('../src/ConsentPhase.story.js');
   require('../src/InstructionsPhase.story.js');
   require('../src/DiscussPhase.story.js');
+  require('../src/Student.story.js');
   require('../src/Turn.story.js');
   // You can require as many stories as you need.
 }

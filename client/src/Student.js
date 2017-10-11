@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Turn from './Turn.js';
+import StudentProfile from './StudentProfile.js';
+import Interactions from './Interactions.js';
 import './Student.css';
 
 
@@ -35,26 +37,88 @@ class Student extends Component {
   }
 
   onDoneTurn() {
-    const {argumentTexts, onDone} = this.props;
     const swipesMade = this.state.swipesMade + 1;
-    if (swipesMade >= argumentTexts.length) return onDone();
     this.setState({swipesMade});
   }
 
+  onChoiceTapped(choices, choiceIndex, ratingText) {
+    const {onDone, onInteraction} = this.props;
+    const {
+      profileName,
+      profileKey,
+      profileText,
+      profileImageSrc
+    } = this.props;
+    const student = {
+      profileName,
+      profileKey,
+      profileText,
+      profileImageSrc
+    };
+    const interaction = Interactions.studentRating({choices, choiceIndex, ratingText, student});
+    onInteraction(interaction);
+    onDone();
+  }
+
   render() {
-    const {onInteraction} = this.props;
-    const turn = this.currentTurn();
+    const {argumentTexts} = this.props;
+    const {swipesMade} = this.state;
+
     return (
       <div className="Student">
-        <Turn
-          {...turn}
-          onInteraction={onInteraction}
-          onDone={this.onDoneTurn}
-        />
+        {(swipesMade < argumentTexts.length)
+          ? this.renderTurn()
+          : this.renderQuestion()}
+      </div>
+    );
+  }
+
+  renderTurn() {
+    const {onInteraction, swipeHeight} = this.props;
+    const turn = this.currentTurn();
+    return (
+      <Turn
+        {...turn}
+        swipeHeight={swipeHeight}
+        onInteraction={onInteraction}
+        onDone={this.onDoneTurn} />
+    );
+  }
+
+  renderQuestion() {
+    const {profileImageSrc, profileName, profileText, swipeHeight} = this.props;
+    const choices = [
+      "they're in",
+      "they need one more nudge",
+      "i didn't get there yet"
+    ];
+
+    return (
+      <div className="Student-rating">
+        <StudentProfile
+          className="Student-profile"
+          profileImageSrc={profileImageSrc}
+          profileName={profileName}
+          profileText={profileText} />
+        <div className="Student-choices-container" style={{height: swipeHeight}}>
+          <div>How likely are they to take CS?</div>
+          <ul className="Student-choices">
+            {choices.map((choice, choiceIndex) => {
+              return (
+                <li
+                  key={choice}
+                  onClick={this.onChoiceTapped.bind(this, choice, choiceIndex)}>
+                  {choice}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     );
   }
 }
+
 Student.propTypes = {
   profileName: PropTypes.string.isRequired,
   profileKey: PropTypes.string.isRequired,
@@ -62,7 +126,11 @@ Student.propTypes = {
   profileText: PropTypes.string.isRequired,
   argumentTexts: PropTypes.arrayOf(PropTypes.string).isRequired,
   onInteraction: PropTypes.func.isRequired,
-  onDone: PropTypes.func.isRequired
+  onDone: PropTypes.func.isRequired,
+  swipeHeight: PropTypes.number
+};
+Student.defaultProps = {
+  swipeHeight: 140
 };
 
 export default Student;

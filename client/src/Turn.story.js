@@ -16,6 +16,7 @@ function testTurn(props) {
     profileName,
     profileText,
     profileImageSrc,
+    swipeHeight: 140,
     argumentText: "Computer science is pervasive in every field. No matter what you plan to do when you finish school, knowing something about computer science will help you be better at your job.",
     ...props
   };
