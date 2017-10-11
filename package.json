@@ -10,7 +10,7 @@
     "test": "yarn run lint && cd client && yarn run test",
     "heroku-prebuild": "yarn install && cd client && YARN_PRODUCTION=false yarn install --frozen-lockfile",
     "heroku-postbuild": "cd client && yarn run build",
-    "dev": "concurrently \"yarn run server\" \"yarn run client\"",
+    "dev": "concurrently \"NODE_ENV=development yarn run server\" \"yarn run client\"",
     "server": "node server/index.js",
     "client": "cd client && yarn run start",
     "lint": "eslint --ext js -c server/.eslintrc server",

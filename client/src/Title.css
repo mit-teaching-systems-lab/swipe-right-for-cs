@@ -14,4 +14,13 @@
   flex-direction: column;
   background-color: #00ffff;
   color: #662e9e;
+  flex: 1;
+}
+
+.Title-swipe {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

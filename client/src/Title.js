@@ -1,18 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Delay from 'react-delay';
 import './Title.css';
-
+import Swipeable from './Swipeable.js';
 
 class Title extends Component {
+  constructor(props) {
+    super(props);
+    this.onSwipeRight = this.onSwipeRight.bind(this);
+  }
+
+  onSwipeRight() {
+    const {onDone} = this.props;
+    onDone();
+  }
+
   render() {
     return (
       <div className="Title">
         <p className="Title-intro">
           Swipe Right for CS!    
         </p>
-        <button
-          className="button"
-          onClick={this.props.onDone}>CLICK ME TO PLAY</button>
+        <Delay wait={750}>
+          <Swipeable
+            height={120}
+            onSwipeRight={this.onSwipeRight}>
+            <div className="Title-swipe">Swipe right to play!</div>
+          </Swipeable>
+        </Delay>
       </div>
     );
   }

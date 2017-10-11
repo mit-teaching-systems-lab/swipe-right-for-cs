@@ -66,5 +66,6 @@
 .MobileSimulator-background {
   position: relative;
   height: 444px;
+  width: 100%;
   overflow: scroll;
 }

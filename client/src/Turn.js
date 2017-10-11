@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Turn.css';
+import Delay from 'react-delay';
 import Swipeable from './Swipeable.js';
 import Interactions from './Interactions.js';
 
@@ -44,13 +45,15 @@ class Turn extends Component {
             alt={profileName} />
           <div className="Turn-profile">{profileText}</div>
         </div>
-        <Swipeable
-          key={argumentText}
-          height={120}
-          onSwipeLeft={this.onSwipeLeft}
-          onSwipeRight={this.onSwipeRight}>
-          <div className="Turn-argument">{argumentText}</div>
-        </Swipeable>
+        <Delay wait={500}>
+          <Swipeable
+            key={argumentText}
+            height={120}
+            onSwipeLeft={this.onSwipeLeft}
+            onSwipeRight={this.onSwipeRight}>
+            <div className="Turn-argument">{argumentText}</div>
+          </Swipeable>
+        </Delay>
       </div>
     );
   }

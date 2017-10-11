@@ -2,7 +2,7 @@
   height: 100%;
   display:flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   background-color: #00ffff;
 }
@@ -10,11 +10,11 @@
 .IntroductionPhase-header {
   margin-top:0;
   margin-bottom:0;
-  text-align: center;
   background-color: #00ffff;
   color: #662e9e;
-  padding: 40px;
-  font-size: 25px;
+  padding: 20px;
+  padding-bottom: 0px;
+  font-size: 20px;
 }
 
 .IntroductionPhase-body {
@@ -24,4 +24,14 @@
   padding: 20px;
   font-size: 100%;
   color: #662e9e;
+  flex: 1;
+}
+
+
+.IntroductionPhase-swipe {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
