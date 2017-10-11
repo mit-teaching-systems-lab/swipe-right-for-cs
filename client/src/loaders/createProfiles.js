@@ -5,29 +5,29 @@ import __range from 'lodash/range';
 import __compact from 'lodash/compact';
 
 import renderTemplate from './renderTemplate.js';
-import HM1 from '../files/HM1.png';
-import HF1 from '../files/HF1.png';
-import BM1 from '../files/BM1.png';
 import BF1 from '../files/BF1.png';
+import BM1 from '../files/BM1.png';
+import CF1 from '../files/CF1.png';
 import CM1 from '../files/CM1.png';
-import CF2 from '../files/CF2.png';
-import WM1 from '../files/WM1.png';
-import WF1 from '../files/WF1.png';
-import IM1 from '../files/IM1.png';
+import HF1 from '../files/HF1.png';
+import HM1 from '../files/HM1.png';
 import IF1 from '../files/IF1.png';
+import IM1 from '../files/IM1.png';
+import WF1 from '../files/WF1.png';
+import WM1 from '../files/WM1.png';
 
-function imageFor(label) {
+export function imageFor(label) {
   return {
-    BM1,
     BF1,
-    HM1,
-    HF1,
+    BM1,
+    CF1,
     CM1,
-    CF2,
-    WM1,
-    WF1,
+    HF1,
+    HM1,
+    IF1,
     IM1,
-    IF1
+    WF1,
+    WM1
   }[label.toUpperCase()];
 }
 
@@ -35,7 +35,7 @@ function imageFor(label) {
 // into concrete profiles for a game.
 //
 // Returns no students on input array length mismatch.
-function createProfiles(profileTemplates, variants, argumentCount) {
+export function createProfiles(profileTemplates, variants, argumentCount) {
   if (profileTemplates.length !== variants.length) return [];
 
   return __zip(profileTemplates, variants).map(([profileTemplate, variant]) => {
@@ -61,5 +61,3 @@ function argumentTextsFor(profileTemplate) {
   const keys = __range(1, 20).map(i => `argument_${i}`);
   return __compact(keys.map(key => profileTemplate[key]));
 }
-
-export default createProfiles;

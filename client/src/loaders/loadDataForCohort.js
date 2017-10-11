@@ -4,7 +4,7 @@ import parseCsvSync from 'csv-parse/lib/sync';
 import profileTemplatesFile from '../files/profileTemplates.csv';
 import sortedVariantsFile from '../files/sortedVariants.csv';
 import hashCode from '../util/hashCode.js';
-import createProfiles from './createProfiles.js';
+import {createProfiles} from './createProfiles.js';
 
 
 export async function loadDataForCohort(workshopCode, options = {}) {
