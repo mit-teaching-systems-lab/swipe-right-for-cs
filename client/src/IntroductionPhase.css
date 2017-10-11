@@ -4,13 +4,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #00ffff;
 }
 
 .IntroductionPhase-header {
   margin-top:0;
   margin-bottom:0;
-  background-color: #00ffff;
   color: #662e9e;
   padding: 20px;
   padding-bottom: 0px;
@@ -18,7 +16,6 @@
 }
 
 .IntroductionPhase-body {
-  background-color: #00ffff;
   flex-direction: column;
   align-items: center;
   padding: 20px;
