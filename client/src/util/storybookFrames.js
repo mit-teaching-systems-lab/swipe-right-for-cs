@@ -4,14 +4,15 @@ import MobileSimulator from '../components/MobileSimulator.js';
 import '../index.css';
 
 
-// Development only.  A frame for showing stories so they look like
-// they are in the product.
 export function LargePhone(props) {
   const {children} = props;
   return (
     <div style={{width: 374, height: 667, border: '1px solid black', overflow: 'hidden'}}>{children}</div>
   );
 }
+LargePhone.propTypes = {
+  children: PropTypes.node.isRequired
+};
 
 export function SmallPhone(props) {
   const {children} = props;
@@ -19,6 +20,9 @@ export function SmallPhone(props) {
     <div style={{width: 374, height: 444, border: '1px solid black', overflow: 'hidden'}}>{children}</div>
   );
 }
+SmallPhone.propTypes = {
+  children: PropTypes.node.isRequired
+};
 
 export function Desktop(props) {
   const {children} = props;
@@ -26,6 +30,10 @@ export function Desktop(props) {
     <MobileSimulator minWidth={10} minHeight={10} forceIsNotWide={true}>{children}</MobileSimulator>
   );
 }
+Desktop.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
 
 // Select between string values
 class Select extends Component {
@@ -60,6 +68,8 @@ Select.propTypes = {
 };
 
 
+// Development only.  A frame for showing stories so they look like
+// they are in the product.
 export function withFrameSwitcher(children) {
   return (
     <div>

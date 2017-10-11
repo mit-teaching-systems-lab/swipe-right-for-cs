@@ -138,7 +138,7 @@ class App extends Component {
   }
 
   renderReview() {
-    return <div>TODO...</div>
+    return <div>TODO...</div>;
   }
 }
 

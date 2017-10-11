@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Turn.css';
-import Media from 'react-media';
 import Delay from 'react-delay';
 import Swipeable from './components/Swipeable.js';
 import Interactions from './Interactions.js';
