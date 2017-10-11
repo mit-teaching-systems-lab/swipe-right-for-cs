@@ -5,6 +5,7 @@ import Media from 'react-media';
 import Delay from 'react-delay';
 import Swipeable from './components/Swipeable.js';
 import Interactions from './Interactions.js';
+import StudentProfile from './StudentProfile.js';
 
 
 // Shows the user a turn of the game, and let's them interact with it.
@@ -59,13 +60,11 @@ class Turn extends Component {
     const imageHeight = (isNotWide) ? 180 : 360;
     return (
       <div className="Turn">
-        <div className="Turn-student">
-          <img
-            height={imageHeight}
-            src={profileImageSrc}
-            alt={profileName} />
-          <div className="Turn-profile">{profileText}</div>
-        </div>
+        <StudentProfile
+          imageHeight={imageHeight}
+          profileImageSrc={profileImageSrc}
+          profileName={profileName}
+          profileText={profileText} />
         <Delay wait={500}>
           <Swipeable
             key={argumentText}
