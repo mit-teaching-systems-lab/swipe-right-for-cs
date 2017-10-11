@@ -48,11 +48,12 @@ class Turn extends Component {
 
   render() {
     const {profileName, profileText, profileImageSrc, argumentText} = this.props;
+    const imageHeight = 180;
     return (
       <div className="Turn">
         <div className="Turn-student">
           <img
-            height={180}
+            height={imageHeight}
             src={profileImageSrc}
             alt={profileName} />
           <div className="Turn-profile">{profileText}</div>

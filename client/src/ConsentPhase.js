@@ -56,22 +56,24 @@ class ConsentPhase extends Component {
 
     return (
       <div className="ConsentPhase">
-        <div className="Global-header-font">Research consent</div>
-        <div>
-          <p className="ConsentPhase-text">Optionally, {"we'd"} like to use your responses here for a joint research study between MIT and code.org.  We would like to compare the responses across participants.</p>
-          <p className="ConsentPhase-text">Your responses would be included in the research, along with data from your code.org profile.  All data you enter is stored securely and protected on a secure server on Google Drive, Amazon Web Services or Heroku.  If you consent, we will email you a copy of this form for your records.</p>
-          <p className="ConsentPhase-text">You can continue playing the game either way.  Participation in the research study in voluntary.</p>
-          {isExpanded && this.renderExpandedConsent()}
+        <div className="ConsentPhase-content">
+          <div className="Global-header-font">Research consent</div>
+          <div className="ConsentPhase-text">
+            <p>Optionally, {"we'd"} like to use your responses here for a joint research study between MIT and code.org.  We would like to compare the responses across participants.</p>
+            <p>Your responses would be included in the research, along with data from your code.org profile.  All data you enter is stored securely and protected on a secure server on Google Drive, Amazon Web Services or Heroku.  If you consent, we will email you a copy of this form for your records.</p>
+            <p>You can continue playing the game either way.  Participation in the research study in voluntary.</p>
+            {isExpanded && this.renderExpandedConsent()}
+          </div>
+          <Delay wait={2000}>
+            <Bounceable height={60}>
+              <div className="ConsentPhase-choices">
+                <div onClick={this.onConsent}>I consent</div>
+                <div onClick={this.onDecline}>No thanks</div>
+                {!isExpanded && <div onClick={this.onReadMoreTapped}>Read more</div>}
+              </div>
+            </Bounceable>
+          </Delay>
         </div>
-        <Delay wait={2000}>
-          <Bounceable height={120}>
-            <div className="ConsentPhase-choices">
-              <div onClick={this.onConsent}>I consent</div>
-              <div onClick={this.onDecline}>No thanks</div>
-              {!isExpanded && <div onClick={this.onReadMoreTapped}>Read more</div>}
-            </div>
-          </Bounceable>
-        </Delay>
       </div>
     );
   }

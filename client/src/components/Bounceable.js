@@ -29,7 +29,7 @@ class Bounceable extends Component {
       <div className="Bounceable" style={{height: height}}>
         <Animated.div
           className="Bounceable-spring"
-          style={{top: animTop}}>
+          style={{top: animTop, height: height}}>
           {children}
         </Animated.div>
       </div>
