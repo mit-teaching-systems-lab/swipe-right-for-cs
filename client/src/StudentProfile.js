@@ -6,20 +6,16 @@ import './StudentProfile.css';
 // Renders a student profile.
 class StudentProfile extends Component {
   render() {
-    const {profileName, profileText, profileImageSrc, imageHeight} = this.props;
+    const {profileText, profileImageSrc} = this.props;
     return (
       <div className="StudentProfile">
-        <img
-          height={imageHeight}
-          src={profileImageSrc}
-          alt={profileName} />
+        <div className="StudentProfile-image" style={{backgroundImage: `url(${profileImageSrc})`}}></div>
         <div className="StudentProfile-profile">{profileText}</div>
       </div>
     );
   }
 }
 StudentProfile.propTypes = {
-  imageHeight: PropTypes.number.isRequired,
   profileName: PropTypes.string.isRequired,
   profileImageSrc: PropTypes.string.isRequired,
   profileText: PropTypes.string.isRequired

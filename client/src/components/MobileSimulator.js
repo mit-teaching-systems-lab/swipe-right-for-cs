@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import __has from 'lodash/has';
 import Media from 'react-media';
 import Animated from 'animated/lib/targets/react-dom';
 import './MobileSimulator.css';
@@ -42,8 +43,11 @@ class MobileSimulator extends Component {
     return <Media query={query}>{this.renderResponsiveFrame}</Media>;
   }
 
-  renderResponsiveFrame(isNotWide) {
+  renderResponsiveFrame(isNotWideFromMedia) {
     const {children} = this.props;
+    const isNotWide = (__has(this.props, 'forceIsNotWide'))
+      ? this.props.forceIsNotWide
+      : isNotWideFromMedia;
     if (!isNotWide) return <div className="MobileSimulator-not-wide Global-background-color">{children}</div>;
     
     const {animScale} = this.state;
@@ -88,7 +92,8 @@ class MobileSimulator extends Component {
 MobileSimulator.propTypes = {
   minWidth: PropTypes.number.isRequired,
   minHeight: PropTypes.number.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  forceIsNotWide: PropTypes.bool
 };
 
 export default MobileSimulator;
