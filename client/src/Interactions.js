@@ -21,5 +21,8 @@ const Interactions = {
   swipeRight(turn) {
     return { turn: turn, type: 'SWIPE_RIGHT' };
   },
+  doneDiscussPhase() {
+    return { type: 'DONE_DISCUSS_PHASE' };
+  }
 };
 export default Interactions;

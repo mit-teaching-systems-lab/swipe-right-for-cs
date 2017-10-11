@@ -63,7 +63,7 @@ Select.propTypes = {
 export function withFrameSwitcher(children) {
   return (
     <div>
-      <Select values={['large', 'small', 'desktop']} render={(key) => {
+      <Select values={['desktop', 'small', 'large']} render={(key) => {
         const frameMap = {
           large: LargePhone,
           small: SmallPhone,

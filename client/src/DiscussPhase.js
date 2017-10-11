@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import StudentProfile from './StudentProfile.js';
+import Swipeable from './components/Swipeable.js';
+import Interactions from './Interactions.js';
 import './DiscussPhase.css';
 
 // Show the phase where folks talk in pairs about students.
 class DiscussPhase extends Component {
+  constructor(props) {
+    super(props);
+    this.onSwipeRight = this.onSwipeRight.bind(this);
+  }
+
+  onSwipeRight() {
+    const {onInteraction, onDone} = this.props;
+    onInteraction(Interactions.doneDiscussPhase());
+    onDone();
+  }
+
   render() {
     const {students} = this.props;
     return (
@@ -30,6 +43,11 @@ class DiscussPhase extends Component {
             })}
           </div>
         </div>
+        <Swipeable
+          height={120}
+          onSwipeRight={this.onSwipeRight}>
+          <div className="DiscussPhase-swipe">Swipe to continue!</div>
+        </Swipeable>
       </div>
     );
   }

@@ -12,5 +12,13 @@
   border-top: 1px solid #ccc;
   padding-top: 10px;
   padding-bottom: 10px;
-  height: 300px;
+  height: 320px;
+}
+
+.DiscussPhase-swipe {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
