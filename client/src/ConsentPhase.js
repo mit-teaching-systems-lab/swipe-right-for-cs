@@ -5,7 +5,6 @@ import Interactions from './Interactions.js';
 import Bounceable from './components/Bounceable.js';
 import fullConsentFile from './files/fullConsentText.txt';
 import './ConsentPhase.css';
-// import Swipeable from './Swipeable.js';
 
 
 // Ask the user for research consent.
