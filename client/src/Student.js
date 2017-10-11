@@ -17,9 +17,16 @@ class Student extends Component {
   }
 
   currentTurn() {
-    const {profileName, profileText, profileImageSrc, argumentTexts} = this.props;
+    const {
+      profileName,
+      profileKey,
+      profileText,
+      profileImageSrc,
+      argumentTexts
+    } = this.props;
     const {swipesMade} = this.state;
     return {
+      profileKey,
       profileName,
       profileText,
       profileImageSrc,
@@ -50,6 +57,7 @@ class Student extends Component {
 }
 Student.propTypes = {
   profileName: PropTypes.string.isRequired,
+  profileKey: PropTypes.string.isRequired,
   profileImageSrc: PropTypes.string.isRequired,
   profileText: PropTypes.string.isRequired,
   argumentTexts: PropTypes.arrayOf(PropTypes.string).isRequired,

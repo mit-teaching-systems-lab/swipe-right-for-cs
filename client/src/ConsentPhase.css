@@ -1,0 +1,34 @@
+.ConsentPhase {
+  height: 100%;
+  display: flex;
+}
+
+.ConsentPhase-content {
+  margin: 20px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ConsentPhase-text {
+  flex: 1;
+}
+
+.ConsentPhase-more {
+  color: blue;
+}
+
+.ConsentPhase-choices {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: blue;
+  height: 100%;
+}
+
+.ConsentPhase-full-consent {
+  white-space: pre-wrap;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}

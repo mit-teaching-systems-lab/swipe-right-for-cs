@@ -6,13 +6,17 @@ body {
 
 html, body, #root {
   height: 100%;
+  color: #662e9e;
 }
 
 button.button {
   align-self: center;
-  background-color: #00ffff;
 }
 
 .Global-background-color {
-  background-color: #00ffff;
+  background-color: white;
+}
+
+.Global-header-font {
+  font-size: 20px;
 }

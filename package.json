@@ -10,9 +10,10 @@
     "test": "yarn run lint && cd client && yarn run test",
     "heroku-prebuild": "yarn install && cd client && YARN_PRODUCTION=false yarn install --frozen-lockfile",
     "heroku-postbuild": "cd client && yarn run build",
-    "dev": "concurrently \"NODE_ENV=development yarn run server\" \"yarn run client\"",
+    "dev": "concurrently \"NODE_ENV=development yarn run server\" \"yarn run client\" \"yarn run storybook\"",
     "server": "node server/index.js",
     "client": "cd client && yarn run start",
+    "storybook": "cd client && yarn run storybook",
     "lint": "eslint --ext js -c server/.eslintrc server",
     "ngrok": "ngrok http 3000 -host-header=\"localhost:8080\""
   },

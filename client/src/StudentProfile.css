@@ -1,0 +1,23 @@
+.StudentProfile {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
+  flex: 1;
+  height: 100%;
+}
+
+.StudentProfile-image {
+  width: 100%;
+  flex: 1;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+}
+
+.StudentProfile-profile {
+  text-align: center;
+  margin: 10px;
+  height: 100px;
+}

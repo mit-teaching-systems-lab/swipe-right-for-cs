@@ -3,14 +3,22 @@ import ReactDOM from 'react-dom';
 import Turn from './Turn.js';
 
 function testProps(props = {}) {
+  const turn = testTurn(props.turn || {});
   return {
     ...props,
-    profileName: 'Kevin',
-    profileImageSrc: 'foo.png',
-    profileText: 'hello!',
-    argumentText: 'do it!',
+    ...turn,
     onInteraction: jest.fn(),
     onDone: jest.fn()
+  };
+}
+
+function testTurn() {
+  return {
+    profileName: "Kevin",
+    profileKey: "WM1",
+    profileImageSrc: "foo.png",
+    profileText: "hello!",
+    argumentText: "do it!"
   };
 }
 
@@ -22,18 +30,14 @@ it('renders without crashing', async () => {
 
 it('records swipe left interactions correctly', async () => {
   const div = document.createElement('div');
-  const props = testProps();
+  const turn = testTurn();
+  const props = testProps({turn});
   const instance = ReactDOM.render(<Turn {...props} />, div); // eslint-disable-line react/no-render-return-value
   instance.onSwipeLeft();
 
   const expectedInteration = {
-    "type": "SWIPE_LEFT",
-    "turn": {
-      "profileName": "Kevin",
-      "profileImageSrc": "foo.png",
-      "profileText": "hello!",
-      "argumentText": "do it!"
-    }
+    turn,
+    type: "SWIPE_LEFT"
   };
   expect(props.onInteraction).toHaveBeenCalledWith(expectedInteration);
   expect(props.onDone).toHaveBeenCalledWith(expectedInteration);
@@ -42,18 +46,14 @@ it('records swipe left interactions correctly', async () => {
 
 it('records swipe right interactions correctly', async () => {
   const div = document.createElement('div');
-  const props = testProps();
+  const turn = testTurn();
+  const props = testProps({turn});
   const instance = ReactDOM.render(<Turn {...props} />, div); // eslint-disable-line react/no-render-return-value
   instance.onSwipeRight();
 
   const expectedInteration = {
-    "type": "SWIPE_RIGHT",
-    "turn": {
-      "profileName": "Kevin",
-      "profileImageSrc": "foo.png",
-      "profileText": "hello!",
-      "argumentText": "do it!"
-    }
+    turn,
+    type: "SWIPE_RIGHT"
   };
   expect(props.onInteraction).toHaveBeenCalledWith(expectedInteration);
   expect(props.onDone).toHaveBeenCalledWith(expectedInteration);

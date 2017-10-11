@@ -1,0 +1,11 @@
+.Bounceable {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.Bounceable-spring {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}

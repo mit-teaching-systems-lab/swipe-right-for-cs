@@ -1,0 +1,30 @@
+.DiscussPhase {
+  height: 100%;
+  flex: 1;
+}
+
+.DiscussPhase-content {
+  padding: 20px;
+  padding-top: 0;
+}
+
+.Discuss-copy {
+  white-space: pre-wrap;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.DiscussPhase-student {
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 320px;
+}
+
+.DiscussPhase-swipe {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

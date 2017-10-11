@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Turn.css';
 import Delay from 'react-delay';
-import Swipeable from './Swipeable.js';
+import Swipeable from './components/Swipeable.js';
 import Interactions from './Interactions.js';
+import StudentProfile from './StudentProfile.js';
 
 
 // Shows the user a turn of the game, and let's them interact with it.
@@ -17,8 +18,20 @@ class Turn extends Component {
   }
 
   turn() {
-    const {profileName, profileText, profileImageSrc, argumentText} = this.props;
-    return {profileName, profileText, profileImageSrc, argumentText};
+    const {
+      profileKey,
+      profileName,
+      profileText,
+      profileImageSrc,
+      argumentText
+    } = this.props;
+    return {
+      profileKey,
+      profileName,
+      profileText,
+      profileImageSrc,
+      argumentText
+    };
   }
 
   onSwipe(interaction) {
@@ -36,29 +49,31 @@ class Turn extends Component {
 
   render() {
     const {profileName, profileText, profileImageSrc, argumentText} = this.props;
+    const height = 140;
     return (
       <div className="Turn">
-        <div className="Turn-student">
-          <img
-            height={180}
-            src={profileImageSrc}
-            alt={profileName} />
-          <div className="Turn-profile">{profileText}</div>
+        <StudentProfile
+          className="Turn-student"
+          profileImageSrc={profileImageSrc}
+          profileName={profileName}
+          profileText={profileText} />
+        <div style={{height}}>
+          <Delay wait={500}>
+            <Swipeable
+              key={argumentText}
+              height={height}
+              onSwipeLeft={this.onSwipeLeft}
+              onSwipeRight={this.onSwipeRight}>
+              <div className="Turn-argument">{argumentText}</div>
+            </Swipeable>
+          </Delay>
         </div>
-        <Delay wait={500}>
-          <Swipeable
-            key={argumentText}
-            height={120}
-            onSwipeLeft={this.onSwipeLeft}
-            onSwipeRight={this.onSwipeRight}>
-            <div className="Turn-argument">{argumentText}</div>
-          </Swipeable>
-        </Delay>
       </div>
     );
   }
 }
 Turn.propTypes = {
+  profileKey: PropTypes.string.isRequired,
   profileName: PropTypes.string.isRequired,
   profileImageSrc: PropTypes.string.isRequired,
   profileText: PropTypes.string.isRequired,

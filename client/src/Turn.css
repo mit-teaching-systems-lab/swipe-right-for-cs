@@ -5,18 +5,7 @@
 }
 
 .Turn-student {
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: stretch;
-  flex: 1;
   margin: 10px;
-}
-
-.Turn-profile {
-  text-align:center;
-  margin-right:10px;
-  margin-left:10px;
 }
 
 .Turn-argument {

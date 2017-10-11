@@ -1,16 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Student from './Student.js';
+import DiscussPhase from './DiscussPhase.js';
+import {storybookStudents} from './util/fixtures.js';
 
 it('renders without crashing', async () => {
   const div = document.createElement('div');
   ReactDOM.render(
-    <Student
-      profileName="Kevin"
-      profileKey="WM1"
-      profileImageSrc="WM1.png"
-      profileText="Kevin likes trees."
-      argumentTexts={["Because it's fun", "Because it's cool"]}
+    <DiscussPhase
+      students={storybookStudents}
       onDone={jest.fn()}
       onInteraction={jest.fn()}
     />, div);

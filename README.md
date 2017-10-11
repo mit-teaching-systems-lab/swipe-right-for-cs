@@ -11,6 +11,8 @@ This will run the server and the create-react-app development server in parallel
 
 Note that the site is responsive and will include a fake frame for an iPhone 5 running Safari at desktop resolution.
 
+Running `yarn start` will also start a [storybook](https://github.com/storybooks/storybook) server on port 9001.  You can use this to create "stories" iterate on UI features.
+
 To develop on device:
 ```
 $ yarn run grok

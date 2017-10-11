@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
 import './App.css';
-import MobileSimulator from './MobileSimulator.js';
+import MobileSimulator from './components/MobileSimulator.js';
 import Title from './Title.js';
+import ConsentPhase from './ConsentPhase.js';
 import IntroductionPhase from './IntroductionPhase.js';
 import StudentsPhase from './StudentsPhase.js';
+import DiscussPhase from './DiscussPhase.js';
 import {loadDataForCohort} from './loaders/loadDataForCohort.js';
 
 
@@ -29,12 +31,9 @@ class App extends Component {
       students: null,
       logs: []
     };
-    this.onDoneTitle = this.onDoneTitle.bind(this);
-    this.onDoneIntroduction = this.onDoneIntroduction.bind(this);
-    this.onDoneStudents = this.onDoneStudents.bind(this);
-    this.onInteraction = this.onInteraction.bind(this);
     this.onDataLoaded = this.onDataLoaded.bind(this);
     this.onDataError = this.onDataError.bind(this);
+    this.onInteraction = this.onInteraction.bind(this);
   }
 
   componentDidMount() {
@@ -66,18 +65,6 @@ class App extends Component {
     console.error(err); // eslint-disable-line no-console
   }
 
-  onDoneTitle() {
-    this.setState({ phase: Phases.INTRODUCTION });
-  }
-
-  onDoneIntroduction() {
-    this.setState({ phase: Phases.STUDENTS });
-  }
-
-  onDoneStudents() {
-    this.setState({ phase: Phases.DISCUSS });
-  }
-
   // Log an interaction locally and on the server, along with context
   // about the session.
   onInteraction(interaction) {
@@ -103,20 +90,29 @@ class App extends Component {
   renderScreen() {
     const {phase, students} = this.state;
     if (phase === Phases.TITLE) return this.renderTitle();
+    if (phase === Phases.CONSENT) return this.renderConsent();
     if (phase === Phases.INTRODUCTION) return this.renderIntroduction();
     if (!students) return this.renderLoading();
     if (phase === Phases.STUDENTS) return this.renderStudents();
-    if (phase === Phases.DISCUSS) return <div>Discuss! (TODO)</div>;
+    if (phase === Phases.DISCUSS) return this.renderDiscuss();
+    if (phase === Phases.REVIEW) return this.renderReview();
   }
 
   renderTitle() {
-    return <Title onDone={this.onDoneTitle} />;
+    return <Title
+      onDone={() => this.setState({ phase: Phases.CONSENT })} />;
+  }
+
+  renderConsent() {
+    return <ConsentPhase
+      onInteraction={this.onInteraction}
+      onDone={() => this.setState({ phase: Phases.INTRODUCTION })} />;
   }
 
   renderIntroduction() {
     return <IntroductionPhase
       onInteraction={this.onInteraction}
-      onDone={this.onDoneIntroduction} />;
+      onDone={() => this.setState({ phase: Phases.STUDENTS })} />;
   }
 
   renderLoading() {
@@ -129,8 +125,20 @@ class App extends Component {
       <StudentsPhase
         students={students}
         onInteraction={this.onInteraction}
-        onDone={this.onDoneStudents} />
+        onDone={() => this.setState({ phase: Phases.DISCUSS })} />
     );
+  }
+
+  renderDiscuss() {
+    const {students} = this.state;
+    return <DiscussPhase
+      students={students}
+      onInteraction={this.onInteraction}
+      onDone={() => this.setState({ phase: Phases.REVIEW })} />;
+  }
+
+  renderReview() {
+    return <div>TODO...</div>;
   }
 }
 
