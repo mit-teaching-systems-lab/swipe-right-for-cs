@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Turn.css';
+import Media from 'react-media';
 import Delay from 'react-delay';
 import Swipeable from './components/Swipeable.js';
 import Interactions from './Interactions.js';
@@ -12,6 +13,7 @@ import Interactions from './Interactions.js';
 class Turn extends Component {
   constructor(props) {
     super(props);
+    this.renderResponsive = this.renderResponsive.bind(this);
     this.onSwipeLeft = this.onSwipeLeft.bind(this);
     this.onSwipeRight = this.onSwipeRight.bind(this);
   }
@@ -47,8 +49,14 @@ class Turn extends Component {
   }
 
   render() {
+    const [minWidth, minHeight] = [800, 400];
+    const query = `(min-width: ${minWidth}px) and (min-height: ${minHeight}px)`;
+    return <Media query={query}>{this.renderResponsive}</Media>;
+  }
+
+  renderResponsive(isNotWide) {
     const {profileName, profileText, profileImageSrc, argumentText} = this.props;
-    const imageHeight = 180;
+    const imageHeight = (isNotWide) ? 180 : 360;
     return (
       <div className="Turn">
         <div className="Turn-student">
