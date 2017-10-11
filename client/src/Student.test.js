@@ -7,7 +7,8 @@ it('renders without crashing', async () => {
   ReactDOM.render(
     <Student
       profileName="Kevin"
-      profileImageSrc="foo.png"
+      profileKey="WM1"
+      profileImageSrc="WM1.png"
       profileText="Kevin likes trees."
       argumentTexts={["Because it's fun", "Because it's cool"]}
       onDone={jest.fn()}
