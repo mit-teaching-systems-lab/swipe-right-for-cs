@@ -23,7 +23,7 @@ class App extends Component {
     super(props);
     this.state = {
       email: 'unknown@mit.edu',
-      workshopCode: 'foo',
+      workshopCode: uuid.v4(),
       sessionId: uuid.v4(),
       phase: Phases.TITLE,
       students: null,
