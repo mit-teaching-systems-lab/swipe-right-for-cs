@@ -56,9 +56,19 @@ class App extends Component {
     };
   }
 
+  // Optimization
+  doPrefetchStudentImages(students) {
+    const imageUrls = students.map(s => s.profileImageSrc);
+    imageUrls.forEach(imageUrl => {
+      const image = new Image();
+      image.src = imageUrl;
+    });
+  }
+
   onDataLoaded(loadedData) {
     const {cohortNumber, students} = loadedData;
     this.setState({cohortNumber, students});
+    this.doPrefetchStudentImages(students);
   }
 
   onDataError(err) {
