@@ -27,14 +27,13 @@ class IntroductionPhase extends Component {
            Round 1: Meet some students! 
         </p>
         <div className="IntroductionPhase-body">
-          <p className="IntroductionPhase-copy">
+          <p>
             {`The following high school students are not enrolled in a CS course.
             For each student, read a short profile of them and think of what they really care about.
             You'll then see some things that teachers might say to persuade them to take a CS course.`}
           </p>
-          <div><b>If you think the argument would meaningfully resonate with that student, swipe it right.</b></div>
-          <br />
-          <div>If not, swipe it left.</div>
+          <p><b>If you think the argument would meaningfully resonate with that student, swipe it right.</b></p>
+          <p>If not, swipe it left.</p>
         </div>
         <Delay wait={2000}>
           <Swipeable
