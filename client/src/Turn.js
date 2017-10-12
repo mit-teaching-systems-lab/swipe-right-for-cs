@@ -53,7 +53,6 @@ class Turn extends Component {
     return (
       <div className="Turn">
         <StudentProfile
-          className="Turn-student"
           profileImageSrc={profileImageSrc}
           profileName={profileName}
           profileText={profileText} />
@@ -64,7 +63,7 @@ class Turn extends Component {
               height={swipeHeight}
               onSwipeLeft={this.onSwipeLeft}
               onSwipeRight={this.onSwipeRight}>
-              <div className="Turn-argument">{argumentText}</div>
+              <div className="Turn-argument">“{argumentText}”</div>
             </Swipeable>
           </Delay>
         </div>
