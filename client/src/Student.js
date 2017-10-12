@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Turn from './Turn.js';
+import Bounceable from './components/Bounceable.js';
 import StudentProfile from './StudentProfile.js';
 import Interactions from './Interactions.js';
 import './Student.css';
@@ -90,13 +91,7 @@ class Student extends Component {
   }
 
   renderQuestion() {
-    const {profileImageSrc, profileName, profileText, swipeHeight} = this.props;
-    const choices = [
-      "they're in",
-      "they need one more nudge",
-      "i didn't get there yet"
-    ];
-
+    const {profileImageSrc, profileName, profileText} = this.props;
     return (
       <div className="Student-rating">
         <StudentProfile
@@ -104,6 +99,21 @@ class Student extends Component {
           profileImageSrc={profileImageSrc}
           profileName={profileName}
           profileText={profileText} />
+        {this.renderChoices()}
+      </div>
+    );
+  }
+
+  renderChoices() {
+    const {swipeHeight} = this.props;
+    const choices = [
+      "they're in",
+      "they need one more nudge",
+      "i didn't get there yet"
+    ];
+
+    return (
+      <Bounceable height={swipeHeight}>
         <div className="Student-choices-container" style={{height: swipeHeight}}>
           <div>How likely are they to take CS?</div>
           <ul className="Student-choices">
@@ -118,7 +128,7 @@ class Student extends Component {
             })}
           </ul>
         </div>
-      </div>
+      </Bounceable>
     );
   }
 }
