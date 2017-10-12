@@ -21,7 +21,7 @@ class IntroductionPhase extends Component {
   }
 
   render() {
-    const height = 100;
+    const height = 80;
     return (
       <div className="IntroductionPhase">
         <p className="IntroductionPhase-header Global-header-font">
