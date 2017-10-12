@@ -36,7 +36,7 @@ class IntroductionPhase extends Component {
           <p><b>If you think the argument would meaningfully resonate with that student, swipe it right.</b></p>
           <p>If not, swipe it left.</p>
         </div>
-        <Delay wait={2000}>
+        <Delay wait={200}>
           <Swipeable
             height={height}
             onSwipeRight={this.onSwipeRight}>

@@ -23,15 +23,6 @@ function testTurn(props) {
 }
 
 storiesOf('Turn', module) //eslint-disable-line no-undef
-  .add('normal', () => {
-    const turn = testTurn();
-    return withFrameSwitcher(
-      <Turn
-        {...turn}
-        onInteraction={action('onInteraction')}
-        onDone={action('onDone')} />
-    );
-  })
   .add('long text', () => {
     const profileText = longProfileText;
     const argumentText = longArgument;

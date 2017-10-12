@@ -1,12 +1,12 @@
 .Bounceable {
-  display: flex;
-  align-items: center;
   width: 100%;
   overflow-y: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .Bounceable-spring {
   position: relative;
-  height: 100%;
   width: 100%;
+  display: flex;
 }
