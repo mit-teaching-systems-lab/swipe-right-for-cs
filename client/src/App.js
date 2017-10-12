@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom';
+import queryString from 'query-string';
 import './App.css';
 import MobileSimulator from './components/MobileSimulator.js';
 import Title from './Title.js';
@@ -23,8 +28,9 @@ const Phases = {
 class App extends Component {
   constructor(props) {
     super(props);
+    const query = queryString.parse(window.location.search);
     this.state = {
-      email: 'unknown@mit.edu',
+      email: query.email || 'unknown@mit.edu',
       workshopCode: uuid.v4(),
       sessionId: uuid.v4(),
       phase: Phases.TITLE,
@@ -34,6 +40,8 @@ class App extends Component {
     this.onDataLoaded = this.onDataLoaded.bind(this);
     this.onDataError = this.onDataError.bind(this);
     this.onInteraction = this.onInteraction.bind(this);
+    this.renderDemo = this.renderDemo.bind(this);
+    this.renderCodeOrg = this.renderCodeOrg.bind(this);
   }
 
   componentDidMount() {
@@ -89,62 +97,76 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <MobileSimulator minWidth={800} minHeight={400}>
-          {this.renderScreen()}
-        </MobileSimulator>
-      </div>
+      <Router>
+        <div className="App">
+          <MobileSimulator minWidth={800} minHeight={400}>
+            <Route exact path="/" render={this.renderDemo}/>
+            <Route exact path="/start" render={this.renderCodeOrg}/>
+          </MobileSimulator>
+        </div>
+      </Router>
     );
   }
 
-  renderScreen() {
+  // From code.org Code Studio, with email on query string
+  renderCodeOrg(match) {
     const {phase, students} = this.state;
-    if (phase === Phases.TITLE) return this.renderTitle();
-    if (phase === Phases.CONSENT) return this.renderConsent();
-    if (phase === Phases.INTRODUCTION) return this.renderIntroduction();
+    if (phase === Phases.TITLE) return this.renderTitle(Phases.CONSENT);
+    if (phase === Phases.CONSENT) return this.renderConsent(Phases.INTRODUCTION);
+    if (phase === Phases.INTRODUCTION) return this.renderIntroduction(Phases.STUDENTS);
     if (!students) return this.renderLoading();
-    if (phase === Phases.STUDENTS) return this.renderStudents();
-    if (phase === Phases.DISCUSS) return this.renderDiscuss();
+    if (phase === Phases.STUDENTS) return this.renderStudents(Phases.DISCUSS);
+    if (phase === Phases.DISCUSS) return this.renderDiscuss(Phases.REVIEW);
     if (phase === Phases.REVIEW) return this.renderReview();
   }
 
-  renderTitle() {
-    return <Title
-      onDone={() => this.setState({ phase: Phases.CONSENT })} />;
+  // Publicly open demo
+  renderDemo(match) {
+    const {phase, students} = this.state;
+    if (phase === Phases.TITLE) return this.renderTitle(Phases.INTRODUCTION);
+    if (phase === Phases.INTRODUCTION) return this.renderIntroduction(Phases.STUDENTS);
+    if (!students) return this.renderLoading();
+    if (phase === Phases.STUDENTS) return this.renderStudents(Phases.REVIEW);
+    if (phase === Phases.REVIEW) return this.renderReview();
   }
 
-  renderConsent() {
+  renderTitle(phase) {
+    return <Title
+      onDone={() => this.setState({phase})} />;
+  }
+
+  renderConsent(phase) {
     return <ConsentPhase
       onInteraction={this.onInteraction}
-      onDone={() => this.setState({ phase: Phases.INTRODUCTION })} />;
+      onDone={() => this.setState({phase})} />;
   }
 
-  renderIntroduction() {
+  renderIntroduction(phase) {
     return <IntroductionPhase
       onInteraction={this.onInteraction}
-      onDone={() => this.setState({ phase: Phases.STUDENTS })} />;
+      onDone={() => this.setState({phase})} />;
   }
 
   renderLoading() {
     return <div>Loading...</div>;
   }
 
-  renderStudents() {
+  renderStudents(phase) {
     const {students} = this.state;
     return (
       <StudentsPhase
         students={students}
         onInteraction={this.onInteraction}
-        onDone={() => this.setState({ phase: Phases.DISCUSS })} />
+        onDone={() => this.setState({phase})} />
     );
   }
 
-  renderDiscuss() {
+  renderDiscuss(phase) {
     const {students} = this.state;
     return <DiscussPhase
       students={students}
       onInteraction={this.onInteraction}
-      onDone={() => this.setState({ phase: Phases.REVIEW })} />;
+      onDone={() => this.setState({phase})} />;
   }
 
   renderReview() {

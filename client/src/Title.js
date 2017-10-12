@@ -11,6 +11,12 @@ class Title extends Component {
     this.onSwipeRight = this.onSwipeRight.bind(this);
   }
 
+  // prefetch image before animation starts
+  componentDidMount() {
+    const image = new Image();
+    image.src = logoSrc;
+  }
+
   onSwipeRight() {
     const {onDone} = this.props;
     onDone();
