@@ -109,7 +109,7 @@ class Student extends Component {
     const choices = [
       "they're in",
       "they need one more nudge",
-      "i didn't get there yet"
+      "I didn't get there yet"
     ];
 
     return (
