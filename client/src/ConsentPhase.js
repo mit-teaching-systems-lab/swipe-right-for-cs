@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Delay from 'react-delay';
 import Interactions from './Interactions.js';
-import Bounceable from './components/Bounceable.js';
 import './ConsentPhase.css';
 
 
 // Note that changes here may require IRB amendments.
 const fullConsentText = `
+Optionally, we'd" like to use your responses here for a joint research study between MIT and code.org.  We would like to compare the responses across participants.
+
+Your responses would be included in the research, along with data from your code.org profile.  All data you enter is stored securely and protected on a secure server on Google Drive, Amazon Web Services or Heroku.  If you consent, we will email you a copy of this form for your records.
+
+You can continue playing the game either way.  Participation in the research study in voluntary.
+
+More details:
 You have been asked to participate in a research study conducted by the staff and researchers at the Teaching System Laboratory (TSL) at the Massachusetts Institute of Technology and code.org.
 
 Purpose of study:
@@ -40,18 +45,8 @@ Please contact Dr. Justin Reich (jreich@mit.edu) or Kevin Robinson, (krob@mit.ed
 class ConsentPhase extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isExpanded: false
-    };
-    this.onReadMoreTapped = this.onReadMoreTapped.bind(this);
     this.onConsent = this.onConsent.bind(this);
     this.onDecline = this.onDecline.bind(this);
-  }
-
-  onReadMoreTapped() {
-    const {onInteraction} = this.props;
-    onInteraction(Interactions.readMoreConsent());
-    this.setState({ isExpanded: true });
   }
 
   onConsent() {
@@ -67,34 +62,18 @@ class ConsentPhase extends Component {
   }
 
   render() {
-    const {isExpanded} = this.state;
-
     return (
       <div className="ConsentPhase">
         <div className="ConsentPhase-content">
           <div className="Global-header-font">Research consent</div>
-          <div className="ConsentPhase-text">
-            <p>Optionally, {"we'd"} like to use your responses here for a joint research study between MIT and code.org.  We would like to compare the responses across participants.</p>
-            <p>Your responses would be included in the research, along with data from your code.org profile.  All data you enter is stored securely and protected on a secure server on Google Drive, Amazon Web Services or Heroku.  If you consent, we will email you a copy of this form for your records.</p>
-            <p>You can continue playing the game either way.  Participation in the research study in voluntary.</p>
-            {isExpanded && this.renderExpandedConsent()}
+          <div className="ConsentPhase-text">{fullConsentText}</div>
+          <div className="ConsentPhase-choices">
+            <div onClick={this.onConsent}>I consent</div>
+            <div onClick={this.onDecline}>No thanks</div>
           </div>
-          <Delay wait={2000}>
-            <Bounceable height={60}>
-              <div className="ConsentPhase-choices">
-                <div onClick={this.onConsent}>I consent</div>
-                <div onClick={this.onDecline}>No thanks</div>
-                {!isExpanded && <div onClick={this.onReadMoreTapped}>Read more</div>}
-              </div>
-            </Bounceable>
-          </Delay>
         </div>
       </div>
     );
-  }
-
-  renderExpandedConsent() {
-    return <div className="ConsentPhase-full-consent">{fullConsentText}</div>;
   }
 }
 ConsentPhase.propTypes = {

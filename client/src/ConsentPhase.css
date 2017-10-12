@@ -13,10 +13,7 @@
 .ConsentPhase-text {
   flex: 1;
   margin-top: 10px;
-}
-
-.ConsentPhase-more {
-  color: blue;
+  white-space: pre-wrap;
 }
 
 .ConsentPhase-choices {
@@ -26,10 +23,5 @@
   align-items: center;
   color: blue;
   height: 100%;
-}
-
-.ConsentPhase-full-consent {
-  white-space: pre-wrap;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  padding: 30px;
 }

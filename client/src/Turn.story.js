@@ -7,7 +7,7 @@ import Turn from './Turn.js';
 
 
 const longProfileText = "Lamar can always get the class cackling with his running commentary, but especially when he starts doing impersonations. Somehow she's able to do it in a way where everyone can laugh.";
-
+const longArgument = "Computer science creates so many new ways to express your creativity, whether it's generating images or videos,  creating interactive stories, or making new kinds of media altogether.";
 function testTurn(props) {
   const student = storybookStudents[0];
   const {profileKey, profileName, profileText, profileImageSrc} = student;
@@ -34,7 +34,8 @@ storiesOf('Turn', module) //eslint-disable-line no-undef
   })
   .add('long text', () => {
     const profileText = longProfileText;
-    const turn = testTurn({profileText});
+    const argumentText = longArgument;
+    const turn = testTurn({profileText, argumentText});
     return withFrameSwitcher(
       <Turn
         {...turn}
