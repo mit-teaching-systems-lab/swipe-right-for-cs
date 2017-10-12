@@ -21,6 +21,7 @@ class IntroductionPhase extends Component {
   }
 
   render() {
+    const height = 100;
     return (
       <div className="IntroductionPhase">
         <p className="IntroductionPhase-header Global-header-font">
@@ -37,7 +38,7 @@ class IntroductionPhase extends Component {
         </div>
         <Delay wait={2000}>
           <Swipeable
-            height={100}
+            height={height}
             onSwipeRight={this.onSwipeRight}>
             <div className="IntroductionPhase-swipe">Swipe to play!</div>
           </Swipeable>

@@ -1,6 +1,6 @@
 .IntroductionPhase {
+  display: flex;
   height: 100%;
-  display:flex;
   flex-direction: column;
   justify-content: center;
 }
@@ -13,11 +13,9 @@
 }
 
 .IntroductionPhase-body {
-  flex-direction: column;
   align-items: center;
   padding: 20px;
   padding-top: 10px;
-  font-size: 100%;
   flex: 1;
 }
 
