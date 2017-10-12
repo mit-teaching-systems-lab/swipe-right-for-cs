@@ -18,6 +18,19 @@ app.get('*', (request, response) => {
   response.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
+// Enforce HTTPS
+function enforceHTTPS(request, response, next) {
+  if (process.env.NODE_ENV === 'development') return next();
+  
+  if (request.headers['x-forwarded-proto'] !== 'https') {
+    const httpsUrl = ['https://', request.headers.host, request.url].join('');
+    return response.redirect(httpsUrl);
+  }
+
+  return next();
+}
+app.use(enforceHTTPS);
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}.`);
