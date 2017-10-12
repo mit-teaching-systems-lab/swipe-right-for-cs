@@ -1,6 +1,5 @@
 .IntroductionPhase {
   display: flex;
-  height: 100%;
   flex-direction: column;
   justify-content: center;
 }
@@ -21,8 +20,6 @@
 }
 
 .IntroductionPhase-swipe {
-  height: 100%;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

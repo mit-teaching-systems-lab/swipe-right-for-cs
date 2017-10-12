@@ -1,5 +1,4 @@
 .DiscussPhase {
-  height: 100%;
   flex: 1;
 }
 
@@ -23,7 +22,6 @@
 }
 
 .DiscussPhase-swipe {
-  height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;

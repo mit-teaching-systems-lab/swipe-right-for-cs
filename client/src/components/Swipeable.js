@@ -9,8 +9,8 @@ const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
 const styles = {
   fullSize: {
-    width: '100%', // for text that doesn't take full width
-    height: '100%' // for mobile Safari
+    display: 'flex',
+    width: '100%' // for text that doesn't take full width
   }
 };
 
