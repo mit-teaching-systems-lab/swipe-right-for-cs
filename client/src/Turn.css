@@ -4,12 +4,27 @@
   flex-direction: column;
 }
 
-.Turn-student {
-  margin: 10px;
-}
-
 .Turn-argument {
-  margin-left: 20px;
-  margin-right: 20px;
+  position: relative;
+  margin-left: 15px;
+  margin-right: 15px;
   cursor: pointer;
+  border-radius: .5em;
+  padding: 6px;
+  background: #eaf8ff;
+  color: black;
+  border: 1px solid #cae2ef;
+}
+.Turn-argument:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: #cae2ef;
+  border-bottom: 0;
+  margin-left: -6px;
+  margin-bottom: -6px;
 }

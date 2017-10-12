@@ -93,7 +93,7 @@ class Student extends Component {
   renderQuestion() {
     const {profileImageSrc, profileName, profileText} = this.props;
     return (
-      <div className="Student-rating">
+      <div className="Student">
         <StudentProfile
           className="Student-profile"
           profileImageSrc={profileImageSrc}
