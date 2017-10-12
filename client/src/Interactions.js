@@ -23,6 +23,16 @@ const Interactions = {
   },
   doneDiscussPhase() {
     return { type: 'DONE_DISCUSS_PHASE' };
+  },
+  studentRating(params) {
+    const {choices, choiceIndex, choiceText, student} = params;
+    return {
+      choices,
+      choiceIndex,
+      choiceText,
+      student,
+      type: 'STUDENT_RATING'
+    };
   }
 };
 export default Interactions;

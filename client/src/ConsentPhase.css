@@ -12,6 +12,7 @@
 
 .ConsentPhase-text {
   flex: 1;
+  margin-top: 10px;
 }
 
 .ConsentPhase-more {
@@ -29,6 +30,6 @@
 
 .ConsentPhase-full-consent {
   white-space: pre-wrap;
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 20px;
 }

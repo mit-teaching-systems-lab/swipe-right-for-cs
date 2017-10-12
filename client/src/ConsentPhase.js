@@ -5,6 +5,8 @@ import Interactions from './Interactions.js';
 import Bounceable from './components/Bounceable.js';
 import './ConsentPhase.css';
 
+
+// Note that changes here may require IRB amendments.
 const fullConsentText = `
 You have been asked to participate in a research study conducted by the staff and researchers at the Teaching System Laboratory (TSL) at the Massachusetts Institute of Technology and code.org.
 
@@ -31,6 +33,7 @@ I understand the procedures described above. My questions have been answered to 
 
 Contact information:
 Please contact Dr. Justin Reich (jreich@mit.edu) or Kevin Robinson, (krob@mit.edu) with any questions or concerns. If you feel you have been treated unfairly, or you have questions regarding your rights as a research subject, you may contact the Chairman of the Committee on the Use of Humans as Experimental Subjects, M.I.T., Room E25-143b, 77 Massachusetts Ave, Cambridge, MA 02139, phone 1-617-253-6787.`;
+
 
 // Ask the user for research consent.
 // Note that changes here may require IRB amendments.
