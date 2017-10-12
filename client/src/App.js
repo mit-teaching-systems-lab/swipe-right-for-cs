@@ -73,6 +73,20 @@ class App extends Component {
     });
   }
 
+  // Logging to the console, server and Rollbar
+  doLog(log) {
+    console.log('onLog', log); // eslint-disable-line no-console
+    if (window.Rollbar) window.Rollbar.info('onLog', log);
+    fetch('/api/log', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'post',
+      body: JSON.stringify(log)
+    });
+  }
+
   onDataLoaded(loadedData) {
     const {cohortNumber, students} = loadedData;
     this.setState({cohortNumber, students});
@@ -83,16 +97,13 @@ class App extends Component {
     console.error(err); // eslint-disable-line no-console
   }
 
-  // Log an interaction locally and on the server, along with context
-  // about the session.
+  // Log the interaction, along with context about the session.
   onInteraction(interaction) {
     const {logs} = this.state;
-
     const session = this.session();
     const log = {interaction, session};
-    console.log('onLog', log); // eslint-disable-line no-console
-    if (window.Rollbar) window.Rollbar.info('onLog', log);
     this.setState({ logs: logs.concat(log) });
+    this.doLog(log);
   }
 
   render() {
