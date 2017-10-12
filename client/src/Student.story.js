@@ -14,7 +14,7 @@ storiesOf('Student', module) //eslint-disable-line no-undef
     return withFrameSwitcher(
       <Student
         {...student}
-        onInteraction={action('onInteraction')}
+        onInteraction={(action('onInteraction'))}
         onDone={action('onDone')} />
     );
   });

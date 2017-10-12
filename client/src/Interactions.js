@@ -25,11 +25,11 @@ const Interactions = {
     return { type: 'DONE_DISCUSS_PHASE' };
   },
   studentRating(params) {
-    const {choices, choiceIndex, ratingText, student} = params;
+    const {choices, choiceIndex, choiceText, student} = params;
     return {
       choices,
       choiceIndex,
-      ratingText,
+      choiceText,
       student,
       type: 'STUDENT_RATING'
     };

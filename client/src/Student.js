@@ -41,7 +41,7 @@ class Student extends Component {
     this.setState({swipesMade});
   }
 
-  onChoiceTapped(choices, choiceIndex, ratingText) {
+  onChoiceTapped(choices, choiceText, choiceIndex) {
     const {onDone, onInteraction} = this.props;
     const {
       profileName,
@@ -49,13 +49,17 @@ class Student extends Component {
       profileText,
       profileImageSrc
     } = this.props;
-    const student = {
-      profileName,
-      profileKey,
-      profileText,
-      profileImageSrc
-    };
-    const interaction = Interactions.studentRating({choices, choiceIndex, ratingText, student});
+    const interaction = Interactions.studentRating({
+      choices,
+      choiceIndex,
+      choiceText,
+      student: {
+        profileName,
+        profileKey,
+        profileText,
+        profileImageSrc
+      }
+    });
     onInteraction(interaction);
     onDone();
   }
@@ -107,7 +111,7 @@ class Student extends Component {
               return (
                 <li
                   key={choice}
-                  onClick={this.onChoiceTapped.bind(this, choice, choiceIndex)}>
+                  onClick={this.onChoiceTapped.bind(this, choices, choice, choiceIndex)}>
                   {choice}
                 </li>
               );
