@@ -26,7 +26,7 @@ class TappableButton extends Component {
   }
 
   onMouseDown() {
-    this.doAnimateTo(0.2);
+    this.doAnimateTo(0.2); // same as React Native TouchableOpacity
   }
 
   onMouseUp() {
@@ -38,9 +38,6 @@ class TappableButton extends Component {
     const {animScale} = this.state;
     animScale.setValue(1.0);
     onClick();
-    // animScale.stopAnimation(value => {
-    //   this.doAnimateTo(1.0, { onEnd: onClick });
-    // });
   }
 
   render() {
