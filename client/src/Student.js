@@ -107,8 +107,8 @@ class Student extends Component {
   renderChoices() {
     const {swipeHeight} = this.props;
     const choices = [
-      "they're in",
-      "they need one more nudge",
+      "They're in",
+      "They need one more nudge",
       "I didn't get there yet"
     ];
 

@@ -23,8 +23,17 @@
 
 .Student-choices > li {
   flex: 1;
-  color: blue;
   font-size: 13px;
   list-style: none;
   margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #f6f6f6;
+  background: rgb(38,100,157);
+  height: 3.8em;
+  padding: 3px;
+  box-shadow: 1px 1px 1px #eee;
+  border-radius: 5px;
 }

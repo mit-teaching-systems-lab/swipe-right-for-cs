@@ -5,29 +5,29 @@ import __range from 'lodash/range';
 import __compact from 'lodash/compact';
 
 import renderTemplate from './renderTemplate.js';
-import BF1 from '../files/BF1.png';
-import BM1 from '../files/BM1.png';
-import CF1 from '../files/CF1.png';
-import CM1 from '../files/CM1.png';
-import HF1 from '../files/HF1.png';
-import HM1 from '../files/HM1.png';
-import IF1 from '../files/IF1.png';
-import IM1 from '../files/IM1.png';
-import WF1 from '../files/WF1.png';
-import WM1 from '../files/WM1.png';
+import BF2 from '../files/BF2.png';
+import BM2 from '../files/BM2.png';
+import CF2 from '../files/CF2.png';
+import CM2 from '../files/CM2.png';
+import HF2 from '../files/HF2.png';
+import HM2 from '../files/HM2.png';
+import IF2 from '../files/IF2.png';
+import IM2 from '../files/IM2.png';
+import WF2 from '../files/WF2.png';
+import WM2 from '../files/WM2.png';
 
 export function imageFor(label) {
   return {
-    BF1,
-    BM1,
-    CF1,
-    CM1,
-    HF1,
-    HM1,
-    IF1,
-    IM1,
-    WF1,
-    WM1
+    BF2,
+    BM2,
+    CF2,
+    CM2,
+    HF2,
+    HM2,
+    IF2,
+    IM2,
+    WF2,
+    WM2
   }[label.toUpperCase()];
 }
 

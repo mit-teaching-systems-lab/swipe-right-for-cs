@@ -19,6 +19,16 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  color: blue;
   padding: 30px;
+}
+
+.ConsentPhase-choices > div {
+  color: rgb(38, 100, 157);
+  border: 1px solid #ccc;
+  height: 3.5em;
+  padding: 3px;
+  box-shadow: 1px 1px 1px #eee;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
 }

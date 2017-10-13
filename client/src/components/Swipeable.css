@@ -18,7 +18,7 @@
 
 .Swipeable-left {
   flex: 1;
-  background-color: green;
+  background-color: rgb(37, 214, 137);
 }
 
 .Swipeable-children {
@@ -30,5 +30,5 @@
 
 .Swipeable-right {
   flex: 1;
-  background-color: orange;
+  background-color: rgb(226, 170, 22);
 }

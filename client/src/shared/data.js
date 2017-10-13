@@ -98,6 +98,12 @@ const Session = {
     }
 
     return params;
+  },
+  isUnknownEmail(session) {
+    return (session.email === Session.unknownEmail());
+  },
+  unknownEmail() {
+    return 'unknown@mit.edu';
   }
 };
 

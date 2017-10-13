@@ -31,7 +31,7 @@ class App extends Component {
     super(props);
     const query = queryString.parse(window.location.search);
     this.state = {
-      email: query.email || 'unknown@mit.edu',
+      email: query.email || Session.unknownEmail(),
       workshopCode: uuid.v4(),
       sessionId: uuid.v4(),
       phase: Phases.TITLE,
