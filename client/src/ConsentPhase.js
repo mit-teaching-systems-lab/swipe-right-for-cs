@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Interactions} from '../../shared/data.js';
+import {Interactions} from './shared/data.js';
 import './ConsentPhase.css';
 
 

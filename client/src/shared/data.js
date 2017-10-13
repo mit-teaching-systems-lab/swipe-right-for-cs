@@ -1,5 +1,6 @@
 // This file defines the different user interactions, and how they
 // will be described on both the client and server.
+// It's owned by the client, but the server reaches in and relies on it.
 
 
 // Map of type => type:hash

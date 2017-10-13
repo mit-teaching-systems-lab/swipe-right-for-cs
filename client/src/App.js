@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import queryString from 'query-string';
 import './App.css';
-import {Log, Session} from '../../shared/data.js';
+import {Log, Session} from './shared/data.js';
 import MobileSimulator from './components/MobileSimulator.js';
 import Title from './Title.js';
 import ConsentPhase from './ConsentPhase.js';

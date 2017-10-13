@@ -1,9 +1,9 @@
-const {sha} = require('../shared/data.js');
 const {
+  sha,
   Log,
   Interaction,
   Session
-} = require('../shared/data.js');
+} = require('../client/src/shared/data.js');
 
 
 // Check log message to see if it's giving consent, and if it is,

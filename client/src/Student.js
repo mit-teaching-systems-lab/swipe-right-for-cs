@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Turn from './Turn.js';
 import Bounceable from './components/Bounceable.js';
 import StudentProfile from './StudentProfile.js';
-import {Interactions} from '../../shared/data.js';
+import {Interactions} from './shared/data.js';
 import './Student.css';
 
 
