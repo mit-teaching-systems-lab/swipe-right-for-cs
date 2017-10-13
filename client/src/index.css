@@ -18,10 +18,6 @@ html, body, #root, .Global-root-for-testing {
   flex: 1;
 }
 
-button.button {
-  align-self: center;
-}
-
 .Global-background-color {
   background-color: white;
 }

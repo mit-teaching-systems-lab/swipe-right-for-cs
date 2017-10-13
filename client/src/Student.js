@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Turn from './Turn.js';
 import Bounceable from './components/Bounceable.js';
 import StudentProfile from './StudentProfile.js';
+import TappableButton from './components/TappableButton.js';
 import {Interactions} from './shared/data.js';
 import './Student.css';
 
@@ -116,17 +117,18 @@ class Student extends Component {
       <Bounceable height={swipeHeight}>
         <div className="Student-choices-container" style={{height: swipeHeight}}>
           <div>How likely are they to take CS?</div>
-          <ul className="Student-choices">
+          <div className="Student-choices">
             {choices.map((choice, choiceIndex) => {
               return (
-                <li
+                <TappableButton
                   key={choice}
+                  style={styles.button}
                   onClick={this.onChoiceTapped.bind(this, choices, choice, choiceIndex)}>
                   {choice}
-                </li>
+                </TappableButton>
               );
             })}
-          </ul>
+          </div>
         </div>
       </Bounceable>
     );
@@ -145,6 +147,16 @@ Student.propTypes = {
 };
 Student.defaultProps = {
   swipeHeight: 140
+};
+
+const styles = {
+  button: {
+    height: '3.8em',
+    padding: 3,
+    flex: 1,
+    fontSize: 13,
+    margin: 10,
+  }
 };
 
 export default Student;

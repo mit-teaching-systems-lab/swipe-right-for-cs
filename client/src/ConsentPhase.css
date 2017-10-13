@@ -1,5 +1,5 @@
 .ConsentPhase {
-  display: flex;
+  flex: 1;
 }
 
 .ConsentPhase-content {
@@ -10,7 +10,6 @@
 }
 
 .ConsentPhase-text {
-  flex: 1;
   white-space: pre-wrap;
 }
 
@@ -18,17 +17,6 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  padding: 30px;
-}
-
-.ConsentPhase-choices > div {
-  color: rgb(38, 100, 157);
-  border: 1px solid #ccc;
-  height: 3.5em;
-  padding: 3px;
-  box-shadow: 1px 1px 1px #eee;
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
+  padding-top: 30px;
+  padding-bottom: 10px;
 }
