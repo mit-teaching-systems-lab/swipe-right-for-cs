@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './Turn.css';
 import Delay from 'react-delay';
 import Swipeable from './components/Swipeable.js';
-import Interactions from './Interactions.js';
+import {Interactions} from '../../shared/data.js';
 import StudentProfile from './StudentProfile.js';
 
 

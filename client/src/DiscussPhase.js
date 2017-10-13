@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import StudentProfile from './StudentProfile.js';
 import Swipeable from './components/Swipeable.js';
-import Interactions from './Interactions.js';
+import {Interactions} from '../../shared/data.js';
 import './DiscussPhase.css';
 
 const copyText = `Turn and talk with a partner about the students you encountered.
