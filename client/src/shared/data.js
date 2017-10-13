@@ -2,14 +2,17 @@
 // will be described on both the client and server.
 // It's owned by the client, but the server reaches in and relies on it.
 
+// This code is shared by CRA and node, so uses node-style requires and
+// module.exports.
+const __difference = require('lodash/difference');
+const crypto = require('crypto');
 
 // Map of type => type:hash
 // Ensures that all data access has to go through here.
 // This should not be exported; use functions below to read.
 const InteractionTypes = [
-  'GAVE_CONSENT',
   'INTRO_PLAY',
-  'READ_MORE_CONSENT',
+  'READ_MORE_CONSENT', // deprecated
   'GAVE_CONSENT',
   'DECLINED_CONSENT',
   'SWIPE_LEFT',
@@ -17,29 +20,31 @@ const InteractionTypes = [
   'DONE_DISCUSS_PHASE',
   'STUDENT_RATING'
 ].reduce((map, value) => {
-  map[value] = [value, hashCode(value)].join(':');
+  map[value] = [value, sha(value)].join(':');
   return map;
 }, {});
 
 
 // Readers
-export const Interaction = {
+const Interaction = {
   type(interaction) {
     return interaction.type;
   },
   isConsentType(interaction) {
-    return Interaction.type(interaction) === Types.GAVE_CONSENT;
+    return Interaction.type(interaction) === InteractionTypes.GAVE_CONSENT;
   }
 };
 
 // Creators
-export const Interactions = {
+const Interactions = {
   play() {
     return { type: InteractionTypes.INTRO_PLAY };
   },
   // The user tapped "Read more" in the consent UI to
   // read the full consent guidelines.
+  // Deprecated
   readMoreConsent() {
+    console.warn('READ_MORE_CONSENT interaction deprecated'); // eslint-disable-line no-console
     return { type: InteractionTypes.READ_MORE_CONSENT };
   },
   gaveConsent() {
@@ -71,37 +76,36 @@ export const Interactions = {
 
 
 // Describes a user session
-export const Session = {
+const Session = {
   create(params) {
     // Warn if missing key, but allow it
     const keys = [
-      email,
-      workshopCode,
-      cohortNumber,
-      sessionId,
-      clientTimestampMs,
-      location
+      'email',
+      'workshopCode',
+      'cohortNumber',
+      'sessionId',
+      'clientTimestampMs',
+      'location'
     ];
     keys.forEach((key) => {
-      if (!params[key]) console.warn(`Session: missing param ${key}`);
+      if (!params[key]) console.warn(`Session: missing param ${key}`); // eslint-disable-line no-console
     });
 
-    return {
-      email,
-      workshopCode,
-      cohortNumber,
-      sessionId,
-      clientTimestampMs,
-      location
-    };
+    // Warn if extra keys
+    const extraKeys = __difference(keys, Object.keys(params));
+    if (extraKeys.length > 0) {
+      console.warn(`Session: unexpected keys ${extraKeys.join(', ')}`); // eslint-disable-line no-console
+    }
+
+    return params;
   }
-}
+};
 
 
 
 // Describes an event, using shared log format across client, server
 // and analysis tools.
-export const Log = {
+const Log = {
   create(session, interaction) {
     return {session, interaction};
   },
@@ -115,7 +119,7 @@ export const Log = {
 
 // For hashing a string to an integer
 // from https://docs.oracle.com/javase/7/docs/api/java/lang/String.html
-export function hashCode(str){
+function hashCode(str){
   var value = 0;
   var power = 1;
   var length = str.length;
@@ -128,6 +132,15 @@ export function hashCode(str){
 }
 
 // For hashing a string to a string to obfuscate (insecurely)
-export function sha(value) { 
+function sha(value) { 
   return crypto.createHash('sha256').update(value).digest('base64');
 }
+
+module.exports = { // eslint-disable-line no-undef
+  Interaction,
+  Interactions,
+  Session,
+  Log,
+  hashCode,
+  sha
+};

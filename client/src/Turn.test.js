@@ -38,7 +38,7 @@ it('records swipe left interactions correctly', async () => {
 
   const expectedInteration = {
     turn,
-    type: "SWIPE_LEFT:961964556"
+    type: "SWIPE_LEFT:a3n0/aAfASRmbKZTpULy8BE9F8fCjsWoczycNGdwf5M="
   };
   expect(props.onInteraction).toHaveBeenCalledWith(expectedInteration);
   expect(props.onDone).toHaveBeenCalledWith(expectedInteration);
@@ -54,7 +54,7 @@ it('records swipe right interactions correctly', async () => {
 
   const expectedInteration = {
     turn,
-    type: "SWIPE_RIGHT:-238208876"
+    type: "SWIPE_RIGHT:JTfoWc+SuahkjxwGte2EYDAKTRv0Tjz2ktX/5vdZm00="
   };
   expect(props.onInteraction).toHaveBeenCalledWith(expectedInteration);
   expect(props.onDone).toHaveBeenCalledWith(expectedInteration);

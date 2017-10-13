@@ -8,7 +8,7 @@ const {
 
 // Check log message to see if it's giving consent, and if it is,
 // send an email.
-module.exports = function maybeSendConsentEmail(log, mailgunEnv) {
+function maybeSendConsentEmail(log, mailgunEnv) {
   const interaction = Log.interaction(log);
   if (Interaction.isConsentType(interaction)) {
     const session = Log.session(log);
@@ -17,8 +17,12 @@ module.exports = function maybeSendConsentEmail(log, mailgunEnv) {
       sendConsentEmail(email);
     }
   }
-};
+}
 
 function sendConsentEmail(email) {
   console.log('Sending consent email, email hash: ' + sha(email));
 }
+
+module.exports = {
+  maybeSendConsentEmail
+};

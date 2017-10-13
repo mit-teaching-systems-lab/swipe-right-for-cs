@@ -144,6 +144,7 @@ class App extends Component {
 
   renderTitle(phase) {
     return <Title
+      onInteraction={this.onInteraction}
       onDone={() => this.setState({phase})} />;
   }
 
