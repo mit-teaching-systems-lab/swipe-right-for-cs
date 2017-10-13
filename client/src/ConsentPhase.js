@@ -6,7 +6,7 @@ import './ConsentPhase.css';
 
 // Note that changes here may require IRB amendments.
 const fullConsentText = `
-Optionally, we'd" like to use your responses here for a joint research study between MIT and code.org.  We would like to compare the responses across participants.
+Optionally, we'd like to use your responses here for a joint research study between MIT and code.org.  We would like to compare the responses across participants.
 
 Your responses would be included in the research, along with data from your code.org profile.  All data you enter is stored securely and protected on a secure server on Google Drive, Amazon Web Services or Heroku.  If you consent, we will email you a copy of this form for your records.
 
