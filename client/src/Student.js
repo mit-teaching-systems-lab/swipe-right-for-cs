@@ -123,6 +123,7 @@ class Student extends Component {
                 <TappableButton
                   key={choice}
                   style={styles.button}
+                  outerStyle={styles.buttonOuter}
                   onClick={this.onChoiceTapped.bind(this, choices, choice, choiceIndex)}>
                   {choice}
                 </TappableButton>
@@ -150,10 +151,12 @@ Student.defaultProps = {
 };
 
 const styles = {
+  buttonOuter: {
+    flex: 1
+  },
   button: {
     height: '3.8em',
     padding: 3,
-    flex: 1,
     fontSize: 13,
     margin: 10,
   }

@@ -13,10 +13,12 @@ class Bounceable extends Component {
   }
 
   componentDidMount() {
+    const {springConfig} = this.props;
     const {animTop} = this.state;
     Animated.spring(animTop, {
       toValue: 0.0,
-      speed: 20
+      speed: 20,
+      ...springConfig
     }).start();
   }
 
@@ -39,7 +41,8 @@ class Bounceable extends Component {
 
 Bounceable.propTypes = {
   children: PropTypes.node.isRequired,
-  height: PropTypes.number.isRequired
+  height: PropTypes.number.isRequired,
+  springConfig: PropTypes.object
 };
 
 export default Bounceable;

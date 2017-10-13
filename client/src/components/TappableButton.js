@@ -1,44 +1,74 @@
 import React, { Component } from 'react';
 import './TappableButton.css';
 import PropTypes from 'prop-types';
+import Animated from 'animated/lib/targets/react-dom';
+
 
 // A tappable button
 class TappableButton extends Component {
-  // componentDidMount() {
-  //   const {animTop} = this.state;
-  //   Animated.spring(animTop, {
-  //     toValue: 0.0,
-  //     speed: 20
-  //   }).start();
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      animScale: new Animated.Value(1)
+    };
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
+    this.onClick = this.onClick.bind(this);
+  }
+
+  doAnimateTo(toValue, options = {}) {
+    const {animScale} = this.state;
+    const {onEnd} = options;
+    Animated.spring(animScale, {
+      toValue,
+      speed: 20
+    }).start(onEnd);
+  }
+
+  onMouseDown() {
+    this.doAnimateTo(0.2);
+  }
+
+  onMouseUp() {
+    this.doAnimateTo(1.0);
+  }
+
+  onClick() {
+    const {onClick} = this.props;
+    const {animScale} = this.state;
+    animScale.setValue(1.0);
+    onClick();
+    // animScale.stopAnimation(value => {
+    //   this.doAnimateTo(1.0, { onEnd: onClick });
+    // });
+  }
 
   render() {
-    const {children, onClick, style} = this.props;
-    // const {animTop} = this.state;
+    const {children, outerStyle, style} = this.props;
+    const {animScale} = this.state;
 
+    // Spring on touch
     return (
-      <div
+      <Animated.div
         className="TappableButton"
-        style={style}
-        onClick={(...params) => onClick(...params)}>{children}</div>
+        style={{...outerStyle, opacity: animScale}}>
+        <div
+          className="TappableButton-inner"
+          style={style}
+          onMouseDown={this.onMouseDown}
+          onMouseUp={this.onMouseUp}
+          onMouseOut={this.onMouseUp}
+          onClick={this.onClick}>{children}</div>
+      </Animated.div>
     );
-    // // Spring up
-    // return (
-    //   <div className="Bounceable" style={{height: height}}>
-    //     <Animated.div
-    //       className="Bounceable-spring"
-    //       style={{top: animTop, height: height}}>
-    //       {children}
-    //     </Animated.div>
-    //   </div>
-    // );
   }
 }
 
 TappableButton.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
+  outerStyle: PropTypes.object
 };
 TappableButton.defaultProps = {
   style: {}
