@@ -1,0 +1,11 @@
+.TappableButton-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #f6f6f6;
+  background: rgb(38,100,157);
+  padding: 15px;
+  box-shadow: 1px 1px 1px #eee;
+  border-radius: 5px;
+}

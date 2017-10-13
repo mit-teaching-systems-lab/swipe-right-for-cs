@@ -88,7 +88,7 @@ const Session = {
       'location'
     ];
     keys.forEach((key) => {
-      if (!params[key]) console.warn(`Session: missing param ${key}`); // eslint-disable-line no-console
+      if (params[key] === undefined) console.warn(`Session: missing param ${key}`); // eslint-disable-line no-console
     });
 
     // Warn if extra keys
@@ -98,6 +98,12 @@ const Session = {
     }
 
     return params;
+  },
+  isUnknownEmail(session) {
+    return (session.email === Session.unknownEmail());
+  },
+  unknownEmail() {
+    return 'unknown@mit.edu';
   }
 };
 

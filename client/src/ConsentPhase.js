@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {Interactions} from './shared/data.js';
+import TappableButton from './components/TappableButton.js';
 import './ConsentPhase.css';
 
 
@@ -68,8 +69,8 @@ class ConsentPhase extends Component {
           <div className="Global-header-font">Research consent</div>
           <div className="ConsentPhase-text">{fullConsentText}</div>
           <div className="ConsentPhase-choices">
-            <div onClick={this.onConsent}>I consent</div>
-            <div onClick={this.onDecline}>No thanks</div>
+            <TappableButton onClick={this.onConsent}>I consent</TappableButton>
+            <TappableButton onClick={this.onDecline}>No thanks</TappableButton>
           </div>
         </div>
       </div>
