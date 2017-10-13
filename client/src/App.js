@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import queryString from 'query-string';
 import './App.css';
+import {Log, Session} from './shared/data.js';
 import MobileSimulator from './components/MobileSimulator.js';
 import Title from './Title.js';
 import ConsentPhase from './ConsentPhase.js';
@@ -54,14 +55,14 @@ class App extends Component {
   // Describe context of the game session
   session() {
     const {email, workshopCode, cohortNumber, sessionId} = this.state;
-    return {
+    return Session.create({
       email,
       workshopCode,
       cohortNumber,
       sessionId,
       clientTimestampMs: new Date().getTime(),
       location: window.location.toString()
-    };
+    });
   }
 
   // Optimization
@@ -101,7 +102,7 @@ class App extends Component {
   onInteraction(interaction) {
     const {logs} = this.state;
     const session = this.session();
-    const log = {interaction, session};
+    const log = Log.create(session, interaction);
     this.setState({ logs: logs.concat(log) });
     this.doLog(log);
   }
@@ -143,6 +144,7 @@ class App extends Component {
 
   renderTitle(phase) {
     return <Title
+      onInteraction={this.onInteraction}
       onDone={() => this.setState({phase})} />;
   }
 

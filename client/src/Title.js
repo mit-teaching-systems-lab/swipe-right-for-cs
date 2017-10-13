@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Delay from 'react-delay';
 import './Title.css';
 import logoSrc from './img/swipe.png';
+import {Interactions} from './shared/data.js';
 import Swipeable from './components/Swipeable.js';
 
 class Title extends Component {
@@ -18,7 +19,8 @@ class Title extends Component {
   }
 
   onSwipeRight() {
-    const {onDone} = this.props;
+    const {onInteraction, onDone} = this.props;
+    onInteraction(Interactions.play());
     onDone();
   }
 
@@ -49,6 +51,7 @@ class Title extends Component {
 } 
 
 Title.propTypes = {
+  onInteraction: PropTypes.func.isRequired,
   onDone: PropTypes.func.isRequired
 };
 

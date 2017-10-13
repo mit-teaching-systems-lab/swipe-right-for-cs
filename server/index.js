@@ -1,31 +1,20 @@
 const express = require('express');
 const path = require('path');
-const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
-
-
-function tellSlack(webhookUrl, text) {
-  console.log('Slack: ', text);
-  fetch(webhookUrl, {
-    method: 'post',
-    body: JSON.stringify({
-      username: "robo-coach",
-      icon_emoji: ":robot_face:", // eslint-disable-line camelcase
-      text: text
-    })
-  })
-    .catch((err) => console.log('Error.', err))
-    .then(() => console.log('Done.'));
-}
-
+const {maybeSendConsentEmail} = require('./mailer.js');
+const {tellSlack} = require('./slack.js');
 
 // config
 const config = {
   port: process.env.PORT || 4000,
-  slackWebhookUrl: process.env.SLACK_WEBHOOK_URL
+  slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
+  mailgunEnv: {
+    MAILGUN_API_KEY: process.env.MAILGUN_API_KEY,
+    MAILGUN_DOMAIN: process.env.MAILGUN_DOMAIN
+  }
 };
 
-// middleware
+// Create server with middleware
 const app = express();
 app.use(bodyParser.json());
 app.use(function enforceHTTPS(request, response, next) {
@@ -37,26 +26,36 @@ app.use(function enforceHTTPS(request, response, next) {
   return next();
 });
 
-// API endpoints
+
+// Endpoints
 app.get('/api/hello', (req, res) => {
   res.set('Content-Type', 'application/json');
   res.json({ message: 'Hello from the server!' });
 });
+
+// For receiving log data from the client
 app.post('/api/log', (req, res) => {
+  const log = req.body;
+
+  // Log to Slack
   const {slackWebhookUrl} = config;
   if (slackWebhookUrl) {
-    console.log(req.body);
-    const text = JSON.stringify(req.body);
+    const text = JSON.stringify(log);
     tellSlack(slackWebhookUrl, text);
   }
+
+  // Check for sending consent emails
+  maybeSendConsentEmail(log, config.mailgunEnv);
+
+  // Return success
   res.set('Content-Type', 'application/json');
   res.json({ status: 'ok' });
 });
 
-// Serve any static files.
-app.use(express.static(path.resolve(__dirname, '../client/build')));
 
-// All remaining requests return the React app, so it can handle routing.
+// Serve any static files.
+// Route other requests return the React app, so it can handle routing.
+app.use(express.static(path.resolve(__dirname, '../client/build')));
 app.get('*', (request, response) => {
   response.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
