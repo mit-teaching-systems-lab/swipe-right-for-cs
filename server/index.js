@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const {maybeSendConsentEmail} = require('./mailer.js');
 const {tellSlack} = require('./slack.js');
+const {queryDatabase} = require('./database.js');
 
 // config
 const config = {
@@ -12,10 +13,13 @@ const config = {
   mailgunEnv: {
     MAILGUN_API_KEY: process.env.MAILGUN_API_KEY,
     MAILGUN_DOMAIN: process.env.MAILGUN_DOMAIN
-  }
+  },
+  postgresConnectionUrl: (process.env.NODE_ENV === 'development')
+    ? process.env.DATABASE_URL
+    : process.env.DATABASE_URL +'?ssl=true';
 };
 
-// Create server with middleware
+// Create server with middleware, connect to database
 const app = express();
 app.use(bodyParser.json());
 app.use(function enforceHTTPS(request, response, next) {
@@ -26,18 +30,23 @@ app.use(function enforceHTTPS(request, response, next) {
   }
   return next();
 });
+const query = queryDatabase.bind(null, config.postgresConnectionUrl);
 
-app.use(bodyParser.json());
 
-// Endpoints
-app.get('/api/hello', (req, res) => {
-  res.set('Content-Type', 'application/json');
-  res.json({ message: 'Hello from the server!' });
-});
-
+// API endpoints
 // For receiving log data from the client
 app.post('/api/log', (req, res) => {
   const log = req.body;
+
+  // Write into database
+  const sql = `INSERT INTO data(interaction, session) VALUES ($1, $2)`;
+  const values = [log.interaction, log.session];
+  query(sql, values, (err, results) => {
+    if (err) {
+      console.log('query returned err: ', err);
+      console.log({ error:err });
+    }
+  });
 
   // Log to Slack
   const {slackWebhookUrl} = config;
@@ -49,7 +58,7 @@ app.post('/api/log', (req, res) => {
   // Check for sending consent emails
   maybeSendConsentEmail(log, config.mailgunEnv);
 
-  // Return success
+  // Return success no matter what
   res.set('Content-Type', 'application/json');
   res.json({ status: 'ok' });
 });
