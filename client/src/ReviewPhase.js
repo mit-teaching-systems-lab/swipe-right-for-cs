@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import StudentProfile from './StudentProfile.js';
-import Swipeable from './components/Swipeable.js';
 import {Interactions} from './shared/data.js';
 
 // Review peer responses within the workshop.
 class ReviewPhase extends Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   onSwipeRight() {
     const {onInteraction, onDone} = this.props;

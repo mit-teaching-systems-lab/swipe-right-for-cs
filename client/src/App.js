@@ -29,7 +29,7 @@ const Phases = {
 class App extends Component {
   constructor(props) {
     super(props);
-    const isCodeOrg = (window.location.pathname === '/start');
+    const isCodeOrg = (window.location.pathname !== '/play');
     const query = queryString.parse(window.location.search);
     this.state = {
       isCodeOrg,

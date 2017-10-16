@@ -19,7 +19,14 @@ class WorkshopCode extends Component {
   }
 
   componentDidMount() {
-    this.workshopInputEl.focus();
+    this.emailInputEl.setAttribute('nochilddrag', 'nochilddrag');
+    this.workshopInputEl.setAttribute('nochilddrag', 'nochilddrag');
+    const {email} = this.state;
+    if (email === '') {
+      this.emailInputEl.focus();
+    } else {
+      this.workshopInputEl.focus();
+    }
   }
 
   onChangeWorkshopCode(event) {
@@ -51,15 +58,16 @@ class WorkshopCode extends Component {
         <div className="WorkshopCode-form">
           <div className="WorkshopCode-instructions">Code Studio email:</div>
           <input
+            ref={(input) => { this.emailInputEl = input; }} 
             className="WorkshopCode-input WorkshopCode-email"
             type="text"
             onChange={this.onChangeEmail}
             value={email} />
           <div className="WorkshopCode-instructions">Workshop code:</div>
           <input
+            ref={(input) => { this.workshopInputEl = input; }} 
             className="WorkshopCode-input WorkshopCode-workshop"
             type="text"
-            ref={(input) => { this.workshopInputEl = input; }} 
             value={workshopCode}
             onChange={this.onChangeWorkshopCode} />
           <TappableButton
