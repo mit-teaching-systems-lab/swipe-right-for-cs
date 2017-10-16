@@ -10,6 +10,8 @@ import ConsentPhase from './ConsentPhase.js';
 import IntroductionPhase from './IntroductionPhase.js';
 import StudentsPhase from './StudentsPhase.js';
 import DiscussPhase from './DiscussPhase.js';
+import ReviewPhase from './ReviewPhase.js';
+import ThanksPhase from './ThanksPhase.js';
 import {loadDataForCohort} from './loaders/loadDataForCohort.js';
 
 
@@ -138,7 +140,8 @@ class App extends Component {
     if (!students) return this.renderLoading();
     if (phase === Phases.STUDENTS) return this.renderStudents(Phases.DISCUSS);
     if (phase === Phases.DISCUSS) return this.renderDiscuss(Phases.REVIEW);
-    if (phase === Phases.REVIEW) return this.renderReview();
+    if (phase === Phases.REVIEW) return this.renderReview(Phases.THANKS);
+    if (phase === Phases.THANKS) return this.renderThanks();
   }
 
   // Publicly open demo
@@ -148,7 +151,8 @@ class App extends Component {
     if (phase === Phases.INTRODUCTION) return this.renderIntroduction(Phases.STUDENTS);
     if (!students) return this.renderLoading();
     if (phase === Phases.STUDENTS) return this.renderStudents(Phases.REVIEW);
-    if (phase === Phases.REVIEW) return this.renderReview();
+    if (phase === Phases.REVIEW) return this.renderReview(Phases.THANKS);
+    if (phase === Phases.THANKS) return this.renderThanks();
   }
 
   renderWorkshopCode(phase) {
@@ -201,8 +205,16 @@ class App extends Component {
       onDone={() => this.setState({phase})} />;
   }
 
-  renderReview() {
-    return <div>TODO...</div>;
+  renderReview(phase) {
+    const {students} = this.state;
+    return <ReviewPhase
+      students={students}
+      onInteraction={this.onInteraction}
+      onDone={() => this.setState({phase})} />;
+  }
+
+  renderThanks(phase) {
+    return <ThanksPhase onInteraction={this.onInteraction} />;
   }
 }
 

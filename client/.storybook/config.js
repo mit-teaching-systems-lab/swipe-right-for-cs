@@ -8,6 +8,7 @@ function loadStories() {
   require('../src/StudentsPhase.story.js');
   require('../src/Turn.story.js');
   require('../src/DiscussPhase.story.js');
+  require('../src/ReviewPhase.story.js');
   // You can require as many stories as you need.
 }
 
