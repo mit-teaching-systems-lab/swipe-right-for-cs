@@ -83,7 +83,7 @@ class App extends Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      method: 'post',
+      method: 'POST',
       body: JSON.stringify(log)
     });
   }

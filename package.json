@@ -6,12 +6,13 @@
     "node": "6.11.x"
   },
   "scripts": {
-    "install": "cd client && YARN_PRODUCTION=false yarn install --frozen-lockfile", 
+    "install": "cd client && YARN_PRODUCTION=false yarn install --frozen-lockfile",
     "start": "yarn run dev",
     "test": "yarn run lint && cd client && yarn run test",
     "heroku-postbuild": "cd client && yarn run build",
-    "dev": "concurrently \"NODE_ENV=development yarn run server\" \"yarn run client\" \"yarn run storybook\"",
+    "dev": "concurrently \"NODE_ENV=development yarn run server-dev\" \"yarn run client\" \"yarn run storybook\"",
     "server": "node server/index.js",
+    "server-dev": "NODE_ENV=development DATABASE_URL=http://localhost:5432/swipe-right-db yarn run server",
     "client": "cd client && yarn run start",
     "storybook": "cd client && yarn run storybook",
     "lint": "eslint --ext js -c server/.eslintrc server",
@@ -24,7 +25,8 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.1",
-    "node-fetch": "^1.7.3"
+    "node-fetch": "^1.7.3",
+    "pg": "^7.3.0"
   },
   "devDependencies": {
     "concurrently": "^3.5.0",
