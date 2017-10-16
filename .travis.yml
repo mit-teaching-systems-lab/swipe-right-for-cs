@@ -5,6 +5,3 @@ node_js:
 branches:
   only:
     - master
-
-before_install:
-  - yarn run heroku-prebuild
