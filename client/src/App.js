@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
-import {
-  BrowserRouter as Router,
-  Route
-} from 'react-router-dom';
 import queryString from 'query-string';
 import './App.css';
 import {Log, Session} from './shared/data.js';
 import MobileSimulator from './components/MobileSimulator.js';
+import WorkshopCode from './WorkshopCode.js';
 import Title from './Title.js';
 import ConsentPhase from './ConsentPhase.js';
 import IntroductionPhase from './IntroductionPhase.js';
@@ -18,6 +15,7 @@ import {loadDataForCohort} from './loaders/loadDataForCohort.js';
 
 // Describes the major phases of the whole game
 const Phases = {
+  WORKSHOP_CODE: 'WORKSHOP_CODE',
   TITLE: 'TITLE',
   INTRODUCTION: 'INTRODUCTION',
   STUDENTS: 'STUDENTS',
@@ -29,12 +27,14 @@ const Phases = {
 class App extends Component {
   constructor(props) {
     super(props);
+    const isCodeOrg = (window.location.pathname === '/start');
     const query = queryString.parse(window.location.search);
     this.state = {
-      email: query.email || Session.unknownEmail(),
-      workshopCode: uuid.v4(),
+      isCodeOrg,
       sessionId: uuid.v4(),
-      phase: Phases.TITLE,
+      email: (isCodeOrg) ? query.email || '' : Session.unknownEmail(),
+      workshopCode: (isCodeOrg) ? '' : 'demo-workshop-code',
+      phase: (isCodeOrg) ? Phases.WORKSHOP_CODE : Phases.TITLE,
       students: null,
       logs: []
     };
@@ -45,11 +45,13 @@ class App extends Component {
     this.renderCodeOrg = this.renderCodeOrg.bind(this);
   }
 
-  componentDidMount() {
-    const {workshopCode} = this.state;
-    loadDataForCohort(workshopCode)
-      .then(this.onDataLoaded)
-      .catch(this.onDataError);
+  // Wait until the email and workshopCode is set,
+  // which happens different ways based on the code.org
+  // or public path.
+  componentWillUpdate(nextProps, nextState) {
+    const prevPhase = this.state.phase;
+    if (nextState.phase === prevPhase) return;
+    if (nextState.phase === Phases.TITLE) this.doFetchData();
   }
 
   // Describe context of the game session
@@ -63,6 +65,13 @@ class App extends Component {
       clientTimestampMs: new Date().getTime(),
       location: window.location.toString()
     });
+  }
+
+  doFetchData() {
+    const {workshopCode} = this.state;
+    loadDataForCohort(workshopCode)
+      .then(this.onDataLoaded)
+      .catch(this.onDataError);
   }
 
   // Optimization
@@ -108,21 +117,21 @@ class App extends Component {
   }
 
   render() {
+    const {isCodeOrg} = this.state;
+
     return (
-      <Router>
-        <div className="App">
-          <MobileSimulator minWidth={800} minHeight={400}>
-            <Route exact path="/" render={this.renderDemo}/>
-            <Route exact path="/start" render={this.renderCodeOrg}/>
-          </MobileSimulator>
-        </div>
-      </Router>
+      <div className="App">
+        <MobileSimulator minWidth={800} minHeight={400}>
+          {isCodeOrg ? this.renderCodeOrg() : this.renderDemo()}
+        </MobileSimulator>
+      </div>
     );
   }
 
   // From code.org Code Studio, with email on query string
-  renderCodeOrg(match) {
+  renderCodeOrg() {
     const {phase, students} = this.state;
+    if (phase === Phases.WORKSHOP_CODE) return this.renderWorkshopCode(Phases.TITLE);
     if (phase === Phases.TITLE) return this.renderTitle(Phases.CONSENT);
     if (phase === Phases.CONSENT) return this.renderConsent(Phases.INTRODUCTION);
     if (phase === Phases.INTRODUCTION) return this.renderIntroduction(Phases.STUDENTS);
@@ -133,13 +142,23 @@ class App extends Component {
   }
 
   // Publicly open demo
-  renderDemo(match) {
+  renderDemo() {
     const {phase, students} = this.state;
     if (phase === Phases.TITLE) return this.renderTitle(Phases.INTRODUCTION);
     if (phase === Phases.INTRODUCTION) return this.renderIntroduction(Phases.STUDENTS);
     if (!students) return this.renderLoading();
     if (phase === Phases.STUDENTS) return this.renderStudents(Phases.REVIEW);
     if (phase === Phases.REVIEW) return this.renderReview();
+  }
+
+  renderWorkshopCode(phase) {
+    const {email} = this.state;
+    return <WorkshopCode
+      email={email}
+      onInteraction={this.onInteraction}
+      onDone={(workshopCode) => {
+        this.setState({workshopCode, phase});
+      }} />;
   }
 
   renderTitle(phase) {

@@ -9,7 +9,7 @@ class TappableButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      animScale: new Animated.Value(1)
+      animScale: new Animated.Value(1.0)
     };
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
@@ -41,7 +41,7 @@ class TappableButton extends Component {
   }
 
   render() {
-    const {children, outerStyle, style} = this.props;
+    const {children, outerStyle, style, disabled} = this.props;
     const {animScale} = this.state;
 
     // Spring on touch
@@ -49,13 +49,17 @@ class TappableButton extends Component {
       <Animated.div
         className="TappableButton"
         style={{...outerStyle, opacity: animScale}}>
-        <div
-          className="TappableButton-inner"
-          style={style}
-          onMouseDown={this.onMouseDown}
-          onMouseUp={this.onMouseUp}
-          onMouseOut={this.onMouseUp}
-          onClick={this.onClick}>{children}</div>
+        {disabled
+          ? <div
+            className="TappableButton-inner TappableButton-disabled"
+            style={style}>{children}</div>
+          : <div
+            className="TappableButton-inner"
+            style={style}
+            onMouseDown={this.onMouseDown}
+            onMouseUp={this.onMouseUp}
+            onMouseOut={this.onMouseUp}
+            onClick={this.onClick}>{children}</div>}
       </Animated.div>
     );
   }
@@ -64,6 +68,7 @@ class TappableButton extends Component {
 TappableButton.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
   style: PropTypes.object,
   outerStyle: PropTypes.object
 };
