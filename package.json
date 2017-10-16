@@ -6,9 +6,9 @@
     "node": "6.11.x"
   },
   "scripts": {
+    "install": "cd client && YARN_PRODUCTION=false yarn install --frozen-lockfile", 
     "start": "yarn run dev",
     "test": "yarn run lint && cd client && yarn run test",
-    "heroku-prebuild": "yarn install && cd client && YARN_PRODUCTION=false yarn install --frozen-lockfile",
     "heroku-postbuild": "cd client && yarn run build",
     "dev": "concurrently \"NODE_ENV=development yarn run server\" \"yarn run client\" \"yarn run storybook\"",
     "server": "node server/index.js",
