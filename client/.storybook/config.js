@@ -1,6 +1,7 @@
 import { configure } from '@storybook/react';
 
 function loadStories() {
+  require('../src/WorkshopCode.story.js');
   require('../src/Title.story.js');
   require('../src/ConsentPhase.story.js');
   require('../src/InstructionsPhase.story.js');

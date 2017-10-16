@@ -9,7 +9,6 @@ const crypto = require('crypto');
 
 // Map of type => type:hash
 // Ensures that all data access has to go through here.
-// This should not be exported; use functions below to read.
 const InteractionTypes = [
   'INTRO_PLAY',
   'READ_MORE_CONSENT', // deprecated
@@ -144,6 +143,7 @@ function sha(value) {
 
 module.exports = { // eslint-disable-line no-undef
   Interaction,
+  InteractionTypes,
   Interactions,
   Session,
   Log,
