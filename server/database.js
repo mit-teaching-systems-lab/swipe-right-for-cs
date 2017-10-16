@@ -1,15 +1,9 @@
-const pg = require('pg');
+const {Pool} = require('pg');
+
 
 // For querying the database
-module.exports = function queryDatabase(connectionUrl, text, values, cb) {
-  pg.connect(connectionUrl, function(err, client, done) {
-    if (err) {
-      throw new Error('pg.connect failed: ' + JSON.stringify({connectionUrl, err}, null, 2));
-    }
-    client.query(text, values, function(err, result) {
-      done();
-      cb(err, result);
-    });
-  });
+function createPool(connectionString) {
+  return new Pool({connectionString});
 }
 
+module.exports = {createPool};

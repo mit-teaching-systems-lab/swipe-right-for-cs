@@ -19,3 +19,17 @@ $ yarn run grok
 ```
 
 Then open that URL on your phone.
+
+## Database
+This uses a Postgres database; these `psql` commands will boostrap it for local development:
+
+```
+CREATE DATABASE "swipe-right-db";
+\c swipe-right-db;
+CREATE TABLE interactions (
+  id serial primary key,
+  interaction jsonb,
+  session jsonb,
+  timestampz timestamptz
+);
+```
