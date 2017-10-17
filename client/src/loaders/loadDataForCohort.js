@@ -1,24 +1,24 @@
-import __shuffle from 'lodash/shuffle';
 import __flatten from 'lodash/flatten';
+import __defaults from 'lodash/defaults';
+import __sortBy from 'lodash/sortBy';
 import parseCsvSync from 'csv-parse/lib/sync';
 import profileTemplatesFile from '../files/profileTemplates.csv';
 import sortedVariantsFile from '../files/sortedVariants.csv';
 import {hashCode} from '../shared/data.js';
 import {createProfiles} from './createProfiles.js';
 
+
 // Define config for experiment
-export const defaultConfig = {
-  cohortOptions: {
-    argumentCount: 4,
-    cohortCount: 10,
-    maxProfileCount: 10
-  },
-  allowSkipAfter: 6
+export const defaultOptions = {
+  argumentCount: 4,
+  cohortCount: 10,
+  maxProfileCount: 10,
+  forcedProfileCount: 6
 };
 
 export async function loadDataForCohort(workshopCode, options = {}) {
   const {profileTemplates, variants} = await fetchBoth();
-  return cohortAndStudents(workshopCode, profileTemplates, variants, options);
+  return cohortCreateAndShuffle(workshopCode, profileTemplates, variants, options);
 }
 
 export async function fetchBoth() {
@@ -36,34 +36,43 @@ async function fetchTexts() {
   ];
 }
 
-// Determine cohort, apply manipulations, shuffle order on each game
-export function cohortAndStudents(workshopCode, profileTemplates, variants, options = {}) {
+// Determine cohort, apply manipulations, shuffle ordering
+export function cohortCreateAndShuffle(workshopCode, profileTemplates, variants, options = {}) {
   // Tune number of arguments, cohorts, max profiles shown
-  const argumentCount = options.argumentCount || 4;
-  const cohortCount = options.cohortCount || 10;
-  const maxProfileCount = options.maxProfileCount || 10;
+  const {
+    cohortCount,
+    forcedProfileCount,
+    maxProfileCount,
+    argumentCount
+  } = __defaults({}, options, defaultOptions);
 
-  // Bucket into cohorts
+  // Bucket into cohort, and create profiles for cohort
   const cohortNumber = Math.abs(hashCode(workshopCode)) % cohortCount;
+  const studentProfiles = createProfilesForCohort(cohortNumber, profileTemplates, variants, {
+    maxProfileCount,
+    argumentCount
+  });
 
-  // Rotate the variants shown to each cohort
-  const rotatedVariants = rotatedVariantsForProfiles(cohortNumber, profileTemplates, variants);
+  // Bucket profiles list into left and right based on `forcedProfileCount`,
+  // and shuffle within each bucket to ensure that left profiles are seen first.
+  const shuffledStudents = shuffleInBuckets(studentProfiles, forcedProfileCount, cohortNumber);
+  return {cohortNumber, students: shuffledStudents};
+}
 
-  // Within a game, randomly shuffle the order of variants shown
-  const shuffledVariants = __shuffle(rotatedVariants);
 
-  // Within a game, randomly shuffle the order of profiles shown
-  const shuffledProfileTemplates = __shuffle(profileTemplates);
+export function createProfilesForCohort(cohortNumber, profileTemplates, variants, options = {}) {
+  const {maxProfileCount, argumentCount} = options;
 
-  // If there is a mismatch between the number of profiles and variants,
-  // log that and show the top n profiles.
-  const profileCount = Math.min(maxProfileCount, shuffledVariants.length, shuffledProfileTemplates.length);
-  const slicedProfileTemplates = shuffledProfileTemplates.slice(0, profileCount);
-  const slicedVariants = shuffledVariants.slice(0, profileCount);
+  // Get the variants for the cohort (they're just rotated).
+  const variantsForCohort = rotatedVariantsForProfiles(cohortNumber, profileTemplates, variants);
 
-  // Create actual concrete student profiles
-  const students = createProfiles(slicedProfileTemplates, slicedVariants, argumentCount);
-  return {cohortNumber, students};
+  // Truncate the number of profiles.
+  const profileCount = Math.min(maxProfileCount, variantsForCohort.length, profileTemplates.length);
+  const truncatedProfileTemplates = profileTemplates.slice(0, profileCount);
+  
+  // Zip together into concrete student profiles
+  const truncatedVariants = variantsForCohort.slice(0, profileCount);
+  return createProfiles(truncatedProfileTemplates, truncatedVariants, argumentCount);
 }
 
 // Rotate the variants shown to each cohort.
@@ -77,4 +86,20 @@ export function rotatedVariantsForProfiles(cohortNumber, profileTemplates, varia
     variants.slice(0, cohortNumber)
   ]);
   return cohortVariants.slice(0, profileTemplates.length);
+}
+
+// Partition the list at midpoint, and shuffle on both sides.
+export function shuffleInBuckets(items, midpoint, cohortNumber) {
+  return __flatten([
+    consistentShuffleForCohort(items.slice(0, midpoint), cohortNumber),
+    consistentShuffleForCohort(items.slice(midpoint, items.length), cohortNumber)
+  ]);
+}
+
+// This consistently sorts `items` using the cohortNumber as a seed.
+export function consistentShuffleForCohort(items, cohortNumber) {
+  return __sortBy(items, item => {
+    const key = JSON.stringify({item, cohortNumber});
+    return hashCode(key);
+  });
 }

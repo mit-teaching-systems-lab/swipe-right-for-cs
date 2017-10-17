@@ -12,7 +12,7 @@ import StudentsPhase from './StudentsPhase.js';
 import DiscussPhase from './DiscussPhase.js';
 import ReviewPhase from './ReviewPhase.js';
 import ThanksPhase from './ThanksPhase.js';
-import {loadDataForCohort, defaultConfig} from './loaders/loadDataForCohort.js';
+import {loadDataForCohort, defaultOptions} from './loaders/loadDataForCohort.js';
 
 
 // Describes the major phases of the whole game
@@ -34,7 +34,7 @@ class App extends Component {
     const query = queryString.parse(window.location.search);
     this.state = {
       isCodeOrg,
-      config: defaultConfig,
+      config: defaultOptions,
       sessionId: uuid.v4(),
       email: (isCodeOrg) ? query.email || '' : Session.unknownEmail(),
       workshopCode: (isCodeOrg) ? '' : 'demo-workshop-code',
@@ -73,7 +73,7 @@ class App extends Component {
 
   doFetchData() {
     const {workshopCode, config} = this.state;
-    loadDataForCohort(workshopCode, config.cohortOptions)
+    loadDataForCohort(workshopCode, config)
       .then(this.onDataLoaded)
       .catch(this.onDataError);
   }
@@ -190,10 +190,11 @@ class App extends Component {
 
   renderStudents(phase) {
     const {students, config} = this.state;
+    const {forcedProfileCount} = config;
     return (
       <StudentsPhase
         students={students}
-        allowSkipAfter={config.allowSkipAfter}
+        allowSkipAfter={forcedProfileCount}
         onInteraction={this.onInteraction}
         onDone={() => this.setState({phase})} />
     );
