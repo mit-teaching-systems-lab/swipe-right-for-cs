@@ -4,10 +4,23 @@ import __groupBy from 'lodash/groupBy';
 import __orderBy from 'lodash/orderBy';
 import StudentProfile from './StudentProfile.js';
 import Bubble from './components/Bubble.js';
+import Swipeable from './components/Swipeable.js';
+import {Interactions} from './shared/data.js';
 import './ReviewPhase.css';
 
 // Review peer responses within the workshop.
 class ReviewPhase extends Component {
+  constructor(props) {
+    super(props);
+    this.onSwipeRight = this.onSwipeRight.bind(this);
+  }
+
+  onSwipeRight() {
+    const {onInteraction, onDone} = this.props;
+    onInteraction(Interactions.doneReviewPhase());
+    onDone();
+  }
+
   render() {
     const {students} = this.props;
     return (
@@ -32,6 +45,11 @@ class ReviewPhase extends Component {
             );
           })}
         </div>
+        <Swipeable
+          height={120}
+          onSwipeRight={this.onSwipeRight}>
+          <div className="ReviewPhase-swipe">Swipe to continue!</div>
+        </Swipeable>
       </div>
     );
   }

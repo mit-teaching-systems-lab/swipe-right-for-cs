@@ -17,6 +17,7 @@ const InteractionTypes = [
   'SWIPE_LEFT',
   'SWIPE_RIGHT',
   'DONE_DISCUSS_PHASE',
+  'DONE_REVIEW_PHASE',
   'STUDENT_RATING'
 ].reduce((map, value) => {
   map[value] = [value, sha(value)].join(':');
@@ -60,6 +61,9 @@ const Interactions = {
   },
   doneDiscussPhase() {
     return { type: InteractionTypes.DONE_DISCUSS_PHASE };
+  },
+  doneReviewPhase() {
+    return { type: InteractionTypes.DONE_REVIEW_PHASE };
   },
   studentRating(params) {
     const {choices, choiceIndex, choiceText, student} = params;

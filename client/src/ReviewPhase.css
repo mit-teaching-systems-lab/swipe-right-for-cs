@@ -29,3 +29,10 @@
   padding: 10px;
   text-align: right;
 }
+
+.ReviewPhase-swipe {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
