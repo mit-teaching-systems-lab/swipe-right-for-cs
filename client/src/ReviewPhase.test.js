@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReviewPhase from './ReviewPhase.js';
-import {storybookStudents, peerResponses} from './util/fixtures.js';
+import {storybookStudents} from './util/fixtures.js';
+import {peerResponses} from './util/peerResponsesFixtures.js';
+
 
 function mockFetch() {
   fetch.mockResponseOnce(JSON.stringify({

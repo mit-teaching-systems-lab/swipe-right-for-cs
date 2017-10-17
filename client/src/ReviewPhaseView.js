@@ -6,10 +6,10 @@ import StudentProfile from './StudentProfile.js';
 import Bubble from './components/Bubble.js';
 import Swipeable from './components/Swipeable.js';
 import {Interactions} from './shared/data.js';
-import './ReviewPhase.css';
+import './ReviewPhaseView.css';
 
 // Review peer responses within the workshop.
-class ReviewPhase extends Component {
+class ReviewPhaseView extends Component {
   constructor(props) {
     super(props);
     this.onSwipeRight = this.onSwipeRight.bind(this);
@@ -17,24 +17,24 @@ class ReviewPhase extends Component {
 
   onSwipeRight() {
     const {onInteraction, onDone} = this.props;
-    onInteraction(Interactions.doneReviewPhase());
+    onInteraction(Interactions.doneReviewPhaseView());
     onDone();
   }
 
   render() {
     const {students} = this.props;
     return (
-      <div className="ReviewPhase">
-        <div className="ReviewPhase-content">
+      <div className="ReviewPhaseView">
+        <div className="ReviewPhaseView-content">
           <p className="Global-header-font">Round 3: Review</p>
           <p>{"Here's the top three arguments for each student, based on how other folks in the workshop responded."}</p>
         </div>
-        <div className="ReviewPhase-students">
+        <div className="ReviewPhaseView-students">
           {students.map((student) => {
             const {profileName, profileImageSrc, profileText} = student;
             return (
               <div key={profileName}>
-                <div className="ReviewPhase-student">
+                <div className="ReviewPhaseView-student">
                   <StudentProfile
                     profileName={profileName}
                     profileImageSrc={profileImageSrc}
@@ -49,7 +49,7 @@ class ReviewPhase extends Component {
         <Swipeable
           height={120}
           onSwipeRight={this.onSwipeRight}>
-          <div className="ReviewPhase-swipe">Swipe to continue!</div>
+          <div className="ReviewPhaseView-swipe">Swipe to continue!</div>
         </Swipeable>
       </div>
     );
@@ -61,12 +61,12 @@ class ReviewPhase extends Component {
     const rows = __groupBy(peerResponses, 'profileName')[student.profileName] || [];
     const sortedRows = __orderBy(rows, ['percentageRight'], ['desc']);
     return (
-      <div className="ReviewPhase-peer-responses">
+      <div className="ReviewPhaseView-peer-responses">
         {sortedRows.slice(0, topN).map(row =>
-          <div key={row.argumentText} className="ReviewPhase-argument-container">
+          <div key={row.argumentText} className="ReviewPhaseView-argument-container">
             <Bubble>{row.argumentText}</Bubble>
-            <div className="ReviewPhase-percentage" style={{width: `${row.percentageRight}%`}}>
-              <div className="ReviewPhase-percentage-text">{row.percentageRight}%</div>
+            <div className="ReviewPhaseView-percentage" style={{width: `${row.percentageRight}%`}}>
+              <div className="ReviewPhaseView-percentage-text">{row.percentageRight}%</div>
             </div>
           </div>
         )}
@@ -75,7 +75,7 @@ class ReviewPhase extends Component {
   }
 }
 
-ReviewPhase.propTypes = {
+ReviewPhaseView.propTypes = {
   workshopCode: PropTypes.string.isRequired,
   students: PropTypes.arrayOf(PropTypes.object).isRequired,
   peerResponses: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -83,4 +83,4 @@ ReviewPhase.propTypes = {
   onDone: PropTypes.func.isRequired
 };
 
-export default ReviewPhase;
+export default ReviewPhaseView;
