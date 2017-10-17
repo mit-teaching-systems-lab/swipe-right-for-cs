@@ -6,3 +6,16 @@
   padding: 20px;
   padding-top: 0;
 }
+
+.ThanksPhase-links {
+  margin-top: 50px;
+}
+
+.ThanksPhase-list {
+  list-style: none;
+  padding: 0;
+}
+
+.ThanksPhase-list > li {
+  padding: 10px;
+}

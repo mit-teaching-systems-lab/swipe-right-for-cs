@@ -8,7 +8,7 @@
   "scripts": {
     "install": "cd client && YARN_PRODUCTION=false yarn install --frozen-lockfile",
     "start": "yarn run dev",
-    "test": "yarn run lint && cd client && yarn run test",
+    "test": "yarn run lint && yarn run jest && cd client && yarn run test",
     "heroku-postbuild": "cd client && yarn run build",
     "dev": "concurrently \"NODE_ENV=development yarn run server-dev\" \"yarn run client\" \"yarn run storybook\"",
     "server": "node server/index.js",
@@ -16,6 +16,7 @@
     "client": "cd client && yarn run start",
     "storybook": "cd client && yarn run storybook",
     "lint": "eslint --ext js -c server/.eslintrc server",
+    "jest": "jest server",
     "ngrok": "ngrok http 3000 -host-header=\"localhost:8080\""
   },
   "cacheDirectories": [
@@ -26,6 +27,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.1",
     "express-rate-limit": "^2.9.0",
+    "jest": "^21.2.1",
+    "lodash": "^4.17.4",
     "mustache": "^2.3.0",
     "node-fetch": "^1.7.3",
     "pg": "^7.3.0",
