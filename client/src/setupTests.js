@@ -17,3 +17,7 @@ window.matchMedia = window.matchMedia || function() {
     removeListener: function() {}
   };
 };
+
+// Make console.warn and error fail tests
+console.error = jest.fn(warn => { throw new Error(warn); }); //eslint-disable-line no-console
+console.warn = jest.fn(warn => { throw new Error(warn); }); //eslint-disable-line no-console

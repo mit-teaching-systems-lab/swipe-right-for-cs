@@ -36,7 +36,10 @@ export function imageFor(label) {
 //
 // Returns no students on input array length mismatch.
 export function createProfiles(profileTemplates, variants, argumentCount) {
-  if (profileTemplates.length !== variants.length) return [];
+  if (profileTemplates.length !== variants.length) {
+    console.warn(`createProfiles called with ${profileTemplates.length} profiles and ${variants.length} variants`); //eslint-disable-line no-console
+    return [];
+  }
 
   return __zip(profileTemplates, variants).map(([profileTemplate, variant]) => {
     const argumentTexts = __shuffle(argumentTextsFor(profileTemplate)).slice(0, argumentCount);
