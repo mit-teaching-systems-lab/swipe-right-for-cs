@@ -12,7 +12,7 @@ import StudentsPhase from './StudentsPhase.js';
 import DiscussPhase from './DiscussPhase.js';
 import ReviewPhase from './ReviewPhase.js';
 import ThanksPhase from './ThanksPhase.js';
-import {loadDataForCohort} from './loaders/loadDataForCohort.js';
+import {loadDataForCohort, defaultConfig} from './loaders/loadDataForCohort.js';
 
 
 // Describes the major phases of the whole game
@@ -26,6 +26,7 @@ const Phases = {
   THANKS: 'THANKS'
 };
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +34,7 @@ class App extends Component {
     const query = queryString.parse(window.location.search);
     this.state = {
       isCodeOrg,
+      config: defaultConfig,
       sessionId: uuid.v4(),
       email: (isCodeOrg) ? query.email || '' : Session.unknownEmail(),
       workshopCode: (isCodeOrg) ? '' : 'demo-workshop-code',
@@ -70,8 +72,8 @@ class App extends Component {
   }
 
   doFetchData() {
-    const {workshopCode} = this.state;
-    loadDataForCohort(workshopCode)
+    const {workshopCode, config} = this.state;
+    loadDataForCohort(workshopCode, config.cohortOptions)
       .then(this.onDataLoaded)
       .catch(this.onDataError);
   }
@@ -187,11 +189,11 @@ class App extends Component {
   }
 
   renderStudents(phase) {
-    const {students} = this.state;
+    const {students, config} = this.state;
     return (
       <StudentsPhase
         students={students}
-        allowSkipAfter={5}
+        allowSkipAfter={config.allowSkipAfter}
         onInteraction={this.onInteraction}
         onDone={() => this.setState({phase})} />
     );

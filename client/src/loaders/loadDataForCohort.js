@@ -6,6 +6,15 @@ import sortedVariantsFile from '../files/sortedVariants.csv';
 import {hashCode} from '../shared/data.js';
 import {createProfiles} from './createProfiles.js';
 
+// Define config for experiment
+export const defaultConfig = {
+  cohortOptions: {
+    argumentCount: 4,
+    cohortCount: 10,
+    maxProfileCount: 10
+  },
+  allowSkipAfter: 6
+};
 
 export async function loadDataForCohort(workshopCode, options = {}) {
   const {profileTemplates, variants} = await fetchBoth();
@@ -35,7 +44,7 @@ export function cohortAndStudents(workshopCode, profileTemplates, variants, opti
   const maxProfileCount = options.maxProfileCount || 10;
 
   // Bucket into cohorts
-  const cohortNumber = hashCode(workshopCode) % cohortCount;
+  const cohortNumber = Math.abs(hashCode(workshopCode)) % cohortCount;
 
   // Rotate the variants shown to each cohort
   const rotatedVariants = rotatedVariantsForProfiles(cohortNumber, profileTemplates, variants);
