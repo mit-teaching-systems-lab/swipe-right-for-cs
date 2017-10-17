@@ -51,7 +51,7 @@ class ReviewPhaseView extends Component {
           onSwipeRight={this.onSwipeRight}>
           <div className="DiscussPhase-swipe">
             <div className="DiscussPhase-swipe-inner">
-              {"When you're done , swipe right to move on."}
+              {"When you're done, swipe right to move on."}
             </div>
           </div>
         </Swipeable>

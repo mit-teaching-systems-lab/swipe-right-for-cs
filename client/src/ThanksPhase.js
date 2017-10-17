@@ -13,6 +13,10 @@ class ThanksPhase extends Component {
     this.onClickedForums = this.onClickedForums.bind(this);
   }
 
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
+  
   computeMoves() {
     const {logs} = this.props;
     const swipeLogs = logs.filter(log => {
