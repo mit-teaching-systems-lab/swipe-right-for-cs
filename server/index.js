@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const {maybeSendConsentEmail} = require('./mailer.js');
+const {maybeSendConsentEmail, sendResponsesEmail} = require('./emails.js');
 const {createPool} = require('./database.js');
 const {InteractionTypes} = require('../client/src/shared/data.js');
 
@@ -106,6 +106,17 @@ app.get('/api/peers/:workshopCode', (req, res) => {
         rows: results.rows
       });
     });
+});
+
+app.post('/api/share', (req, res) => {
+  const {moves, email} = req.body;
+
+  // Send email with responses
+  sendResponsesEmail(email, moves, config.mailgunEnv);
+
+  // Return success no matter what
+  res.set('Content-Type', 'application/json');
+  res.json({ status: 'ok' });
 });
 
 
