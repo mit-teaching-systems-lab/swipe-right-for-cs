@@ -22,11 +22,8 @@
 }
 
 .DiscussPhase-continue {
-  padding: 20px;
-  background: #eee;
-  border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
-  font-weight: bold;
+  height: 1px;
 }
 
 .DiscussPhase-swipe {
@@ -34,4 +31,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.DiscussPhase-swipe-inner {
+  padding: 20px;
 }

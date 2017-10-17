@@ -46,11 +46,15 @@ class DiscussPhase extends Component {
             })}
           </div>
         </div>
-        <div className="DiscussPhase-continue">{"When you're done discussing, swipe right to move on."}</div>
+        <div className="DiscussPhase-continue" />
         <Swipeable
           height={120}
           onSwipeRight={this.onSwipeRight}>
-          <div className="DiscussPhase-swipe">Swipe to continue!</div>
+          <div className="DiscussPhase-swipe">
+            <div className="DiscussPhase-swipe-inner">
+              {"When you're done discussing, swipe right to move on."}
+            </div>
+          </div>
         </Swipeable>
       </div>
     );

@@ -17,7 +17,7 @@ class ReviewPhaseView extends Component {
 
   onSwipeRight() {
     const {onInteraction, onDone} = this.props;
-    onInteraction(Interactions.doneReviewPhaseView());
+    onInteraction(Interactions.doneReviewPhase());
     onDone();
   }
 
@@ -45,11 +45,15 @@ class ReviewPhaseView extends Component {
             );
           })}
         </div>
-        <div className="DiscussPhase-continue">{"When you're done, swipe right to finish."}</div>
+        <div className="ReviewPhase-continue" />
         <Swipeable
           height={120}
           onSwipeRight={this.onSwipeRight}>
-          <div className="ReviewPhaseView-swipe">Swipe to continue!</div>
+          <div className="DiscussPhase-swipe">
+            <div className="DiscussPhase-swipe-inner">
+              {"When you're done , swipe right to move on."}
+            </div>
+          </div>
         </Swipeable>
       </div>
     );

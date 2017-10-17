@@ -30,17 +30,18 @@
   text-align: right;
 }
 
-.ReviewPhaseView-continue {
-  padding: 20px;
-  background: #eee;
-  border-top: 1px solid #ccc;
+.ReviewPhase-continue {
   border-bottom: 1px solid #ccc;
-  font-weight: bold;
+  height: 1px;
 }
 
-.ReviewPhaseView-swipe {
+.ReviewPhase-swipe {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.ReviewPhase-swipe-inner {
+  padding: 20px;
 }
