@@ -8,7 +8,6 @@ import {Interactions} from './shared/data.js';
 import './Student.css';
 
 
-
 // Render a student, and handle all interactions for swiping or typing
 // or working with that student.
 class Student extends Component {

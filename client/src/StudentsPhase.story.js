@@ -10,6 +10,16 @@ storiesOf('StudentsPhase', module) //eslint-disable-line no-undef
     return withFrameSwitcher(
       <StudentsPhase
         students={storybookStudents}
+        allowSkipAfter={5}
+        onInteraction={(action('onInteraction'))}
+        onDone={action('onDone')} />
+    );
+  })
+  .add('skip', () => {
+    return withFrameSwitcher(
+      <StudentsPhase
+        students={storybookStudents}
+        allowSkipAfter={0}
         onInteraction={(action('onInteraction'))}
         onDone={action('onDone')} />
     );

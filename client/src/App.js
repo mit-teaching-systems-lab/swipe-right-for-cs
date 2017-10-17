@@ -191,6 +191,7 @@ class App extends Component {
     return (
       <StudentsPhase
         students={students}
+        allowSkipAfter={5}
         onInteraction={this.onInteraction}
         onDone={() => this.setState({phase})} />
     );
