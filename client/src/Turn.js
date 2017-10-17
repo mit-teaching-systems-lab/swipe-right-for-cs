@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Turn.css';
-import Delay from 'react-delay';
 import Swipeable from './components/Swipeable.js';
 import Bubble from './components/Bubble.js';
 import {Interactions} from './shared/data.js';
 import StudentProfile from './StudentProfile.js';
+import Delay from './components/Delay.js';
 
 
 // Shows the user a turn of the game, and let's them interact with it.

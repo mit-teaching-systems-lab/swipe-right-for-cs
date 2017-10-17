@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './IntroductionPhase.css';
 import {Interactions} from './shared/data.js';
-import Delay from 'react-delay';
+import Delay from './components/Delay.js';
 import Swipeable from './components/Swipeable.js';
 
 

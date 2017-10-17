@@ -15,6 +15,7 @@ class WorkshopCode extends Component {
       email: props.email
     };
     this.onDelayDone = this.onDelayDone.bind(this);
+    this.onDelaySettled = this.onDelaySettled.bind(this);
     this.onChangeWorkshopCode = this.onChangeWorkshopCode.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -29,14 +30,17 @@ class WorkshopCode extends Component {
   onDelayDone() {
     this.emailInputEl.setAttribute('nochilddrag', 'nochilddrag');
     this.workshopInputEl.setAttribute('nochilddrag', 'nochilddrag');
-    window.setTimeout(() => {
-      const {email} = this.state;
-      if (email === '') {
-        this.emailInputEl.focus();
-      } else {
-        this.workshopInputEl.focus();
-      }
-    }, 100);
+    window.setTimeout(this.onDelaySettled, 100);
+  }
+
+  // Since there's some jank setting the focus while animating.
+  onDelaySettled() {
+    const {email} = this.state;
+    if (email === '') {
+      this.emailInputEl.focus();
+    } else {
+      this.workshopInputEl.focus();
+    }
   }
 
   onChangeWorkshopCode(event) {

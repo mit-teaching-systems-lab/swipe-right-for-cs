@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Delay from 'react-delay';
 import './Title.css';
 import logoSrc from './img/swipe.png';
 import {Interactions} from './shared/data.js';
 import Swipeable from './components/Swipeable.js';
+import Delay from './components/Delay.js';
 
 class Title extends Component {
   constructor(props) {
