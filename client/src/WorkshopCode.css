@@ -5,10 +5,13 @@
   align-items: center;
 }
 
-.WorkshopCode-logo {
-  margin: 10px;
-  padding: 20px;
-  background: rgb(21, 164, 180);
+.WorkshopCode-intro {
+  flex: 1;
+  font-size: 48px;
+  margin: 20px;
+  margin-top: 60px;
+  display: flex;
+  text-align: center;
 }
 
 .WorkshopCode-form {
@@ -19,6 +22,7 @@
   justify-content: flex-end;
   padding: 10px 40px;
   background: white;
+  z-index: 10;
 }
 
 .WorkshopCode-input {

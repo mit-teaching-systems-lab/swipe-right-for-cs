@@ -30,7 +30,7 @@ class Title extends Component {
         <p className="Title-intro">
           Swipe Right for CS!    
         </p>
-        <Delay wait={750}>
+        <Delay wait={250}>
           <Swipeable
             height={128}
             onSwipeRight={this.onSwipeRight}>
