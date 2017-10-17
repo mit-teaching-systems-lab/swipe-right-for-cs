@@ -70,9 +70,6 @@ class ThanksPhase extends Component {
           <TappableButton  outerStyle={{margin: 20}} onClick={this.onClickedForums}>
             forums.code.org
           </TappableButton>
-          <div>
-            {JSON.stringify(this.computeMoves(), null, 2)}
-          </div>
         </div>
       </div>
     );
