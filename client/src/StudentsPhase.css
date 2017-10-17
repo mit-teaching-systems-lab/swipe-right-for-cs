@@ -2,3 +2,10 @@
   flex: 1;
   display: flex;
 }
+
+.StudentsPhase-float {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 10;
+}
