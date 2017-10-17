@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const RateLimit = require('express-rate-limit');
-const {maybeSendConsentEmail, sendResponsesEmail} = require('./emails.js');
+const {sendResponsesEmail} = require('./emails.js');
 const {createPool} = require('./database.js');
 const {queryForGroupedResponses} = require('./peerResponses.js');
 
