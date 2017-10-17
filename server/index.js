@@ -3,6 +3,8 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const {maybeSendConsentEmail} = require('./mailer.js');
 const {createPool} = require('./database.js');
+const {InteractionTypes} = require('../client/src/shared/data.js');
+
 
 // config
 const config = {
@@ -50,6 +52,60 @@ app.post('/api/log', (req, res) => {
   // Return success no matter what
   res.set('Content-Type', 'application/json');
   res.json({ status: 'ok' });
+});
+
+// For receiving anonymized responses of peers within
+// the same workshop.
+app.get('/api/peers/:workshopCode', (req, res) => {
+  const {workshopCode} = req.params;
+
+  // Aggregate query, returning:
+  // [{profile_name, argument_text, percentage_right}]
+  const sql = `
+    SELECT
+      profile_name,
+      argument_text,
+      CAST(100.0 * count_by_type / total as int) as percentage_right
+    FROM (
+      SELECT
+        interaction->'turn'->>'profileName' as profile_name,
+        interaction->'turn'->>'argumentText' as argument_text,
+        interaction->>'type' as type,
+        COUNT(*) OVER (PARTITION BY
+          interaction->'turn'->>'profileName',
+          interaction->'turn'->>'argumentText'
+        ) as total,
+        COUNT(*) OVER (PARTITION BY
+          interaction->'turn'->>'profileName',
+          interaction->'turn'->>'argumentText',
+          interaction->>'type'
+        ) as count_by_type
+      FROM interactions
+      WHERE 1=1
+        AND session->>'workshopCode' = $3
+        AND interaction->>'type' IN ($1, $2)
+    ) as swipes
+    WHERE
+      type = $1
+    ;`;
+  const values = [
+    InteractionTypes.SWIPE_RIGHT,
+    InteractionTypes.SWIPE_LEFT,
+    workshopCode
+  ];
+
+  res.set('Content-Type', 'application/json');
+  pool.query(sql, values)
+    .catch(err => {
+      console.log('query returned err: ', err);
+      res.json({ status: 'error' });
+    })
+    .then(results => {
+      res.json({
+        status: 'ok',
+        rows: results.rows
+      });
+    });
 });
 
 

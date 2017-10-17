@@ -1,0 +1,38 @@
+.ReviewPhase {
+  flex: 1;
+}
+
+.ReviewPhase-content {
+  padding: 20px;
+  padding-top: 0;
+}
+
+.ReviewPhase-student {
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 320px;
+  display: flex;
+}
+
+.ReviewPhase-argument-container {
+  margin: 20px;
+}
+
+.ReviewPhase-percentage {
+  background-color: rgb(37, 214, 137);
+  margin-top: 5px;
+  color: white;
+}
+
+.ReviewPhase-percentage-text {
+  padding: 10px;
+  text-align: right;
+}
+
+.ReviewPhase-swipe {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -30,7 +30,7 @@ class DiscussPhase extends Component {
         <div className="DiscussPhase-content">
           <div>
             <p className="Global-header-font">Round 2: Discuss</p>
-            <p className="Discuss-copy">{copyText}</p>
+            <p className="DiscussPhase-copy">{copyText}</p>
           </div>
           <div className="DiscussPhase-students">
             {students.map((student) => {

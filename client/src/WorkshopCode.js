@@ -15,11 +15,32 @@ class WorkshopCode extends Component {
     };
     this.onChangeWorkshopCode = this.onChangeWorkshopCode.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.onStart = this.onStart.bind(this);
   }
 
   componentDidMount() {
-    this.workshopInputEl.focus();
+    this.emailInputEl.setAttribute('nochilddrag', 'nochilddrag');
+    this.workshopInputEl.setAttribute('nochilddrag', 'nochilddrag');
+    const {email} = this.state;
+    if (email === '') {
+      this.emailInputEl.focus();
+    } else {
+      this.workshopInputEl.focus();
+    }
+  }
+
+  isReadyToSubmit() {
+    const {workshopCode, email} = this.state;
+    return (email !== "" && workshopCode !== "");
+  }
+  
+  // For the enter keypress
+  onSubmit(event) {
+    event.preventDefault();
+    if (this.isReadyToSubmit()) {
+      this.onStart();
+    }
   }
 
   onChangeWorkshopCode(event) {
@@ -48,26 +69,28 @@ class WorkshopCode extends Component {
           alt="Code.org"
           width={128}
           height={126} />
-        <div className="WorkshopCode-form">
+        <form className="WorkshopCode-form" onSubmit={this.onSubmit}>
+          <button type="submit" style={{display: 'none'}} />
           <div className="WorkshopCode-instructions">Code Studio email:</div>
           <input
+            ref={(input) => { this.emailInputEl = input; }} 
             className="WorkshopCode-input WorkshopCode-email"
             type="text"
             onChange={this.onChangeEmail}
             value={email} />
           <div className="WorkshopCode-instructions">Workshop code:</div>
           <input
+            ref={(input) => { this.workshopInputEl = input; }} 
             className="WorkshopCode-input WorkshopCode-workshop"
             type="text"
-            ref={(input) => { this.workshopInputEl = input; }} 
             value={workshopCode}
             onChange={this.onChangeWorkshopCode} />
           <TappableButton
-            disabled={email === "" || workshopCode === ""}
+            disabled={!this.isReadyToSubmit()}
             onClick={this.onStart}>
             Start
           </TappableButton>
-        </div>
+        </form>
       </div>
     );
   }

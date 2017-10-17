@@ -10,6 +10,8 @@ import ConsentPhase from './ConsentPhase.js';
 import IntroductionPhase from './IntroductionPhase.js';
 import StudentsPhase from './StudentsPhase.js';
 import DiscussPhase from './DiscussPhase.js';
+import ReviewPhase from './ReviewPhase.js';
+import ThanksPhase from './ThanksPhase.js';
 import {loadDataForCohort} from './loaders/loadDataForCohort.js';
 
 
@@ -27,7 +29,7 @@ const Phases = {
 class App extends Component {
   constructor(props) {
     super(props);
-    const isCodeOrg = (window.location.pathname === '/start');
+    const isCodeOrg = (window.location.pathname !== '/play');
     const query = queryString.parse(window.location.search);
     this.state = {
       isCodeOrg,
@@ -83,10 +85,8 @@ class App extends Component {
     });
   }
 
-  // Logging to the console, server and Rollbar
+  // Log to the server
   doLog(log) {
-    console.log('onLog', log); // eslint-disable-line no-console
-    if (window.Rollbar) window.Rollbar.info('onLog', log);
     fetch('/api/log', {
       headers: {
         'Accept': 'application/json',
@@ -104,6 +104,7 @@ class App extends Component {
   }
 
   onDataError(err) {
+    if (window.Rollbar) window.Rollbar.error(err);
     console.error(err); // eslint-disable-line no-console
   }
 
@@ -138,7 +139,8 @@ class App extends Component {
     if (!students) return this.renderLoading();
     if (phase === Phases.STUDENTS) return this.renderStudents(Phases.DISCUSS);
     if (phase === Phases.DISCUSS) return this.renderDiscuss(Phases.REVIEW);
-    if (phase === Phases.REVIEW) return this.renderReview();
+    if (phase === Phases.REVIEW) return this.renderReview(Phases.THANKS);
+    if (phase === Phases.THANKS) return this.renderThanks();
   }
 
   // Publicly open demo
@@ -148,7 +150,8 @@ class App extends Component {
     if (phase === Phases.INTRODUCTION) return this.renderIntroduction(Phases.STUDENTS);
     if (!students) return this.renderLoading();
     if (phase === Phases.STUDENTS) return this.renderStudents(Phases.REVIEW);
-    if (phase === Phases.REVIEW) return this.renderReview();
+    if (phase === Phases.REVIEW) return this.renderReview(Phases.THANKS);
+    if (phase === Phases.THANKS) return this.renderThanks();
   }
 
   renderWorkshopCode(phase) {
@@ -201,8 +204,17 @@ class App extends Component {
       onDone={() => this.setState({phase})} />;
   }
 
-  renderReview() {
-    return <div>TODO...</div>;
+  renderReview(phase) {
+    const {students, workshopCode} = this.state;
+    return <ReviewPhase
+      workshopCode={workshopCode}
+      students={students}
+      onInteraction={this.onInteraction}
+      onDone={() => this.setState({phase})} />;
+  }
+
+  renderThanks(phase) {
+    return <ThanksPhase onInteraction={this.onInteraction} />;
   }
 }
 

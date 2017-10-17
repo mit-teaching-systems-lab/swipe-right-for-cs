@@ -30,7 +30,7 @@ async function fetchTexts() {
 // Determine cohort, apply manipulations, shuffle order on each game
 export function cohortAndStudents(workshopCode, profileTemplates, variants, options = {}) {
   // Tune number of arguments, cohorts, max profiles shown
-  const argumentCount = options.argumentCount || 5;
+  const argumentCount = options.argumentCount || 4;
   const cohortCount = options.cohortCount || 10;
   const maxProfileCount = options.maxProfileCount || 10;
 

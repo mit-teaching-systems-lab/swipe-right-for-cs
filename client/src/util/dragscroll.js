@@ -1,4 +1,5 @@
 // from https://github.com/asvd/dragscroll/blob/master/dragscroll.js
+// patched
 function dragscroll(elements) {
   var _window = window;
   var _document = document;
@@ -29,11 +30,12 @@ function dragscroll(elements) {
       (cont = el.container || el)[addEventListener](
         mousedown,
         cont.md = function(e) {
-          if (!el.hasAttribute('nochilddrag') ||
-            _document.elementFromPoint(
-              e.pageX, e.pageY
-            ) === cont
-          ) {
+          const preventDrag = (
+            el.hasAttribute('nochilddrag') ||
+            e.target.hasAttribute('nochilddrag')
+          );
+          const elFromPoint = _document.elementFromPoint(e.pageX, e.pageY);
+          if (!preventDrag || elFromPoint === cont) {
             pushed = 1;
             lastClientX = e.clientX;
             lastClientY = e.clientY;
