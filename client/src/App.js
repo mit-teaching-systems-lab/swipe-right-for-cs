@@ -19,6 +19,7 @@ import {loadDataForCohort, defaultOptions} from './loaders/loadDataForCohort.js'
 const Phases = {
   WORKSHOP_CODE: 'WORKSHOP_CODE',
   TITLE: 'TITLE',
+  CONSENT: 'CONSENT',
   INTRODUCTION: 'INTRODUCTION',
   STUDENTS: 'STUDENTS',
   DISCUSS: 'DISCUSS',
@@ -36,8 +37,10 @@ class App extends Component {
       isCodeOrg,
       config: defaultOptions,
       sessionId: uuid.v4(),
-      email: (isCodeOrg) ? query.email || '' : Session.unknownEmail(),
-      workshopCode: (isCodeOrg) ? '' : 'demo-workshop-code',
+      identifier: (isCodeOrg)
+        ? query.cuid || Session.unknownIdentifier()
+        : Session.unknownIdentifier(),
+      workshopCode: (isCodeOrg) ? '' : 'DEMO_WORKSHOP_CODE',
       phase: (isCodeOrg) ? Phases.WORKSHOP_CODE : Phases.TITLE,
       students: null,
       logs: []
@@ -49,7 +52,7 @@ class App extends Component {
     this.renderCodeOrg = this.renderCodeOrg.bind(this);
   }
 
-  // Wait until the email and workshopCode is set,
+  // Wait until the workshopCode is set,
   // which happens different ways based on the code.org
   // or public path.
   componentWillUpdate(nextProps, nextState) {
@@ -60,9 +63,10 @@ class App extends Component {
 
   // Describe context of the game session
   session() {
-    const {email, workshopCode, cohortNumber, sessionId} = this.state;
+    const {isCodeOrg, identifier, workshopCode, cohortNumber, sessionId} = this.state;
     return Session.create({
-      email,
+      isCodeOrg,
+      identifier,
       workshopCode,
       cohortNumber,
       sessionId,
@@ -131,7 +135,7 @@ class App extends Component {
     );
   }
 
-  // From code.org Code Studio, with email on query string
+  // From code.org Code Studio, with identifier on query string
   renderCodeOrg() {
     const {phase, students} = this.state;
     if (phase === Phases.WORKSHOP_CODE) return this.renderWorkshopCode(Phases.TITLE);
@@ -157,9 +161,7 @@ class App extends Component {
   }
 
   renderWorkshopCode(phase) {
-    const {email} = this.state;
     return <WorkshopCode
-      email={email}
       onInteraction={this.onInteraction}
       onDone={(workshopCode) => {
         this.setState({workshopCode, phase});
@@ -218,9 +220,8 @@ class App extends Component {
   }
 
   renderThanks(phase) {
-    const {email, logs} = this.state;
+    const {logs} = this.state;
     return <ThanksPhase
-      email={email}
       logs={logs}
       onInteraction={this.onInteraction} />;
   }

@@ -96,7 +96,8 @@ const Session = {
   create(params) {
     // Warn if missing key, but allow it
     const keys = [
-      'email',
+      'identifier',
+      'isCodeOrg',
       'workshopCode',
       'cohortNumber',
       'sessionId',
@@ -120,6 +121,9 @@ const Session = {
   },
   unknownEmail() {
     return 'unknown@mit.edu';
+  },
+  unknownIdentifier() {
+    return 'UNKNOWN_IDENTIFIER';
   }
 };
 
