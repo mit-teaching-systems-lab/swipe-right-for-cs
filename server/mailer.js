@@ -1,8 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const Mustache = require('mustache');
-const fetch = require('node-fetch');
-const FormData = require('form-data');
+const request = require('superagent');
 const {consentText} = require('../client/src/shared/consent.js');
 const {
   sha,
@@ -38,33 +37,28 @@ function renderEmail() {
 
 // Send an email through Mailgun, taking env config, info on email and
 // html string.
-function sendEmail(env, info, html) {
+// Calls back with {status: 'ok'}
+function sendEmail(env, info, html, cb) {
   const {subject, fromEmail, toEmail} = info;
   const {MAILGUN_API_KEY, MAILGUN_DOMAIN} = env;
-  const url = `https://api:${MAILGUN_API_KEY}@api.mailgun.net/v3/${MAILGUN_DOMAIN}/messages`;
-  return fetch(url, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Accept': 'application/json'
-    },
-    body: formData({
+  console.log('Sending `' + subject + '` to ' + toEmail + ' from ' + fromEmail);
+
+  request
+    .post('https://api:' + MAILGUN_API_KEY + '@api.mailgun.net/v3/' + MAILGUN_DOMAIN + '/messages')
+    .set('Content-Type', 'application/x-www-form-urlencoded')
+    .set('Accept', 'application/json')
+    .send({
       from: fromEmail,
       to: toEmail,
       subject: subject,
       html: html
     })
-  });
+    .end((err, result) => {
+      console.log('Mailgun request (err, result):', "\n  " + JSON.stringify(err), "\n  " + JSON.stringify({ status: result.status, text: result.text }));
+      if (err) return cb(err);
+      return cb(null, { status: 'ok' });
+    });
 }
-
-function formData(params = {}) {
-  const form = new FormData();
-  Object.keys(params).forEach(key =>
-    form.append(key, params[key])
-  );
-  return form;
-}
-
 function sendConsentEmail(mailgunEnv, email) {
   console.log('Sending consent email, email hash: ' + sha(email));
   const html = renderEmail();
@@ -73,15 +67,12 @@ function sendConsentEmail(mailgunEnv, email) {
     fromEmail: 'swipe-right-bot@tsl.mit.edu',
     subject: 'Research consent'
   };
-  return sendEmail(mailgunEnv, info, html)
-    .then(res => {
-      if (res.status !== 200) {
-        console.log("Mailgun returned status:\n  " + JSON.stringify(res, null, 2));
-      }
-    })
-    .catch(err => {
+  sendEmail(mailgunEnv, info, html, (err, res) => {
+    if (err) {
       console.log("Mailgun request (err):\n  " + JSON.stringify(err, null, 2));
-    });
+    }
+    console.log("Mailgun returned:\n  " + JSON.stringify(res, null, 2));
+  });
 }
 
 module.exports = {

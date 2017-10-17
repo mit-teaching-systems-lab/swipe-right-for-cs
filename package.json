@@ -28,7 +28,8 @@
     "mustache": "^2.3.0",
     "node-fetch": "^1.7.3",
     "pg": "^7.3.0",
-    "react": "16"
+    "react": "16",
+    "superagent": "^3.6.3"
   },
   "devDependencies": {
     "concurrently": "^3.5.0",
