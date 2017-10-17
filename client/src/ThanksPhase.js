@@ -70,10 +70,16 @@ class ThanksPhase extends Component {
           <TappableButton  outerStyle={{margin: 20}} onClick={this.onClickedForums}>
             forums.code.org
           </TappableButton>
-          <div>{"If you're curious, here's some of the research that informed this work."}</div>
-          <ul>
-            <li>Lewis, C. M. (2017). Good (and bad) reasons to teach all students computer science. In S. B. Fee, A. M. Holland-Minkley, & T. E. Lombardi, New Directions for Computing Education: Embedding Computing Across Disciplines. New York: Springer.</li>
-            <li>NCWIT: Introduce Students to Computer Science in an Engaging Way</li>
+          <div className="ThanksPhase-links">{"If you're curious, here's some of the research that informed this work:"}</div>
+          <ul className="ThanksPhase-list">
+            <li>
+              <a href="http://blogs.hmc.edu/lewis/" rel="noopener noreferrer" target="_blank">
+                Lewis, C. M.
+              </a> (2017). Good (and bad) reasons to teach all students computer science. In S. B. Fee, A. M. Holland-Minkley, & T. E. Lombardi, New Directions for Computing Education: Embedding Computing Across Disciplines. New York: Springer.
+            </li>
+            <li><a href="https://www.ncwit.org/sites/default/files/resources/c4c_counselorlessonplan_web.pdf" rel="noopener noreferrer" target="_blank">
+              NCWIT: Introduce Students to Computer Science in an Engaging Way
+            </a></li>
           </ul>
         </div>
       </div>

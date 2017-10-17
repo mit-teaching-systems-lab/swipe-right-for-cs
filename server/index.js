@@ -65,7 +65,6 @@ app.post('/api/log', (req, res) => {
 
 // For receiving anonymized responses of peers within
 // the same workshop.
-//
 // Returns: {status, rows}
 // where rows: [{profileName, argumentText, percentageRight}]
 app.get('/api/peers/:workshopCode', limiter, (req, res) => {
