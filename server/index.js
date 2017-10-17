@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const RateLimit = require('express-rate-limit');
 const {maybeSendConsentEmail, sendResponsesEmail} = require('./emails.js');
 const {createPool} = require('./database.js');
 const {InteractionTypes} = require('../client/src/shared/data.js');
@@ -31,6 +32,15 @@ app.use(function enforceHTTPS(request, response, next) {
 });
 const pool = createPool(config.postgresUrl);
 
+// As a precaution for emailing routes
+const limiter = new RateLimit({
+  windowMs: 60*60*1000, // 60 minutes
+  max: 10, // limit each IP to 10 requests per windowMs
+  delayMs: 0, // disable delaying - full speed until the max limit is reached
+  onLimitReached: (req, res, options) => {
+    console.log('RateLimit reached!');
+  }
+});
 
 // API endpoints
 // For receiving log data from the client
@@ -56,7 +66,7 @@ app.post('/api/log', (req, res) => {
 
 // For receiving anonymized responses of peers within
 // the same workshop.
-app.get('/api/peers/:workshopCode', (req, res) => {
+app.get('/api/peers/:workshopCode', limiter, (req, res) => {
   const {workshopCode} = req.params;
 
   // Aggregate query, returning:
@@ -108,7 +118,7 @@ app.get('/api/peers/:workshopCode', (req, res) => {
     });
 });
 
-app.post('/api/share', (req, res) => {
+app.post('/api/share', limiter, (req, res) => {
   const {moves, email} = req.body;
 
   // Send email with responses

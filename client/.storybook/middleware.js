@@ -3,10 +3,15 @@
 const proxy = require('http-proxy-middleware');
 const packageJson = require('../package.json');
 
-module.exports = function expressMiddleware(router) { // eslint-disable-line no-undef
+// Enable this to proxy to the development server
+function proxyingMiddleware(router) { // eslint-disable-line no-unused-vars
   const proxyDomain = packageJson.proxy;
   console.log(`Proxying to ${proxyDomain}...`); //eslint-disable-line no-console
   router.use('/api', proxy({
     target: proxyDomain
   }));
-};
+}
+
+function noopMiddleware(router) { }
+
+module.exports = noopMiddleware; // eslint-disable-line no-undef
