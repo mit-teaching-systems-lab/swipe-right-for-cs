@@ -61,7 +61,7 @@ class ReviewPhase extends Component {
     const rows = __groupBy(peerResponses, 'profile_name')[student.profileName] || [];
     const sortedRows = __orderBy(rows, ['percentage_right'], ['desc']);
     return (
-      <div key={student.profileName} className="ReviewPhase-peer-responses">
+      <div className="ReviewPhase-peer-responses">
         {sortedRows.slice(0, topN).map(row =>
           <div key={row.argument_text} className="ReviewPhase-argument-container">
             <Bubble>{row.argument_text}</Bubble>

@@ -16,6 +16,10 @@ function renderEmail(templateFilename, params = {}) {
 function sendEmail(env, info, html, cb) {
   const {subject, fromEmail, toEmail} = info;
   const {MAILGUN_API_KEY, MAILGUN_DOMAIN} = env;
+  if (!MAILGUN_API_KEY || !MAILGUN_DOMAIN) {
+    console.log('No MailGun env, aborting email...');
+    return cb(null, { error: 'abort' });
+  }
   console.log('Sending `' + subject + '` to ' + toEmail + ' from ' + fromEmail);
 
   request
