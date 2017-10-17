@@ -215,7 +215,11 @@ class App extends Component {
   }
 
   renderThanks(phase) {
-    return <ThanksPhase onInteraction={this.onInteraction} />;
+    const {email, logs} = this.state;
+    return <ThanksPhase
+      email={email}
+      logs={logs}
+      onInteraction={this.onInteraction} />;
   }
 }
 

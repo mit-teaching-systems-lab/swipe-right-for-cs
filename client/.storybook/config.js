@@ -9,6 +9,7 @@ function loadStories() {
   require('../src/Turn.story.js');
   require('../src/DiscussPhase.story.js');
   require('../src/ReviewPhaseView.story.js');
+  require('../src/ThanksPhase.story.js');
   // You can require as many stories as you need.
 }
 

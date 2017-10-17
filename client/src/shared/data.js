@@ -18,7 +18,9 @@ const InteractionTypes = [
   'SWIPE_RIGHT',
   'DONE_DISCUSS_PHASE',
   'DONE_REVIEW_PHASE',
-  'STUDENT_RATING'
+  'STUDENT_RATING',
+  'SHARE',
+  'FORUMS'
 ].reduce((map, value) => {
   map[value] = [value, sha(value)].join(':');
   return map;
@@ -74,6 +76,17 @@ const Interactions = {
       student,
       type: InteractionTypes.STUDENT_RATING
     };
+  },
+  share(params) {
+    const {moves, email} = params;
+    return {
+      moves,
+      email,
+      type: InteractionTypes.SHARE
+    };
+  },
+  forums() {
+    return { type: InteractionTypes.FORUMS };
   }
 };
 

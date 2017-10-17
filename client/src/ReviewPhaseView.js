@@ -45,6 +45,7 @@ class ReviewPhase extends Component {
             );
           })}
         </div>
+        <div className="DiscussPhase-continue">{"When you're done, swipe right to finish."}</div>
         <Swipeable
           height={120}
           onSwipeRight={this.onSwipeRight}>
@@ -60,7 +61,7 @@ class ReviewPhase extends Component {
     const rows = __groupBy(peerResponses, 'profile_name')[student.profileName] || [];
     const sortedRows = __orderBy(rows, ['percentage_right'], ['desc']);
     return (
-      <div className="ReviewPhase-peer-responses">
+      <div key={student.profileName} className="ReviewPhase-peer-responses">
         {sortedRows.slice(0, topN).map(row =>
           <div key={row.argument_text} className="ReviewPhase-argument-container">
             <Bubble>{row.argument_text}</Bubble>
