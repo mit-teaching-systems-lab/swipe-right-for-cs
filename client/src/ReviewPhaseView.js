@@ -58,15 +58,15 @@ class ReviewPhase extends Component {
   renderPeerResponses(student) {
     const {peerResponses} = this.props;
     const topN = 3;
-    const rows = __groupBy(peerResponses, 'profile_name')[student.profileName] || [];
-    const sortedRows = __orderBy(rows, ['percentage_right'], ['desc']);
+    const rows = __groupBy(peerResponses, 'profileName')[student.profileName] || [];
+    const sortedRows = __orderBy(rows, ['percentageRight'], ['desc']);
     return (
       <div className="ReviewPhase-peer-responses">
         {sortedRows.slice(0, topN).map(row =>
-          <div key={row.argument_text} className="ReviewPhase-argument-container">
-            <Bubble>{row.argument_text}</Bubble>
-            <div className="ReviewPhase-percentage" style={{width: `${row.percentage_right}%`}}>
-              <div className="ReviewPhase-percentage-text">{row.percentage_right}%</div>
+          <div key={row.argumentText} className="ReviewPhase-argument-container">
+            <Bubble>{row.argumentText}</Bubble>
+            <div className="ReviewPhase-percentage" style={{width: `${row.percentageRight}%`}}>
+              <div className="ReviewPhase-percentage-text">{row.percentageRight}%</div>
             </div>
           </div>
         )}
