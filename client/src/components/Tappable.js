@@ -72,7 +72,9 @@ Tappable.propTypes = {
   outerStyle: PropTypes.object
 };
 Tappable.defaultProps = {
-  style: {}
+  style: {},
+  outerStyle: {},
+  disabled: false
 };
 
 export default Tappable;

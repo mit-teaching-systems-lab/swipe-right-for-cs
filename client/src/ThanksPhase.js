@@ -9,12 +9,18 @@ import {Interactions, InteractionTypes} from './shared/data.js';
 class ThanksPhase extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      email: ''
+    };
     this.onClickedEmail = this.onClickedEmail.bind(this);
     this.onClickedForums = this.onClickedForums.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
   }
 
   componentDidMount() {
+    this.emailInputEl.setAttribute('nochilddrag', 'nochilddrag');
     window.scrollTo(0, 0);
+    this.emailInputEl.focus();
   }
   
   computeMoves() {
@@ -41,6 +47,10 @@ class ThanksPhase extends Component {
     });
   }
 
+  onChangeEmail(event) {
+    this.setState({ email: event.target.value });
+  }
+
   onClickedEmail() {
     const {email, onInteraction} = this.props;
     const moves = this.computeMoves();
@@ -62,12 +72,21 @@ class ThanksPhase extends Component {
   }
 
   render() {
+    const {email} = this.state;
     return (
       <div className="ThanksPhase">
         <div className="ThanksPhase-content">
           <p className="Global-header-font">Thanks!</p>
           <div>We can email you your responses if you like.</div>
-          <TappableButton outerStyle={{margin: 20}} onClick={this.onClickedEmail}>
+          <div className="ThanksPhase-email-container">
+            <input
+              className="ThanksPhase-email"
+              ref={(input) => { this.emailInputEl = input; }} 
+              type="text"
+              value={email}
+              onChange={this.onChangeEmail} />
+          </div>
+          <TappableButton disabled={email === ''} outerStyle={{margin: 20, marginTop: 0}} onClick={this.onClickedEmail}>
             Send me an email
           </TappableButton>
           <div>And you can talk more on the Code.org forums too!</div>

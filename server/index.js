@@ -56,7 +56,8 @@ app.post('/api/log', (req, res) => {
   });
 
   // Check for sending consent emails
-  maybeSendConsentEmail(log, config.mailgunEnv);
+  // TODO(kr) this is disabled since we're removing emails
+  // maybeSendConsentEmail(log, config.mailgunEnv);
 
   // Return success no matter what
   res.set('Content-Type', 'application/json');
