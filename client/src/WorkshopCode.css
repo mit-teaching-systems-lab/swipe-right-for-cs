@@ -11,6 +11,9 @@
   background: rgb(21, 164, 180);
 }
 
+form {
+
+}
 .WorkshopCode-form {
   flex: 1;
   display: flex;

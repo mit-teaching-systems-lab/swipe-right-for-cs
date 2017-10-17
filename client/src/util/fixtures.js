@@ -7,3 +7,78 @@ export const storybookStudents = students.map(student => {
     profileImageSrc: `http://localhost:3000/${student.profileImageSrc}`
   };
 });
+
+export const peerResponses = [
+  {
+    "profile_name": "Gabriella",
+    "argument_text": "Computer science creates so many new ways to express your creativity, whether it's generating images or videos,  creating interactive stories, or making new kinds of media altogether.",
+    "total": 1,
+    "percentage_right": 97
+  },
+  {
+    "profile_name": "Gabriella",
+    "argument_text": "Learning CS can help you connect or build global communities that share your interests and passions.",
+    "total": 1,
+    "percentage_right": 73
+  },
+  {
+    "profile_name": "Gabriella",
+    "argument_text": "People in the arts and architecture rely on design software all the time.",
+    "total": 1,
+    "percentage_right": 43
+  },
+  {
+    "profile_name": "Gabriella",
+    "argument_text": "Since computing can be an applied science, it underpins innovations across whole fields. If you were interested in medicine for example, you could be part of a new innovation in health care.",
+    "total": 1,
+    "percentage_right": 31
+  },
+  {
+    "profile_name": "Gabriella",
+    "argument_text": "You can take AP computer science classes and get college credit before even going to college.  It'll save money on tuition when you're in college as well.",
+    "total": 1,
+    "percentage_right": 100
+  },
+  {
+    "profile_name": "Keisha",
+    "argument_text": "There are real cultural and structural barriers that might make it hard to pursue computer science at the college level.  Getting started now in high school will be easier.",
+    "total": 1,
+    "percentage_right": 100
+  },
+  {
+    "profile_name": "Keisha",
+    "argument_text": "You'll have so many career opportunities - high income, job flexibility, lots of options.",
+    "total": 1,
+    "percentage_right": 100
+  },
+  {
+    "profile_name": "Meredith",
+    "argument_text": "Computer science creates so many new ways to express your creativity, whether it's generating images or videos,  creating interactive stories, or making new kinds of media altogether.",
+    "total": 1,
+    "percentage_right": 37
+  },
+  {
+    "profile_name": "Meredith",
+    "argument_text": "Computer science is pervasive in every field. No matter what you plan to do when you finish school, knowing something about computer science will help you be better at your job.",
+    "total": 1,
+    "percentage_right": 42
+  },
+  {
+    "profile_name": "Meredith",
+    "argument_text": "Computer science jobs are high-paying and high status, and can empower you to push back against current forms of oppression. ",
+    "total": 1,
+    "percentage_right": 56
+  },
+  {
+    "profile_name": "Meredith",
+    "argument_text": "Since computing can be an applied science, it underpins innovations across whole fields. If you were interested in medicine for example, you could be part of a new innovation in health care.",
+    "total": 1,
+    "percentage_right": 82
+  },
+  {
+    "profile_name": "Meredith",
+    "argument_text": "You might be surprised to know only half of computing jobs are in high tech companies! You could mash up your interests in other careers with technology and work anywhere",
+    "total": 1,
+    "percentage_right": 27
+  }
+];

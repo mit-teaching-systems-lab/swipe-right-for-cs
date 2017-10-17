@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './Turn.css';
 import Delay from 'react-delay';
 import Swipeable from './components/Swipeable.js';
+import Bubble from './components/Bubble.js';
 import {Interactions} from './shared/data.js';
 import StudentProfile from './StudentProfile.js';
 
@@ -63,7 +64,9 @@ class Turn extends Component {
               height={swipeHeight}
               onSwipeLeft={this.onSwipeLeft}
               onSwipeRight={this.onSwipeRight}>
-              <div className="Turn-argument">“{argumentText}”</div>
+              <div className="Turn-bubble">
+                <Bubble>“{argumentText}”</Bubble>
+              </div>
             </Swipeable>
           </Delay>
         </div>

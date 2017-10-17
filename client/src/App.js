@@ -87,7 +87,6 @@ class App extends Component {
 
   // Logging to the console, server and Rollbar
   doLog(log) {
-    console.log('onLog', log); // eslint-disable-line no-console
     if (window.Rollbar) window.Rollbar.info('onLog', log);
     fetch('/api/log', {
       headers: {
@@ -206,8 +205,9 @@ class App extends Component {
   }
 
   renderReview(phase) {
-    const {students} = this.state;
+    const {students, workshopCode} = this.state;
     return <ReviewPhase
+      workshopCode={workshopCode}
       students={students}
       onInteraction={this.onInteraction}
       onDone={() => this.setState({phase})} />;

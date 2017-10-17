@@ -1,0 +1,22 @@
+.Bubble {
+  position: relative;
+  cursor: pointer;
+  border-radius: .5em;
+  padding: 6px;
+  background: #eaf8ff;
+  color: black;
+  border: 1px solid #cae2ef;
+}
+.Bubble:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: #cae2ef;
+  border-bottom: 0;
+  margin-left: -6px;
+  margin-bottom: -6px;
+}

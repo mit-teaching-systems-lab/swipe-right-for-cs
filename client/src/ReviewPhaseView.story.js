@@ -2,16 +2,17 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import {withFrameSwitcher} from './util/storybookFrames.js';
-import ReviewPhase from './ReviewPhase.js';
-import {storybookStudents} from './util/fixtures.js';
+import ReviewPhaseView from './ReviewPhaseView.js';
+import {storybookStudents, peerResponses} from './util/fixtures.js';
 
 
-storiesOf('ReviewPhase', module) //eslint-disable-line no-undef
+storiesOf('ReviewPhaseView', module) //eslint-disable-line no-undef
   .add('normal', () => {
     return withFrameSwitcher(
-      <ReviewPhase
+      <ReviewPhaseView
         workshopCode="foo"
         students={storybookStudents}
+        peerResponses={peerResponses}
         onInteraction={action('onInteraction')}
         onDone={action('onDone')} />
     );

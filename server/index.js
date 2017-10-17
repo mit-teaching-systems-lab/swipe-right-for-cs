@@ -56,16 +56,15 @@ app.post('/api/log', (req, res) => {
 
 // For receiving anonymized responses of peers within
 // the same workshop.
-app.get('/api/peers/:workshop', (req, res) => {
-  const workshopCode = req.params.workshop;
-  res.set('Content-Type', 'application/json');
+app.get('/api/peers/:workshopCode', (req, res) => {
+  const {workshopCode} = req.params;
 
-  // Write into database
+  // Aggregate query, returning:
+  // [{profile_name, argument_text, percentage_right}]
   const sql = `
     SELECT
       profile_name,
       argument_text,
-      CAST(total as int),
       CAST(100.0 * count_by_type / total as int) as percentage_right
     FROM (
       SELECT
@@ -94,6 +93,8 @@ app.get('/api/peers/:workshop', (req, res) => {
     InteractionTypes.SWIPE_LEFT,
     workshopCode
   ];
+
+  res.set('Content-Type', 'application/json');
   pool.query(sql, values)
     .catch(err => {
       console.log('query returned err: ', err);

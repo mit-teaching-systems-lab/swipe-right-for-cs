@@ -15,6 +15,7 @@ class WorkshopCode extends Component {
     };
     this.onChangeWorkshopCode = this.onChangeWorkshopCode.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.onStart = this.onStart.bind(this);
   }
 
@@ -26,6 +27,19 @@ class WorkshopCode extends Component {
       this.emailInputEl.focus();
     } else {
       this.workshopInputEl.focus();
+    }
+  }
+
+  isReadyToSubmit() {
+    const {workshopCode, email} = this.state;
+    return (email !== "" && workshopCode !== "");
+  }
+  
+  // For the enter keypress
+  onSubmit(event) {
+    event.preventDefault();
+    if (this.isReadyToSubmit()) {
+      this.onStart();
     }
   }
 
@@ -55,7 +69,8 @@ class WorkshopCode extends Component {
           alt="Code.org"
           width={128}
           height={126} />
-        <div className="WorkshopCode-form">
+        <form className="WorkshopCode-form" onSubmit={this.onSubmit}>
+          <button type="submit" style={{display: 'none'}} />
           <div className="WorkshopCode-instructions">Code Studio email:</div>
           <input
             ref={(input) => { this.emailInputEl = input; }} 
@@ -71,11 +86,11 @@ class WorkshopCode extends Component {
             value={workshopCode}
             onChange={this.onChangeWorkshopCode} />
           <TappableButton
-            disabled={email === "" || workshopCode === ""}
+            disabled={!this.isReadyToSubmit()}
             onClick={this.onStart}>
             Start
           </TappableButton>
-        </div>
+        </form>
       </div>
     );
   }
