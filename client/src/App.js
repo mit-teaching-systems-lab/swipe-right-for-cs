@@ -85,9 +85,8 @@ class App extends Component {
     });
   }
 
-  // Logging to the console, server and Rollbar
+  // Log to the server
   doLog(log) {
-    if (window.Rollbar) window.Rollbar.info('onLog', log);
     fetch('/api/log', {
       headers: {
         'Accept': 'application/json',
