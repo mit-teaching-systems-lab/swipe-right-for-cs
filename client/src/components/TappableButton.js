@@ -15,7 +15,7 @@ class TappableButton extends Component {
       <Tappable
         onClick={onClick}
         outerStyle={outerStyle}
-        disable={disabled}>
+        disabled={disabled}>
         {disabled
           ? <div className="TappableButton-inner TappableButton-disabled" style={style}>{children}</div>
           : <div className="TappableButton-inner" style={style}>{children}</div>}
@@ -32,7 +32,9 @@ TappableButton.propTypes = {
   outerStyle: PropTypes.object
 };
 TappableButton.defaultProps = {
-  style: {}
+  style: {},
+  outerStyle: {},
+  disabled: false
 };
 
 export default TappableButton;

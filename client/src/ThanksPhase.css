@@ -7,6 +7,22 @@
   padding-top: 0;
 }
 
+.ThanksPhase-email-container {
+  margin: 20px;
+  margin-bottom: 0;
+  display: flex;
+}
+
+.ThanksPhase-email {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  font-size: 14px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .ThanksPhase-links {
   margin-top: 50px;
 }

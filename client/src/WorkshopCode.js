@@ -6,51 +6,38 @@ import Bounceable from './components/Bounceable.js';
 import Delay from './components/Delay.js';
 
 
-// Allows user to change email and asks them to enter workshop code.
+// Asks user to enter a workshop code.
 class WorkshopCode extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      workshopCode: '',
-      email: props.email
+      workshopCode: ''
     };
     this.onDelayDone = this.onDelayDone.bind(this);
     this.onDelaySettled = this.onDelaySettled.bind(this);
     this.onChangeWorkshopCode = this.onChangeWorkshopCode.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onStart = this.onStart.bind(this);
   }
 
   isReadyToSubmit() {
-    const {workshopCode, email} = this.state;
-    return (email !== "" && workshopCode !== "");
+    const {workshopCode} = this.state;
+    return (workshopCode !== "");
   }
   
   onDelayDone() {
-    this.emailInputEl.setAttribute('nochilddrag', 'nochilddrag');
     this.workshopInputEl.setAttribute('nochilddrag', 'nochilddrag');
     window.setTimeout(this.onDelaySettled, 100);
   }
 
   // Since there's some jank setting the focus while animating.
   onDelaySettled() {
-    const {email} = this.state;
-    if (email === '') {
-      this.emailInputEl.focus();
-    } else {
-      this.workshopInputEl.focus();
-    }
+    this.workshopInputEl.focus();
   }
 
   onChangeWorkshopCode(event) {
     const workshopCode = event.target.value;
     this.setState({workshopCode});
-  }
-
-  onChangeEmail(event) {
-    const email = event.target.value;
-    this.setState({email});
   }
 
   // For the enter keypress
@@ -68,8 +55,8 @@ class WorkshopCode extends Component {
   }
 
   render() {
-    const {workshopCode, email} = this.state;
-    const height = 230;
+    const {workshopCode} = this.state;
+    const height = 160;
 
     return (
       <div className="WorkshopCode">
@@ -81,14 +68,7 @@ class WorkshopCode extends Component {
             <div height={height}>
               <form className="WorkshopCode-form" onSubmit={this.onSubmit}>
                 <button type="submit" style={{display: 'none'}} />
-                <div className="WorkshopCode-instructions">Code Studio email:</div>
-                <input
-                  ref={(input) => { this.emailInputEl = input; }} 
-                  className="WorkshopCode-input WorkshopCode-email"
-                  type="text"
-                  onChange={this.onChangeEmail}
-                  value={email} />
-                <div className="WorkshopCode-instructions">Workshop code:</div>
+                <div className="WorkshopCode-instructions">Please enter your workshop code:</div>
                 <input
                   ref={(input) => { this.workshopInputEl = input; }} 
                   className="WorkshopCode-input WorkshopCode-workshop"
@@ -111,7 +91,6 @@ class WorkshopCode extends Component {
 } 
 
 WorkshopCode.propTypes = {
-  email: PropTypes.string.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onDone: PropTypes.func.isRequired
 };

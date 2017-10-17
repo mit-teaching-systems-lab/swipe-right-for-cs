@@ -2,7 +2,7 @@
 const consentText = `
 Optionally, we'd like to use your responses here for a joint research study between MIT and code.org.  We would like to compare the responses across participants.
 
-Your responses would be included in the research, along with data from your code.org profile.  All data you enter is stored securely and protected on a secure server on Google Drive, Amazon Web Services or Heroku.  If you consent, we will email you a copy of this form for your records.
+Your responses would be included in the research, along with data from your code.org profile.  All data you enter is stored securely and protected on a secure server on Google Drive, Amazon Web Services or Heroku.  You may print a copy of this form for your records.
 
 You can continue playing the game either way.  Participation in the research study in voluntary.
 
@@ -28,7 +28,7 @@ Study timeframe:
 This project will be completed by September 1, 2020.  After that date, participant data will be deleted.
 
 Informed Consent: 
-I understand the procedures described above. My questions have been answered to my satisfaction, and I agree to participate in this study.  I will be emailed a copy of this form.
+I understand the procedures described above. My questions have been answered to my satisfaction, and I agree to participate in this study.
 
 Contact information:
 Please contact Dr. Justin Reich (jreich@mit.edu) or Kevin Robinson, (krob@mit.edu) with any questions or concerns. If you feel you have been treated unfairly, or you have questions regarding your rights as a research subject, you may contact the Chairman of the Committee on the Use of Humans as Experimental Subjects, M.I.T., Room E25-143b, 77 Massachusetts Ave, Cambridge, MA 02139, phone 1-617-253-6787.`;

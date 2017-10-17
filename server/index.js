@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const RateLimit = require('express-rate-limit');
-const {maybeSendConsentEmail, sendResponsesEmail} = require('./emails.js');
+const {sendResponsesEmail} = require('./emails.js');
 const {createPool} = require('./database.js');
 const {queryForGroupedResponses} = require('./peerResponses.js');
 
@@ -56,7 +56,8 @@ app.post('/api/log', (req, res) => {
   });
 
   // Check for sending consent emails
-  maybeSendConsentEmail(log, config.mailgunEnv);
+  // TODO(kr) this is disabled since we're removing emails
+  // maybeSendConsentEmail(log, config.mailgunEnv);
 
   // Return success no matter what
   res.set('Content-Type', 'application/json');
