@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './WorkshopCode.css';
-import codeOrgLogo from './img/codeorg.png';
 import TappableButton from './components/TappableButton.js';
+import Bounceable from './components/Bounceable.js';
+import Delay from './components/Delay.js';
 
 
 // Allows user to change email and asks them to enter workshop code.
@@ -13,21 +14,12 @@ class WorkshopCode extends Component {
       workshopCode: '',
       email: props.email
     };
+    this.onDelayDone = this.onDelayDone.bind(this);
+    this.onDelaySettled = this.onDelaySettled.bind(this);
     this.onChangeWorkshopCode = this.onChangeWorkshopCode.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onStart = this.onStart.bind(this);
-  }
-
-  componentDidMount() {
-    this.emailInputEl.setAttribute('nochilddrag', 'nochilddrag');
-    this.workshopInputEl.setAttribute('nochilddrag', 'nochilddrag');
-    const {email} = this.state;
-    if (email === '') {
-      this.emailInputEl.focus();
-    } else {
-      this.workshopInputEl.focus();
-    }
   }
 
   isReadyToSubmit() {
@@ -35,11 +27,19 @@ class WorkshopCode extends Component {
     return (email !== "" && workshopCode !== "");
   }
   
-  // For the enter keypress
-  onSubmit(event) {
-    event.preventDefault();
-    if (this.isReadyToSubmit()) {
-      this.onStart();
+  onDelayDone() {
+    this.emailInputEl.setAttribute('nochilddrag', 'nochilddrag');
+    this.workshopInputEl.setAttribute('nochilddrag', 'nochilddrag');
+    window.setTimeout(this.onDelaySettled, 100);
+  }
+
+  // Since there's some jank setting the focus while animating.
+  onDelaySettled() {
+    const {email} = this.state;
+    if (email === '') {
+      this.emailInputEl.focus();
+    } else {
+      this.workshopInputEl.focus();
     }
   }
 
@@ -53,6 +53,14 @@ class WorkshopCode extends Component {
     this.setState({email});
   }
 
+  // For the enter keypress
+  onSubmit(event) {
+    event.preventDefault();
+    if (this.isReadyToSubmit()) {
+      this.onStart();
+    }
+  }
+
   onStart() {
     const {onDone} = this.props;
     const {workshopCode} = this.state;
@@ -61,36 +69,42 @@ class WorkshopCode extends Component {
 
   render() {
     const {workshopCode, email} = this.state;
+    const height = 230;
+
     return (
       <div className="WorkshopCode">
-        <img
-          className="WorkshopCode-logo"
-          src={codeOrgLogo}
-          alt="Code.org"
-          width={128}
-          height={126} />
-        <form className="WorkshopCode-form" onSubmit={this.onSubmit}>
-          <button type="submit" style={{display: 'none'}} />
-          <div className="WorkshopCode-instructions">Code Studio email:</div>
-          <input
-            ref={(input) => { this.emailInputEl = input; }} 
-            className="WorkshopCode-input WorkshopCode-email"
-            type="text"
-            onChange={this.onChangeEmail}
-            value={email} />
-          <div className="WorkshopCode-instructions">Workshop code:</div>
-          <input
-            ref={(input) => { this.workshopInputEl = input; }} 
-            className="WorkshopCode-input WorkshopCode-workshop"
-            type="text"
-            value={workshopCode}
-            onChange={this.onChangeWorkshopCode} />
-          <TappableButton
-            disabled={!this.isReadyToSubmit()}
-            onClick={this.onStart}>
-            Start
-          </TappableButton>
-        </form>
+        <p className="WorkshopCode-intro">
+          Swipe Right for CS!    
+        </p>
+        <Delay wait={500} onDone={this.onDelayDone}>
+          <Bounceable height={height}>
+            <div height={height}>
+              <form className="WorkshopCode-form" onSubmit={this.onSubmit}>
+                <button type="submit" style={{display: 'none'}} />
+                <div className="WorkshopCode-instructions">Code Studio email:</div>
+                <input
+                  ref={(input) => { this.emailInputEl = input; }} 
+                  className="WorkshopCode-input WorkshopCode-email"
+                  type="text"
+                  onChange={this.onChangeEmail}
+                  value={email} />
+                <div className="WorkshopCode-instructions">Workshop code:</div>
+                <input
+                  ref={(input) => { this.workshopInputEl = input; }} 
+                  className="WorkshopCode-input WorkshopCode-workshop"
+                  type="text"
+                  value={workshopCode}
+                  onChange={this.onChangeWorkshopCode} />
+                <TappableButton
+                  disabled={!this.isReadyToSubmit()}
+                  onClick={this.onStart}
+                  outerStyle={{width: '50%', marginTop: 10}}>
+                  Continue
+                </TappableButton>
+              </form>
+            </div>
+          </Bounceable>
+        </Delay>
       </div>
     );
   }
