@@ -45,6 +45,7 @@ class ReviewPhase extends Component {
             );
           })}
         </div>
+        <div className="DiscussPhase-continue">{"When you're done, swipe right to finish."}</div>
         <Swipeable
           height={120}
           onSwipeRight={this.onSwipeRight}>
