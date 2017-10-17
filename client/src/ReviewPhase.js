@@ -27,6 +27,7 @@ class ReviewPhase extends Component {
   }
 
   onDataError(err) {
+    if (window.Rollbar) window.Rollbar.error(err);
     console.error(err); // eslint-disable-line no-console
   }
 
