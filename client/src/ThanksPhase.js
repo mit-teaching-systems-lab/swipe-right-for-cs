@@ -24,9 +24,16 @@ class ThanksPhase extends Component {
     });
     return swipeLogs.map(log => {
       const {turn, type} = log.interaction;
-      const {profileName, profileText, argumentText} = turn;
-      const isRight = (InteractionTypes.SWIPE_RIGHT === type);
-      return {profileName, profileText, argumentText, isRight};
+      const {profileImageSrc, profileText, argumentText} = turn;
+      const swipeText = (InteractionTypes.SWIPE_RIGHT === type)
+        ? 'You swiped right'
+        : 'You swiped left';
+      return {
+        profileText,
+        profileImageSrc,
+        argumentText,
+        swipeText
+      };
     });
   }
 
@@ -40,7 +47,7 @@ class ThanksPhase extends Component {
         'Content-Type': 'application/json'
       },
       method: 'POST',
-      body: {moves, email}
+      body: JSON.stringify({moves, email})
     });
   }
 
@@ -63,6 +70,9 @@ class ThanksPhase extends Component {
           <TappableButton  outerStyle={{margin: 20}} onClick={this.onClickedForums}>
             forums.code.org
           </TappableButton>
+          <div>
+            {JSON.stringify(this.computeMoves(), null, 2)}
+          </div>
         </div>
       </div>
     );
