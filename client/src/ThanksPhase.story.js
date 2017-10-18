@@ -10,7 +10,6 @@ storiesOf('ThanksPhase', module) //eslint-disable-line no-undef
   .add('normal', () => {
     return withFrameSwitcher(
       <ThanksPhase
-        email="foo@mit.edu"
         logs={logs}
         onInteraction={action('onInteraction')} />
     );
