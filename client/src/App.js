@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
+import __isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
 import './App.css';
 import {Log, Session} from './shared/data.js';
@@ -67,6 +68,14 @@ class App extends Component {
       clientTimestampMs: new Date().getTime(),
       location: window.location.toString()
     });
+  }
+
+  shouldWarnAboutCodeStudio() {
+    const {identifier} = this.state;
+    return (
+      (identifier === Session.unknownIdentifier()) ||
+      (__isEmpty(identifier))
+    );
   }
 
   doFetchData() {
@@ -162,6 +171,7 @@ class App extends Component {
 
   renderWorkshopCode(phase) {
     return <WorkshopCode
+      shouldWarnAboutCodeStudio={this.shouldWarnAboutCodeStudio()}
       onInteraction={this.onInteraction}
       onDone={() => this.setState({phase})} />;
   }

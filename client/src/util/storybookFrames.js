@@ -95,7 +95,7 @@ Select.propTypes = {
 export function withFrameSwitcher(children) {
   return (
     <div>
-      <Select values={['all', 'desktop', 'small', 'large', 'sideways']} render={(key) => {
+      <Select values={['desktop', 'all', 'small', 'large', 'sideways']} render={(key) => {
         if (key === 'all') {
           return (
             <div style={{display: 'flex', flexDirection: 'row'}}>

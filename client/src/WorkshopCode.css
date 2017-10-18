@@ -37,3 +37,24 @@
   width: 100%;
   font-size: 32px;
 }
+
+.WorkshopCode-warning {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.WorkshopCode-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.WorkshopCode-warning-message {
+  padding: 20px;
+  padding-left: 10px;
+  width: 8em;
+}
