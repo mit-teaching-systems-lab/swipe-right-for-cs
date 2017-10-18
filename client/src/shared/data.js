@@ -6,6 +6,7 @@
 // module.exports.
 const __difference = require('lodash/difference');
 const crypto = require('crypto');
+const {warn} = require('./log.js');
 
 // Map of type => type:hash
 // Ensures that all data access has to go through here.
@@ -46,7 +47,7 @@ const Interactions = {
   // read the full consent guidelines.
   // Deprecated
   readMoreConsent() {
-    console.warn('READ_MORE_CONSENT interaction deprecated'); // eslint-disable-line no-console
+    warn('READ_MORE_CONSENT interaction deprecated');
     return { type: InteractionTypes.READ_MORE_CONSENT };
   },
   gaveConsent() {
@@ -105,13 +106,13 @@ const Session = {
       'location'
     ];
     keys.forEach((key) => {
-      if (params[key] === undefined) console.warn(`Session: missing param ${key}`); // eslint-disable-line no-console
+      if (params[key] === undefined) warn(`Session: missing param ${key}`); // eslint-disable-line no-console
     });
 
     // Warn if extra keys
     const extraKeys = __difference(keys, Object.keys(params));
     if (extraKeys.length > 0) {
-      console.warn(`Session: unexpected keys ${extraKeys.join(', ')}`); // eslint-disable-line no-console
+      warn(`Session: unexpected keys ${extraKeys.join(', ')}`); // eslint-disable-line no-console
     }
 
     return params;

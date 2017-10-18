@@ -65,24 +65,22 @@ class WorkshopCode extends Component {
         </p>
         <Delay wait={500} onDone={this.onDelayDone}>
           <Bounceable height={height}>
-            <div height={height}>
-              <form className="WorkshopCode-form" onSubmit={this.onSubmit}>
-                <button type="submit" style={{display: 'none'}} />
-                <div className="WorkshopCode-instructions">Please enter your workshop code:</div>
-                <input
-                  ref={(input) => { this.workshopInputEl = input; }} 
-                  className="WorkshopCode-input WorkshopCode-workshop"
-                  type="text"
-                  value={workshopCode}
-                  onChange={this.onChangeWorkshopCode} />
-                <TappableButton
-                  disabled={!this.isReadyToSubmit()}
-                  onClick={this.onStart}
-                  outerStyle={{width: '50%', marginTop: 10}}>
-                  Continue
-                </TappableButton>
-              </form>
-            </div>
+            <form className="WorkshopCode-form" onSubmit={this.onSubmit}>
+              <button type="submit" style={{display: 'none'}} />
+              <div className="WorkshopCode-instructions">Please enter your workshop code:</div>
+              <input
+                ref={(input) => { this.workshopInputEl = input; }} 
+                className="WorkshopCode-input WorkshopCode-workshop"
+                type="text"
+                value={workshopCode}
+                onChange={this.onChangeWorkshopCode} />
+              <TappableButton
+                disabled={!this.isReadyToSubmit()}
+                onClick={this.onStart}
+                outerStyle={{width: '50%', marginTop: 10}}>
+                Continue
+              </TappableButton>
+            </form>
           </Bounceable>
         </Delay>
       </div>
