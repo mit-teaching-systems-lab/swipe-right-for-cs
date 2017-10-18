@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // Wraps lifecycle events, so that a caller can
-// describe imperative actions based on when something
+// describe imperative side-effecting actions based on when something
 // is rendered, without having to put that inside the
-// component definitions.
+// component definition.
 //
 // Example:
 //   <Lifecycle componentWillMount={this.prefetchScreenTwoData}>
