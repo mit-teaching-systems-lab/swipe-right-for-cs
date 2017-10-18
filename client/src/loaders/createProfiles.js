@@ -3,6 +3,7 @@ import __capitalize from 'lodash/capitalize';
 import __shuffle from 'lodash/shuffle';
 import __range from 'lodash/range';
 import __compact from 'lodash/compact';
+import {warn} from '../shared/log.js';
 
 import renderTemplate from './renderTemplate.js';
 import BF2 from '../files/BF2.png';
@@ -37,7 +38,7 @@ export function imageFor(label) {
 // Returns no students on input array length mismatch.
 export function createProfiles(profileTemplates, variants, argumentCount) {
   if (profileTemplates.length !== variants.length) {
-    console.warn(`createProfiles called with ${profileTemplates.length} profiles and ${variants.length} variants`); //eslint-disable-line no-console
+    warn(`createProfiles called with ${profileTemplates.length} profiles and ${variants.length} variants`); //eslint-disable-line no-console
     return [];
   }
 
