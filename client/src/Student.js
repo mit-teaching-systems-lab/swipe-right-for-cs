@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Turn from './Turn.js';
 import Bounceable from './components/Bounceable.js';
-import StudentProfile from './StudentProfile.js';
+import Bubble from './components/Bubble.js';
+import Delay from './components/Delay.js';
+import Swipeable from './components/Swipeable.js';
 import TappableButton from './components/TappableButton.js';
+import StudentProfile from './StudentProfile.js';
 import {Interactions} from './shared/data.js';
 import './Student.css';
 
@@ -16,28 +18,41 @@ class Student extends Component {
     this.state = {
       swipesMade: 0
     };
-    this.onDoneTurn = this.onDoneTurn.bind(this);
+    this.onSwipeLeft = this.onSwipeLeft.bind(this);
+    this.onSwipeRight = this.onSwipeRight.bind(this);
+    this.onSwipe = this.onSwipe.bind(this);
+    this.onChoiceTapped = this.onChoiceTapped.bind(this);
   }
 
-  currentTurn() {
-    const {
-      profileName,
-      profileKey,
-      profileText,
-      profileImageSrc,
-      argumentTexts
-    } = this.props;
-    const {swipesMade} = this.state;
+  currentSwipeTurn() {
+    const argumentText = this.currentArgumentText();
+    const {profileName, profileKey, profileText, profileImageSrc} = this.props;
     return {
-      profileKey,
+      argumentText,
       profileName,
+      profileKey,
       profileText,
-      profileImageSrc,
-      argumentText: argumentTexts[swipesMade]
-    };
+      profileImageSrc
+    }; 
   }
 
-  onDoneTurn() {
+  currentArgumentText() {
+    const {argumentTexts} = this.props;
+    const {swipesMade} = this.state;
+    return argumentTexts[swipesMade];
+  }
+
+  onSwipeLeft(turn) {
+    this.onSwipe(Interactions.swipeLeft(turn));
+  }
+
+  onSwipeRight(turn) {
+    this.onSwipe(Interactions.swipeRight(turn));
+  }
+
+  onSwipe(interaction) {
+    const {onInteraction} = this.props;
+    onInteraction(interaction);
     const swipesMade = this.state.swipesMade + 1;
     this.setState({swipesMade});
   }
@@ -68,43 +83,46 @@ class Student extends Component {
   render() {
     const {argumentTexts} = this.props;
     const {swipesMade} = this.state;
-
-    return (
-      <div className="Student">
-        {(swipesMade < argumentTexts.length)
-          ? this.renderTurn()
-          : this.renderQuestion()}
-      </div>
-    );
-  }
-
-  renderTurn() {
-    const {onInteraction, swipeHeight} = this.props;
-    const turn = this.currentTurn();
-    return (
-      <Turn
-        {...turn}
-        swipeHeight={swipeHeight}
-        onInteraction={onInteraction}
-        onDone={this.onDoneTurn} />
-    );
-  }
-
-  renderQuestion() {
     const {profileImageSrc, profileName, profileText} = this.props;
+    
     return (
       <div className="Student">
-        <StudentProfile
-          className="Student-profile"
-          profileImageSrc={profileImageSrc}
-          profileName={profileName}
-          profileText={profileText} />
-        {this.renderChoices()}
+        <div className="Student">
+          <StudentProfile
+            className="Student-profile"
+            profileImageSrc={profileImageSrc}
+            profileName={profileName}
+            profileText={profileText} />
+          {(swipesMade < argumentTexts.length)
+            ? this.renderSwipeTurn()
+            : this.renderHowLikely()}
+        </div>
       </div>
     );
   }
 
-  renderChoices() {
+  renderSwipeTurn() {
+    const {swipeHeight} = this.props;
+    const turn = this.currentSwipeTurn();
+    const {argumentText} = turn;
+    return (
+      <div style={{height: swipeHeight}}>
+        <Delay wait={500}>
+          <Swipeable
+            key={argumentText}
+            height={swipeHeight}
+            onSwipeLeft={this.onSwipeLeft.bind(this, turn)}
+            onSwipeRight={this.onSwipeRight.bind(this, turn)}>
+            <div className="Student-argument">
+              <Bubble>“{argumentText}”</Bubble>
+            </div>
+          </Swipeable>
+        </Delay>
+      </div>
+    );
+  }
+
+  renderHowLikely() {
     const {swipeHeight} = this.props;
     const choices = [
       "They're in",
