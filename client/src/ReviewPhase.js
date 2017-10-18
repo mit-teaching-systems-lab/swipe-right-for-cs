@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReviewPhaseView from './ReviewPhaseView.js';
-
+import {error} from './shared/log.js';
 
 // Review peer responses within the workshop.
 class ReviewPhase extends Component {
@@ -27,8 +27,7 @@ class ReviewPhase extends Component {
   }
 
   onDataError(err) {
-    if (window.Rollbar) window.Rollbar.error(err);
-    console.error(err); // eslint-disable-line no-console
+    error(err); // eslint-disable-line no-console
   }
 
   render() {

@@ -3,7 +3,9 @@ import uuid from 'uuid';
 import queryString from 'query-string';
 import './App.css';
 import {Log, Session} from './shared/data.js';
+import {error} from './shared/log.js';
 import MobileSimulator from './components/MobileSimulator.js';
+import Lifecycle from './components/Lifecycle.js';
 import WorkshopCode from './WorkshopCode.js';
 import Title from './Title.js';
 import ConsentPhase from './ConsentPhase.js';
@@ -40,7 +42,8 @@ class App extends Component {
       identifier: (isCodeOrg)
         ? query.cuid || Session.unknownIdentifier()
         : Session.unknownIdentifier(),
-      workshopCode: (isCodeOrg) ? '' : 'DEMO_WORKSHOP_CODE',
+      workshopCode: ['DEMO', uuid.v4()].join(':'), // for code.org, set in initial screens
+      cohortNumber: null, // set when data is loaded, based on workhopCode
       phase: (isCodeOrg) ? Phases.WORKSHOP_CODE : Phases.TITLE,
       students: null,
       logs: []
@@ -50,15 +53,6 @@ class App extends Component {
     this.onInteraction = this.onInteraction.bind(this);
     this.renderDemo = this.renderDemo.bind(this);
     this.renderCodeOrg = this.renderCodeOrg.bind(this);
-  }
-
-  // Wait until the workshopCode is set,
-  // which happens different ways based on the code.org
-  // or public path.
-  componentWillUpdate(nextProps, nextState) {
-    const prevPhase = this.state.phase;
-    if (nextState.phase === prevPhase) return;
-    if (nextState.phase === Phases.TITLE) this.doFetchData();
   }
 
   // Describe context of the game session
@@ -103,6 +97,14 @@ class App extends Component {
     });
   }
 
+  onWorkshopCodeDone(nextPhase, workshopCode) {
+    this.setState({workshopCode, phase: nextPhase});
+  }
+
+  onTitleDone(nextPhase) {
+    this.setState({phase: nextPhase});
+  }
+
   onDataLoaded(loadedData) {
     const {cohortNumber, students} = loadedData;
     this.setState({cohortNumber, students});
@@ -110,8 +112,7 @@ class App extends Component {
   }
 
   onDataError(err) {
-    if (window.Rollbar) window.Rollbar.error(err);
-    console.error(err); // eslint-disable-line no-console
+    error(err);
   }
 
   // Log the interaction, along with context about the session.
@@ -125,7 +126,6 @@ class App extends Component {
 
   render() {
     const {isCodeOrg} = this.state;
-
     return (
       <div className="App">
         <MobileSimulator minWidth={800} minHeight={400}>
@@ -163,15 +163,17 @@ class App extends Component {
   renderWorkshopCode(phase) {
     return <WorkshopCode
       onInteraction={this.onInteraction}
-      onDone={(workshopCode) => {
-        this.setState({workshopCode, phase});
-      }} />;
+      onDone={() => this.setState({phase})} />;
   }
 
   renderTitle(phase) {
-    return <Title
-      onInteraction={this.onInteraction}
-      onDone={() => this.setState({phase})} />;
+    return (
+      <Lifecycle componentWillMount={() => this.doFetchData()}>
+        <Title
+          onInteraction={this.onInteraction}
+          onDone={this.onTitleDone.bind(this, phase)} />
+      </Lifecycle>
+    );
   }
 
   renderConsent(phase) {
