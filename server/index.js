@@ -68,7 +68,7 @@ app.post('/api/log', (req, res) => {
 // the same workshop.
 // Returns: {status, rows}
 // where rows: [{profileName, argumentText, percentageRight}]
-app.get('/api/peers/:workshopCode', limiter, (req, res) => {
+app.get('/api/peers/:workshopCode', (req, res) => {
   res.set('Content-Type', 'application/json');
   
   const {workshopCode} = req.params;

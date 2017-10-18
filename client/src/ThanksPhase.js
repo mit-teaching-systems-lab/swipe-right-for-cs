@@ -15,12 +15,20 @@ class ThanksPhase extends Component {
     this.onClickedEmail = this.onClickedEmail.bind(this);
     this.onClickedForums = this.onClickedForums.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentDidMount() {
+    this.doScrollHack();
     this.emailInputEl.setAttribute('nochilddrag', 'nochilddrag');
-    window.scrollTo(0, 0);
     this.emailInputEl.focus();
+  }
+  
+  // TODO(kr) hack, not sure why this is necessary, but 
+  // this is a problem on desktop Firefox
+  doScrollHack() {
+    const el = document.querySelector('.MobileSimulator-background');
+    if (el) el.scrollTo(0, 0);    
   }
   
   computeMoves() {
@@ -47,12 +55,23 @@ class ThanksPhase extends Component {
     });
   }
 
+  isSendEmailEnabled() {
+    const {email} = this.state;
+    return (email !== '');
+  }
+
   onChangeEmail(event) {
     this.setState({ email: event.target.value });
   }
 
+  onSubmit(event) {
+    if (this.isSendEmailEnabled()) this.onClickedEmail();
+    event.preventDefault();
+  }
+
   onClickedEmail() {
-    const {email, onInteraction} = this.props;
+    const {onInteraction} = this.props;
+    const {email} = this.state;
     const moves = this.computeMoves();
     onInteraction(Interactions.share({moves, email}));
     fetch('/api/share', {
@@ -78,15 +97,16 @@ class ThanksPhase extends Component {
         <div className="ThanksPhase-content">
           <p className="Global-header-font">Thanks!</p>
           <div>We can email you your responses if you like.</div>
-          <div className="ThanksPhase-email-container">
+          <form className="ThanksPhase-email-container" onSubmit={this.onSubmit}>
             <input
               className="ThanksPhase-email"
               ref={(input) => { this.emailInputEl = input; }} 
               type="text"
               value={email}
               onChange={this.onChangeEmail} />
-          </div>
-          <TappableButton disabled={email === ''} outerStyle={{margin: 20, marginTop: 0}} onClick={this.onClickedEmail}>
+            <button type="submit" style={{display: 'none'}} />
+          </form>
+          <TappableButton disabled={!this.isSendEmailEnabled()} outerStyle={{margin: 20, marginTop: 0}} onClick={this.onClickedEmail}>
             Send me an email
           </TappableButton>
           <div>And you can talk more on the Code.org forums too!</div>
@@ -111,7 +131,6 @@ class ThanksPhase extends Component {
 }
 
 ThanksPhase.propTypes = {
-  email: PropTypes.string.isRequired,
   logs: PropTypes.arrayOf(PropTypes.object).isRequired,
   onInteraction: PropTypes.func.isRequired
 };
