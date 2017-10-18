@@ -6,7 +6,7 @@ import {storybookStudents} from './util/fixtures.js';
 import Turn from './Turn.js';
 
 
-const longProfileText = "Lamar can always get the class cackling with his running commentary, but especially when he starts doing impersonations. Somehow she's able to do it in a way where everyone can laugh.";
+const longProfileText = "Foo can always get the class cackling with his running commentary, but especially when he starts doing impersonations. Somehow she's able to do it in a way where everyone can laugh.";
 const longArgument = "Computer science creates so many new ways to express your creativity, whether it's generating images or videos,  creating interactive stories, or making new kinds of media altogether.";
 function testTurn(props) {
   const student = storybookStudents[0];

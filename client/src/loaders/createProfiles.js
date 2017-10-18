@@ -6,16 +6,16 @@ import __compact from 'lodash/compact';
 import {warn} from '../shared/log.js';
 
 import renderTemplate from './renderTemplate.js';
-import BF2 from '../files/BF2.png';
-import BM2 from '../files/BM2.png';
-import CF2 from '../files/CF2.png';
-import CM2 from '../files/CM2.png';
-import HF2 from '../files/HF2.png';
-import HM2 from '../files/HM2.png';
-import IF2 from '../files/IF2.png';
-import IM2 from '../files/IM2.png';
-import WF2 from '../files/WF2.png';
-import WM2 from '../files/WM2.png';
+import BF2 from '../files/BF2.jpg';
+import BM2 from '../files/BM2.jpg';
+import CF2 from '../files/CF2.jpg';
+import CM2 from '../files/CM2.jpg';
+import HF2 from '../files/HF2.jpg';
+import HM2 from '../files/HM2.jpg';
+import IF2 from '../files/IF2.jpg';
+import IM2 from '../files/IM2.jpg';
+import WF2 from '../files/WF2.jpg';
+import WM2 from '../files/WM2.jpg';
 
 export function imageFor(label) {
   return {
