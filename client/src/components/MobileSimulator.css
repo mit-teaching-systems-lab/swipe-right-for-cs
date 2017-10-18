@@ -71,5 +71,6 @@
   height: 444px;
   width: 100%;
   overflow-y: auto;
+  -ms-overflow-style: none;
   display: flex;
 }
