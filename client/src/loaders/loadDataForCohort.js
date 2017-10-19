@@ -1,10 +1,9 @@
 import __flatten from 'lodash/flatten';
 import __defaults from 'lodash/defaults';
-import __sortBy from 'lodash/sortBy';
 import parseCsvSync from 'csv-parse/lib/sync';
 import profileTemplatesFile from '../files/profileTemplates.csv';
 import sortedVariantsFile from '../files/sortedVariants.csv';
-import {hashCode} from '../shared/data.js';
+import {hashCode, consistentShuffleForCohort} from '../shared/data.js';
 import {createProfiles} from './createProfiles.js';
 
 
@@ -94,12 +93,4 @@ export function shuffleInBuckets(items, midpoint, cohortNumber) {
     consistentShuffleForCohort(items.slice(0, midpoint), cohortNumber),
     consistentShuffleForCohort(items.slice(midpoint, items.length), cohortNumber)
   ]);
-}
-
-// This consistently sorts `items` using the cohortNumber as a seed.
-export function consistentShuffleForCohort(items, cohortNumber) {
-  return __sortBy(items, item => {
-    const key = JSON.stringify({item, cohortNumber});
-    return hashCode(key);
-  });
 }

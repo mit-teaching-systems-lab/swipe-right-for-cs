@@ -10,7 +10,6 @@ import {
   loadDataForCohort,
   defaultOptions,
   rotatedVariantsForProfiles,
-  consistentShuffleForCohort,
   shuffleInBuckets
 } from './loadDataForCohort.js';
 
@@ -114,13 +113,5 @@ describe('rotatedVariantsForProfiles', () => {
     expect(rotatedVariantsForProfiles(0, profiles, variants)).toEqual(['x','y']);
     expect(rotatedVariantsForProfiles(1, profiles, variants)).toEqual(['y','z']);
     expect(rotatedVariantsForProfiles(2, profiles, variants)).toEqual(['z','x']);
-  });
-});
-
-describe('consistentShuffleForCohort', () => {
-  it('is consistent on subsequent calls', () => {
-    const first = consistentShuffleForCohort([4,32,5,9], 0);
-    const second = consistentShuffleForCohort([4,32,5,9], 0);
-    expect(first).toEqual(second);
   });
 });
