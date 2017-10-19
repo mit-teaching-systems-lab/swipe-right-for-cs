@@ -1,6 +1,5 @@
 import __zip from 'lodash/zip';
 import __capitalize from 'lodash/capitalize';
-import __shuffle from 'lodash/shuffle';
 import __range from 'lodash/range';
 import __compact from 'lodash/compact';
 import {warn} from '../shared/log.js';
@@ -36,14 +35,13 @@ export function imageFor(label) {
 // into concrete profiles for a game.
 //
 // Returns no students on input array length mismatch.
-export function createProfiles(profileTemplates, variants, argumentCount) {
+export function createProfiles(profileTemplates, variants) {
   if (profileTemplates.length !== variants.length) {
     warn(`createProfiles called with ${profileTemplates.length} profiles and ${variants.length} variants`); //eslint-disable-line no-console
     return [];
   }
 
   return __zip(profileTemplates, variants).map(([profileTemplate, variant]) => {
-    const argumentTexts = __shuffle(argumentTextsFor(profileTemplate)).slice(0, argumentCount);
     return {
       profileName: variant.name,
       profileImageKey: variant.image_key,
@@ -56,7 +54,7 @@ export function createProfiles(profileTemplates, variants, argumentCount) {
         his: variant.his,
         him: variant.him
       }),
-      argumentTexts
+      argumentTexts: argumentTextsFor(profileTemplate)
     };
   });
 }

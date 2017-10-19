@@ -1,8 +1,4 @@
 import fs from 'fs';
-import __range from 'lodash/range';
-import __uniqWith from 'lodash/uniqWith';
-import __isEqual from 'lodash/isEqual';
-import __sortBy from 'lodash/sortBy';
 import {createProfiles, imageFor} from './createProfiles.js';
 import parseCsvSync from 'csv-parse/lib/sync';
 
@@ -71,37 +67,4 @@ describe('with profileTemplates and variants', () => {
       'WF2'
     ]);
   });
-});
-
-
-it('shuffles argumentTexts for a single profile', () => {
-  const profileTemplate = {
-    "profile_key": 'hardworker',
-    "profile_template": 'template',
-    "argument_1": 'a',
-    "argument_2": 'b',
-    "argument_3": 'c'
-  };
-  const variant = {
-    "image_key": 'IM2',
-    "name": 'Raj',
-    "he": 'he',
-    "his": 'his',
-    "him": 'him'
-  };
-  const runs = __range(0, 20).map(i => {
-    return createProfiles([profileTemplate], [variant], 3);
-  });
-
-  // same set
-  const uniqueSets = __uniqWith(runs.map(profiles => {
-    return __sortBy(profiles[0].argumentTexts);
-  }), __isEqual);
-  expect(uniqueSets.length).toEqual(1);
-
-  const uniqueOrders = __uniqWith(runs.map(profiles => {
-    return profiles[0].argumentTexts;
-  }), __isEqual);
-  expect(uniqueOrders.length).toBeGreaterThan(1);
-  expect(uniqueOrders.length).toBeLessThanOrEqual(runs.length);
 });

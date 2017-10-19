@@ -1,10 +1,9 @@
 import __flatten from 'lodash/flatten';
 import __defaults from 'lodash/defaults';
-import __sortBy from 'lodash/sortBy';
 import parseCsvSync from 'csv-parse/lib/sync';
 import profileTemplatesFile from '../files/profileTemplates.csv';
 import sortedVariantsFile from '../files/sortedVariants.csv';
-import {hashCode} from '../shared/data.js';
+import {hashCode, consistentShuffleForKey} from '../shared/data.js';
 import {createProfiles} from './createProfiles.js';
 
 
@@ -72,7 +71,15 @@ export function createProfilesForCohort(cohortNumber, profileTemplates, variants
   
   // Zip together into concrete student profiles
   const truncatedVariants = variantsForCohort.slice(0, profileCount);
-  return createProfiles(truncatedProfileTemplates, truncatedVariants, argumentCount);
+  const profiles = createProfiles(truncatedProfileTemplates, truncatedVariants);
+
+  // Shuffle and truncate number of arguments for each profile
+  return profiles.map(profile => {
+    const {argumentTexts} = profile;
+    const shuffled = consistentShuffleForKey(argumentTexts, cohortNumber);
+    const truncated = shuffled.slice(0, argumentCount);
+    return {...profile, argumentTexts: truncated};
+  });
 }
 
 // Rotate the variants shown to each cohort.
@@ -91,15 +98,7 @@ export function rotatedVariantsForProfiles(cohortNumber, profileTemplates, varia
 // Partition the list at midpoint, and shuffle on both sides.
 export function shuffleInBuckets(items, midpoint, cohortNumber) {
   return __flatten([
-    consistentShuffleForCohort(items.slice(0, midpoint), cohortNumber),
-    consistentShuffleForCohort(items.slice(midpoint, items.length), cohortNumber)
+    consistentShuffleForKey(items.slice(0, midpoint), cohortNumber),
+    consistentShuffleForKey(items.slice(midpoint, items.length), cohortNumber)
   ]);
-}
-
-// This consistently sorts `items` using the cohortNumber as a seed.
-export function consistentShuffleForCohort(items, cohortNumber) {
-  return __sortBy(items, item => {
-    const key = JSON.stringify({item, cohortNumber});
-    return hashCode(key);
-  });
 }

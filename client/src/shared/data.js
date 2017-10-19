@@ -5,6 +5,7 @@
 // This code is shared by CRA and node, so uses node-style requires and
 // module.exports.
 const __difference = require('lodash/difference');
+const __sortBy = require('lodash/sortBy');
 const crypto = require('crypto');
 const {warn} = require('./log.js');
 
@@ -155,6 +156,15 @@ function sha(value) {
   return crypto.createHash('sha256').update(value).digest('base64');
 }
 
+// This consistently sorts `items` based on the content of each item
+// mixed with the `key`.
+function consistentShuffleForKey(items, key) {
+  return __sortBy(items, item => {
+    const shuffleValue = JSON.stringify({item, key});
+    return hashCode(shuffleValue);
+  });
+}
+
 module.exports = { // eslint-disable-line no-undef
   Interaction,
   InteractionTypes,
@@ -162,5 +172,6 @@ module.exports = { // eslint-disable-line no-undef
   Session,
   Log,
   hashCode,
-  sha
+  sha,
+  consistentShuffleForKey
 };

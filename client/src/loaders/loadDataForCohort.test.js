@@ -10,7 +10,6 @@ import {
   loadDataForCohort,
   defaultOptions,
   rotatedVariantsForProfiles,
-  consistentShuffleForCohort,
   shuffleInBuckets
 } from './loadDataForCohort.js';
 
@@ -40,13 +39,17 @@ describe('loadDataForCohort', () => {
 
 describe('createProfilesForCohort', () => {
   describe('with random samples of cohortCodes', async () => {
-    it('uses consistent profileName and ordering', async () => {
-      // run samples
+    async function sampleRuns(n, cohortNumberFn) {
       const runs = [];
-      for (var i = 0; i < 100; i++) {
+      for (var i = 0; i < n; i++) {
         mockCsvFetches();
-        runs.push(await loadDataForCohort(uuid.v4(), defaultOptions));
+        runs.push(await loadDataForCohort(cohortNumberFn(), defaultOptions));
       }
+      return runs;
+    }
+
+    it('uses consistent profileName and ordering', async () => {
+      const runs = await sampleRuns(100, () => uuid.v4());
 
       // Ensure all runs have the same profileNames
       const uniqueRunsByName = __uniqWith(runs.map(run => {
@@ -61,6 +64,17 @@ describe('createProfilesForCohort', () => {
         return __sortBy(profileKeys);
       }), __isEqual);
       expect(uniqueRunsByKey.length).toEqual(1);
+    });
+
+    it('with a cohort, uses consistently shuffled argumentTexts', async () => {
+      const runs = await sampleRuns(10, () => 'foo');
+
+      // Ensure argument order for each student is consistent across
+      // runs within the cohort.
+      const uniqueOrders = __uniqWith(runs.map(run => {
+        return run.students.map(student => student.argumentTexts);
+      }), __isEqual);
+      expect(uniqueOrders.length).toEqual(1);
     });
   });
 });
@@ -114,13 +128,5 @@ describe('rotatedVariantsForProfiles', () => {
     expect(rotatedVariantsForProfiles(0, profiles, variants)).toEqual(['x','y']);
     expect(rotatedVariantsForProfiles(1, profiles, variants)).toEqual(['y','z']);
     expect(rotatedVariantsForProfiles(2, profiles, variants)).toEqual(['z','x']);
-  });
-});
-
-describe('consistentShuffleForCohort', () => {
-  it('is consistent on subsequent calls', () => {
-    const first = consistentShuffleForCohort([4,32,5,9], 0);
-    const second = consistentShuffleForCohort([4,32,5,9], 0);
-    expect(first).toEqual(second);
   });
 });
