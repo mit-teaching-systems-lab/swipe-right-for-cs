@@ -3,7 +3,6 @@ import uuid from 'uuid';
 import qs from 'query-string';
 import __isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
-import './App.css';
 import {Log, Session} from './shared/data.js';
 import {error} from './shared/log.js';
 import MobileSimulator from './components/MobileSimulator.js';
@@ -19,25 +18,34 @@ import ThanksPhase from './ThanksPhase.js';
 import {loadDataForCohort, defaultOptions} from './loaders/loadDataForCohort.js';
 
 
-// Describes the major phases of the whole game
-const Phases = {
-  WORKSHOP_CODE: 'WORKSHOP_CODE',
-  TITLE: 'TITLE',
-  CONSENT: 'CONSENT',
-  INTRODUCTION: 'INTRODUCTION',
-  STUDENTS: 'STUDENTS',
-  DISCUSS: 'DISCUSS',
-  REVIEW: 'REVIEW',
-  THANKS: 'THANKS'
-};
-
-
-class App extends Component {
+// Describes pathways into the game
+class Entryways extends Component {
   constructor(props) {
     super(props);
-    
-    const isCodeOrg = (window.location.pathname !== '/play');
+    const {pathname} = window.location;
     const query = queryString.parse(window.location.search);
+    this.state = {
+      pathname,
+      query,
+    };
+  }
+
+  render() {
+    const {pathname, query} = this.state;
+
+    if (pathname.indexOf('/') === 0) {
+      return window.location = '/';
+    }
+
+    if (pathname.indexOf('/start') === 0) {
+      if (!query.cuid) {
+        // warn
+      }
+    
+    
+      
+    }
+  }
     this.state = {
       isCodeOrg,
       config: defaultOptions,
@@ -178,7 +186,7 @@ class App extends Component {
   render() {
     const {isCodeOrg} = this.state;
     return (
-      <div className="App">
+      <div className="Entryways">
         <MobileSimulator minWidth={800} minHeight={400}>
           {isCodeOrg ? this.renderCodeOrg() : this.renderDemo()}
         </MobileSimulator>
@@ -281,4 +289,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Entryways;
