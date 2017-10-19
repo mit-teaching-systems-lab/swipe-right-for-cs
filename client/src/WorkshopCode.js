@@ -121,6 +121,7 @@ class WorkshopCode extends Component {
                 <img
                   className="WorkshopCode-logo"
                   src={codeOrgLogo}
+                  alt="Code.org"
                   width={86}
                   height={85} />
               </div>
