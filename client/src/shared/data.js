@@ -160,8 +160,8 @@ function sha(value) {
 // mixed with the `key`.
 function consistentShuffleForKey(items, key) {
   return __sortBy(items, item => {
-    const key = JSON.stringify({item, key});
-    return hashCode(key);
+    const shuffleValue = JSON.stringify({item, key});
+    return hashCode(shuffleValue);
   });
 }
 

@@ -1,3 +1,8 @@
+import uuid from 'uuid';
+import __range from 'lodash/range';
+import __isEqual from 'lodash/isEqual';
+import __uniqWith from 'lodash/uniqWith';
+
 import {
   hashCode,
   consistentShuffleForKey
