@@ -29,22 +29,26 @@ class Delay extends React.Component {
   }
 
   render() {
-    if (!this.state.waiting) {
-      return this.props.children;
+    const {children, placeholder} = this.props;
+    const {waiting} = this.state;
+    if (!waiting) {
+      return children;
     }
 
-    return null;
+    return placeholder;
   }
 }
 
 Delay.propTypes = {
   children: PropTypes.node.isRequired,
   wait: PropTypes.number.isRequired,
+  placeholder: PropTypes.node,
   onDone: PropTypes.func
 };
 
 Delay.defaultProps = {
-  wait: 250
+  wait: 250,
+  placeholder: null
 };
 
 export default Delay;
