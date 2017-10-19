@@ -5,6 +5,7 @@ import logoSrc from './img/swipe.gif';
 import {Interactions} from './shared/data.js';
 import Swipeable from './components/Swipeable.js';
 import Delay from './components/Delay.js';
+import SwipeCue from './components/SwipeCue.js';
 
 class Title extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class Title extends Component {
   }
 
   render() {
+    const swipeHeight = 128;
     return (
       <div className="Title">
         <p className="Title-intro">
@@ -32,9 +34,10 @@ class Title extends Component {
         </p>
         <Delay wait={250}>
           <Swipeable
-            height={128}
+            height={swipeHeight}
             onSwipeRight={this.onSwipeRight}>
             <div className="Title-swipe">
+              <SwipeCue style={{position: 'absolute', top: (swipeHeight/2)}} />
               <img
                 className="Title-logo"
                 alt="Logo"
