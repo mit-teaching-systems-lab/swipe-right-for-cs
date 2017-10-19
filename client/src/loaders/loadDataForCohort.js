@@ -15,6 +15,7 @@ export const defaultOptions = {
   forcedProfileCount: 6
 };
 
+// Returns {cohortNumber, students}
 export async function loadDataForCohort(workshopCode, options = {}) {
   const {profileTemplates, variants} = await fetchBoth();
   return cohortCreateAndShuffle(workshopCode, profileTemplates, variants, options);
