@@ -173,7 +173,7 @@ class App extends Component {
     return <WorkshopCode
       shouldWarnAboutCodeStudio={this.shouldWarnAboutCodeStudio()}
       onInteraction={this.onInteraction}
-      onDone={() => this.setState({phase})} />;
+      onDone={this.onWorkshopCodeDone.bind(this, phase)} />;
   }
 
   renderTitle(phase) {
