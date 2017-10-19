@@ -117,7 +117,7 @@ class WorkshopCode extends Component {
           <div className="WorkshopCode-warning">
             <TappableButton style={styles.codeButton} onClick={this.onCodeTapped}>
               <div className="WorkshopCode-row">
-                <div className="WorkshopCode-warning-message">Please read the Code Studio page first!</div>
+                <div className="WorkshopCode-warning-message">Please tap to read the Code Studio page first!</div>
                 <img
                   className="WorkshopCode-logo"
                   src={codeOrgLogo}
