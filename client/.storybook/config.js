@@ -6,7 +6,6 @@ function loadStories() {
   require('../src/ConsentPhase.story.js');
   require('../src/InstructionsPhase.story.js');
   require('../src/StudentsPhase.story.js');
-  require('../src/Turn.story.js');
   require('../src/DiscussPhase.story.js');
   require('../src/ReviewPhaseView.story.js');
   require('../src/ThanksPhase.story.js');
