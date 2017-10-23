@@ -34,8 +34,8 @@ class ConsentPhase extends Component {
           <div className="Global-header-font">Research consent</div>
           <div className="ConsentPhase-text">{consentText}</div>
           <div className="ConsentPhase-choices">
-            <TappableButton onClick={this.onConsent}>I consent</TappableButton>
             <TappableButton onClick={this.onDecline}>No thanks</TappableButton>
+            <TappableButton onClick={this.onConsent}>I consent</TappableButton>
           </div>
         </div>
       </div>
