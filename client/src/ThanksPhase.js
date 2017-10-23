@@ -111,7 +111,7 @@ class ThanksPhase extends Component {
           </TappableButton>
           <div>And you can talk more on the Code.org forums too!</div>
           <TappableButton  outerStyle={{margin: 20}} onClick={this.onClickedForums}>
-            forums.code.org
+            forum.code.org
           </TappableButton>
           <div className="ThanksPhase-links">{"If you're curious, here's some of the research that informed this work:"}</div>
           <ul className="ThanksPhase-list">
