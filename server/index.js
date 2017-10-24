@@ -2,9 +2,20 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const RateLimit = require('express-rate-limit');
-const {sendResponsesEmail} = require('./emails.js');
-const {createPool} = require('./database.js');
-const {queryForGroupedResponses} = require('./peerResponses.js');
+const {
+  enforceHTTPS,
+  onlyAllowResearchers,
+  loginEndpoint,
+  emailLinkEndpoint
+} = require('./authentication.js');
+const {
+  logEndpoint,
+  peerResponsesEndpoint,
+  emailMyResponsesEndpoint
+} = require('./game/endpoints.js');
+const {interactionsEndpoint} = require('./research/endpoints.js');
+const {createPool} = require('./util/database.js');
+
 
 // config
 const config = {
@@ -21,14 +32,7 @@ const config = {
 // Create server with middleware, connect to database
 const app = express();
 app.use(bodyParser.json());
-app.use(function enforceHTTPS(request, response, next) {
-  if (process.env.NODE_ENV === 'development') return next();
-  if (request.headers['x-forwarded-proto'] !== 'https') {
-    const httpsUrl = ['https://', request.headers.host, request.url].join('');
-    return response.redirect(httpsUrl);
-  }
-  return next();
-});
+app.use(enforceHTTPS);
 const pool = createPool(config.postgresUrl);
 
 // As a precaution for emailing routes
@@ -41,60 +45,18 @@ const limiter = new RateLimit({
   }
 });
 
-// API endpoints
-// For receiving log data from the client
-app.post('/api/log', (req, res) => {
-  const log = req.body;
 
-  // Write into database
-  const sql = `INSERT INTO interactions(interaction, session, timestampz) VALUES ($1, $2, $3)`;
-  const now = new Date();
-  const values = [log.interaction, log.session, now];
-  pool.query(sql, values).catch(err => {
-    console.log('query returned err: ', err);
-    console.log({ error:err });
-  });
+// Endpoints for the game
+app.post('/api/log', logEndpoint.bind(null, pool));
+app.get('/api/peers/:workshopCode', peerResponsesEndpoint.bind(null, pool));
+app.post('/api/share', limiter, emailMyResponsesEndpoint.bind(null, config.mailgunEnv));
 
-  // Check for sending consent emails
-  // TODO(kr) this is disabled since we're removing emails
-  // maybeSendConsentEmail(log, config.mailgunEnv);
+// Endpoints for researcher login
+app.post('/api/research/login', limiter, loginEndpoint);
+app.post('/api/research/email', limiter, emailLinkEndpoint);
 
-  // Return success no matter what
-  res.set('Content-Type', 'application/json');
-  res.json({ status: 'ok' });
-});
-
-// For receiving anonymized responses of peers within
-// the same workshop.
-// Returns: {status, rows}
-// where rows: [{profileName, argumentText, percentageRight}]
-app.get('/api/peers/:workshopCode', (req, res) => {
-  res.set('Content-Type', 'application/json');
-  
-  const {workshopCode} = req.params;
-  queryForGroupedResponses(pool, workshopCode)
-    .catch(err => {
-      console.log('query returned err: ', err);
-      res.json({ status: 'error' });
-    })
-    .then(aggregatedRows => {
-      res.json({
-        status: 'ok',
-        rows: aggregatedRows
-      });
-    });
-});
-
-app.post('/api/share', limiter, (req, res) => {
-  const {moves, email} = req.body;
-
-  // Send email with responses
-  sendResponsesEmail(email, moves, config.mailgunEnv);
-
-  // Return success no matter what
-  res.set('Content-Type', 'application/json');
-  res.json({ status: 'ok' });
-});
+// Endpoints for authenticated researchers to access data
+app.post('/api/research/interactions', onlyAllowResearchers, interactionsEndpoint);
 
 
 // Serve any static files.
