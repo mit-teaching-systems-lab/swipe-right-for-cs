@@ -3,8 +3,10 @@ function interactionsEndpoint(pool, req, res) {
   // TODO
   // 1. Query for all `interactions` from database table
   // 2. Return them with status code 200 as json
-  res.status(405);
-  res.end();
+  if (process.env.NODE_ENV === 'production') {
+    res.status(405);
+    res.end();
+  }
 }
 
 module.exports = {
