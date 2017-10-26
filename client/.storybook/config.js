@@ -10,6 +10,7 @@ function loadStories() {
   require('../src/ReviewPhaseView.story.js');
   require('../src/ThanksPhase.story.js');
   require('../src/loaders/loadDataForCohort.story.js');
+  require('../src/research/InteractionsView.story.js');
   // You can require as many stories as you need.
 }
 

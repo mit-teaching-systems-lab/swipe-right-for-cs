@@ -1,12 +1,12 @@
 const path = require('path');
-const {sendEmail, renderEmail} = require('./email.js');
-const {consentText} = require('../client/src/shared/consent.js');
+const {sendEmail, renderEmail} = require('../util/email.js');
+const {consentText} = require('../../client/src/shared/consent.js');
 const {
   sha,
   Log,
   Interaction,
   Session
-} = require('../client/src/shared/data.js');
+} = require('../../client/src/shared/data.js');
 
 
 // Check log message to see if it's giving consent, and if it is,

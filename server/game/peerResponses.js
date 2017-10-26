@@ -1,5 +1,5 @@
 const __groupBy = require('lodash/groupBy');
-const {InteractionTypes} = require('../client/src/shared/data.js');
+const {InteractionTypes} = require('../../client/src/shared/data.js');
 
 // Returns a Promise of:
 // [{profileName, argumentText, percentageRight}]
