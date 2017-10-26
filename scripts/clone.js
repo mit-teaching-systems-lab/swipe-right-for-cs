@@ -1,5 +1,5 @@
 const {Client} = require('pg');
-const {createPool} = require('../server/database.js');
+const {createPool} = require('../server/util/database.js');
 
 // This script can be used to grab a snapshot of the database and
 // print it in a JSON format that can be used for offline analysis.
