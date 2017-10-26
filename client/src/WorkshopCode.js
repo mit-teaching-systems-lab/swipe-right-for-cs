@@ -83,19 +83,19 @@ class WorkshopCode extends Component {
 
   renderForm() {
     const {workshopCode} = this.state;
-    const height = 160;
+    const height = 200;
 
     return (
       <Delay key="form" wait={250} onDone={this.onDelayDone}>
         <Bounceable height={height}>
           <form className="WorkshopCode-form" onSubmit={this.onSubmit}>
             <button type="submit" style={{display: 'none'}} />
-            <div className="WorkshopCode-instructions">Please enter your workshop code:</div>
+            <div className="WorkshopCode-instructions">Please enter the code you used when taking attendance at the start of the workshop.</div>
             <input
               ref={(input) => { this.workshopInputEl = input; }} 
               className="WorkshopCode-input WorkshopCode-workshop"
               type="text"
-              placeholder="XXXX"
+              placeholder="WXYZ"
               value={workshopCode}
               onChange={this.onChangeWorkshopCode} />
             <TappableButton

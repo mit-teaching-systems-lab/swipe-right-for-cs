@@ -7,7 +7,6 @@ import WorkshopCode from './WorkshopCode.js';
 function testProps(props) {
   return {
     ...props,
-    email: "foo@mit.edu",
     onInteraction: action('onInteraction'),
     onDone: action('onDone')
   };
