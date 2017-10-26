@@ -22,9 +22,17 @@ describe('loadDataForCohort', () => {
   it('has valid data files checked in', async () => {
     mockCsvFetches();
     const {cohortNumber, students} = await loadDataForCohort('foor', defaultOptions);
-    expect(cohortNumber).toEqual(3);
+    expect(cohortNumber).toEqual(2);
     expect(students.length).toEqual(10);
     expect(__uniq(students.map(s => s.argumentTexts.length))).toEqual([4]);
+  });
+
+  it('is case-insensitive when bucketing workshopCodes into cohorts', async () => {
+    mockCsvFetches();
+    const cohortNumberOne = (await loadDataForCohort('hello', defaultOptions)).cohortNumber;
+    const cohortNumberTwo = (await loadDataForCohort('HeLlO', defaultOptions)).cohortNumber;
+    expect(cohortNumberOne).toEqual(8);
+    expect(cohortNumberTwo).toEqual(8);
   });
 
   it('buckets samples into cohortCodes that all fall in the correct range', async () => {
