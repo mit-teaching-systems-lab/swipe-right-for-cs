@@ -47,7 +47,8 @@ export function cohortCreateAndShuffle(workshopCode, profileTemplates, variants,
   } = __defaults({}, options, defaultOptions);
 
   // Bucket into cohort, and create profiles for cohort
-  const cohortNumber = Math.abs(hashCode(workshopCode)) % cohortCount;
+  // Workshop codes are case-insensitive.
+  const cohortNumber = Math.abs(hashCode(workshopCode.toUpperCase())) % cohortCount;
   const studentProfiles = createProfilesForCohort(cohortNumber, profileTemplates, variants, {
     maxProfileCount,
     argumentCount

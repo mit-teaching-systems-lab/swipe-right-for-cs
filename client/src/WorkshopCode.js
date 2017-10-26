@@ -47,8 +47,9 @@ class WorkshopCode extends Component {
     this.setState({ isWarningDismissed: true });
   }
 
+
   onChangeWorkshopCode(event) {
-    const workshopCode = event.target.value;
+    const workshopCode = event.target.value.toUpperCase(); // case matters
     this.setState({workshopCode});
   }
 
