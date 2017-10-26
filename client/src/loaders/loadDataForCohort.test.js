@@ -22,7 +22,7 @@ describe('loadDataForCohort', () => {
   it('has valid data files checked in', async () => {
     mockCsvFetches();
     const {cohortNumber, students} = await loadDataForCohort('foor', defaultOptions);
-    expect(cohortNumber).toEqual(3);
+    expect(cohortNumber).toEqual(2);
     expect(students.length).toEqual(10);
     expect(__uniq(students.map(s => s.argumentTexts.length))).toEqual([4]);
   });
