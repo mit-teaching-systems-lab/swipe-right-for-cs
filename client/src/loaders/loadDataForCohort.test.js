@@ -27,6 +27,14 @@ describe('loadDataForCohort', () => {
     expect(__uniq(students.map(s => s.argumentTexts.length))).toEqual([4]);
   });
 
+  it('is case-insensitive when bucketing workshopCodes into cohorts', async () => {
+    mockCsvFetches();
+    const cohortNumberOne = (await loadDataForCohort('hello', defaultOptions)).cohortNumber;
+    const cohortNumberTwo = (await loadDataForCohort('HeLlO', defaultOptions)).cohortNumber;
+    expect(cohortNumberOne).toEqual(8);
+    expect(cohortNumberTwo).toEqual(8);
+  });
+
   it('buckets samples into cohortCodes that all fall in the correct range', async () => {
     const runs = [];
     for (var i = 0; i < 100; i++) {
