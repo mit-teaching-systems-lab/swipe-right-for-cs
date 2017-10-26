@@ -37,6 +37,7 @@ SELECT
   session->>'identifier' as identifier
 FROM interactions
 WHERE 1=1
+  AND session->>'workshopCode' NOT IN ('foo', 'demo', 'code.org')
   AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
 GROUP BY identifier;
 
@@ -56,12 +57,26 @@ ORDER BY interaction_count DESC;
 SELECT * FROM interactions where session->>'sessionId' = 'xyz';
 
 
---- how many gave consent versus declined?
-SELECT count(*) as declined FROM interactions where interaction->>'type' = 'GAVE_CONSENT:nQddiko2aPPOfmKy8pC3r//eBr82OzD9smVMJPdUZRo=';
+--- how many code.org gave consent versus declined?
+SELECT count(*) as declined FROM interactions
+where 1=1
+  AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
+  AND interaction->>'type' = 'GAVE_CONSENT:nQddiko2aPPOfmKy8pC3r//eBr82OzD9smVMJPdUZRo=';
+
+SELECT count(*) as declined FROM interactions
+where 1=1
+  AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
+  AND interaction->>'type' LIKE '%CONSENT%';
+
+SELECT count(*) as declined FROM interactions
+where 1=1
+  AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
+  AND interaction->>'type' = 'DECLINED_CONSENT:96D+jgR6SglT5cPrdtiLk9oY2FScLr5eMFTwBpISylU=';
+
+
+--- consent overall?
 SELECT count(*) FROM interactions where interaction->>'type' LIKE '%CONSENT%';
-SELECT count(*) as declined FROM interactions where interaction->>'type' = 'DECLINED_CONSENT:96D+jgR6SglT5cPrdtiLk9oY2FScLr5eMFTwBpISylU=';
-
-
+SELECT count(*) as declined FROM interactions where interaction->>'type' = 'GAVE_CONSENT:nQddiko2aPPOfmKy8pC3r//eBr82OzD9smVMJPdUZRo=';
 
 
 
