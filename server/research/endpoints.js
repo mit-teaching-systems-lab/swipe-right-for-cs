@@ -1,12 +1,22 @@
-// For getting all interactions blindly
+// For getting all interactions
 function interactionsEndpoint(pool, req, res) {
-  // TODO
-  // 1. Query for all `interactions` from database table
-  // 2. Return them with status code 200 as json
-  if (process.env.NODE_ENV === 'production') {
-    res.status(405);
+  // query!!!
+  const sql = `
+    SELECT
+    	id,
+    	interaction,
+			timestampz
+			session 
+			
+    FROM interactions`;
+
+
+  const promise = pool.query(sql);
+  promise.then(results => {
+    res.status(200);
+    res.json({rows: results.rows});
     res.end();
-  }
+  });
 }
 
 module.exports = {
