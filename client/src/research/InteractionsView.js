@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import db from '../../../tmp/swipe-right-db.json';
 import {InteractionTypes} from '../shared/data.js';
+
 
 // Render a list of logged user interactions
 class InteractionsView extends Component {
   render() {  
     // unpack!
     //filter out testing data
-
-    const interactions = db.interactions.filter(row =>{  
+    const interactions = this.props.interactions.filter(row =>{  
       if (row.session.workshopCode === 'foo') return false;
       if (row.session.workshopCode === 'demo') return false;
       if (row.session.workshopCode === 'code.org') return false;
@@ -29,13 +28,13 @@ class InteractionsView extends Component {
     return( 
       <div>
         {this.renderPercentSwipeRight(interactions)}
-        <table> {interactions.map(row =>{
+        <table>{interactions.map(row =>{
           return <tr key = {row.id}>
             <td> {row.id} </td>
             <td> {row.timestampz} </td>
             <td> {row.interaction.type} </td>        
           </tr>;
-        })} </table>
+        })}</table>
       </div>
     );
   }
