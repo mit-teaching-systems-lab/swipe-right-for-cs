@@ -3,11 +3,11 @@ function interactionsEndpoint(pool, req, res) {
   // query!!!
   const sql = `
     SELECT
-    	id,
-    	interaction,
-			timestampz
-			session 
-			
+      id,
+      interaction,
+      timestampz,
+      session
+        
     FROM interactions`;
 
 

@@ -19,20 +19,17 @@ class InteractionsView extends Component {
       return true;
     });
     // show it!
-
-
-    // TODO render these as a filterable table
-    // 1. Render using a <pre> tag and JSON.stringify(json, null, 2) so see if things look right
-    // 2. Change to a table with each interaction as a row using <table><tr><td> etc.
-    // 3. Add https://github.com/bvaughn/react-virtualized and use that
+    //render data as a filterable table
     return( 
       <div>
         {this.renderPercentSwipeRight(interactions)}
+        {this.renderPercentRightPerProfile(interactions)}
         <table>{interactions.map(row =>{
           return <tr key = {row.id}>
             <td> {row.id} </td>
             <td> {row.timestampz} </td>
-            <td> {row.interaction.type} </td>        
+            <td> {row.interaction.type} </td>   
+            <td> {JSON.stringify(row.interaction)} </td>     
           </tr>;
         })}</table>
       </div>
@@ -47,6 +44,28 @@ class InteractionsView extends Component {
     });
     return sum/interactions.length*100;
   }
+
+  renderPercentRightPerProfile(interactions){
+    var totals = {};
+    var percents = {};
+    interactions.forEach(row =>{
+      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
+        if (row.interaction.turn.profileKey in totals){
+          if (row.interaction.type === InteractionTypes.SWIPE_RIGHT) totals[row.interaction.turn.profileKey][0] += 1;
+          totals[row.interaction.turn.profileKey][1] += 1;
+        }
+        else{
+          totals[row.interaction.turn.profileKey] = [1,1];
+        }
+      }
+      for (var k in totals){
+        percents[k] = totals[k][0]/totals[k][1]*100 ;
+      }
+    });
+    return JSON.stringify(percents);
+  }
+
+
 }
 InteractionsView.propTypes = {
   interactions: PropTypes.array.isRequired
