@@ -56,7 +56,7 @@ app.post('/api/research/login', limiter, loginEndpoint);
 app.post('/api/research/email', limiter, emailLinkEndpoint);
 
 // Endpoints for authenticated researchers to access data
-app.post('/api/research/interactions', onlyAllowResearchers, interactionsEndpoint);
+app.get('/api/research/interactions', onlyAllowResearchers, interactionsEndpoint.bind(null, pool));
 
 
 // Serve any static files.
