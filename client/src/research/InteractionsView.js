@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {InteractionTypes} from '../shared/data.js';
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup, VictoryAxis, VictoryLabel} from 'victory'; 
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+  VictoryGroup,
+  VictoryAxis,
+  VictoryLabel
+} from 'victory'; 
 import _ from 'lodash';
+
+
 // Render a list of logged user interactions
 class InteractionsView extends Component {
   totalSwipes(interactions, key){
@@ -25,7 +34,9 @@ class InteractionsView extends Component {
       return false;
     });
   }
+
   onlySwipes(){
+    //filter out testing data
     const interactions = this.props.interactions.filter(row =>{  
       if (row.session.workshopCode === 'foo') return false;
       if (row.session.workshopCode === 'demo') return false;
@@ -45,14 +56,11 @@ class InteractionsView extends Component {
   }
 
   render() {  
-    // unpack!
-    //filter out testing data
     const swipeInteractions = this.onlySwipes();
-    // show it!
-    //render data as a filterable table
     if (swipeInteractions.length === 0){
       return <div> No Swipes! </div>;
     }
+
     return( 
       <div>
         {this.renderPercentSwipeRight(swipeInteractions)}
@@ -111,7 +119,8 @@ class InteractionsView extends Component {
             <VictoryBar
               data= {dataPoints}
               labels={(data)=>(Number(data.y)).toFixed(2) + "% of " + data.totalSwipes}
-            />
+              domain={{y: [0, 5.5]}}
+              style={{ parent: { maxWidth: "50%" } }} />
           </VictoryGroup>
         </VictoryChart>
       </div>
