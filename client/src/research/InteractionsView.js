@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {InteractionTypes} from '../shared/data.js';
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup, VictoryAxis} from 'victory'; 
+import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup, VictoryAxis, VictoryLabel} from 'victory'; 
 
 // Render a list of logged user interactions
 class InteractionsView extends Component {
@@ -34,8 +34,8 @@ class InteractionsView extends Component {
         {this.renderPercentSwipeRight(interactions)}
         {this.renderPercentRightPerProfile(interactions, 'profileKey')}
         {this.renderPercentRightPerProfile(interactions, 'profileName')}
-        {this.renderChart(interactions, 'profileName')}
-        {this.renderChart(interactions, 'profileKey')}
+        {this.renderChart(interactions, 'profileName', "Swipes Right Per Person")}
+        {this.renderChart(interactions, 'profileKey',"Swipes Right Per Profile")}
         <table>{interactions.map(row =>{
           return <tr key = {row.id}>
             <td> {row.id} </td>
@@ -76,7 +76,7 @@ class InteractionsView extends Component {
     }
     return JSON.stringify(percents, null,2);
   }
-  renderChart(interactions, key){
+  renderChart(interactions, key, title){
     const p = JSON.parse(this.renderPercentRightPerProfile(interactions, key));
     var keys=[]; 
     var d =[]; 
@@ -97,7 +97,9 @@ class InteractionsView extends Component {
           theme={VictoryTheme.material}
           domain={{y: [0, keys.length]}}
           style={{ parent: { maxWidth: "50%" } }}
+
         >
+          <VictoryLabel text= {title} x={225} y={30} textAnchor="middle"/>
           <VictoryAxis dependentAxis={true} tickValues={values} tickFormat={keys}/>
           <VictoryGroup horizontal
             offset={1}
