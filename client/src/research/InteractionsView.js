@@ -74,9 +74,10 @@ class InteractionsView extends Component {
     for(var k in totals){
       percents[k] = totals[k][0]/totals[k][1]*100;
     }
-    return <pre>{JSON.stringify(percents, null,2)}</pre>;
+    return JSON.stringify(percents, null,2);
   }
   renderChart(interactions, key){
+    const p = JSON.parse(this.renderPercentRightPerProfile(interactions, key));
     var keys=[]; 
     var d =[]; 
     var count = 0;
@@ -86,7 +87,7 @@ class InteractionsView extends Component {
         keys.push(row.interaction.turn[key]);
         count += 1;
         values.push(count);
-        d.push({x: count, y: 1}); // we want this 1 to actually equal to the person's average score  
+        d.push({x: count, y: p[row.interaction.turn[key]]}); 
       }
     });
 
@@ -105,17 +106,6 @@ class InteractionsView extends Component {
           >
             <VictoryBar
               data= {d}
-            />
-            <VictoryBar
-              data={[
-                {x: 1, y: 6.9},
-                {x: 2, y: 6.3},
-                {x: 3, y: 7.6},
-                {x: 4, y: 7.7},
-                {x: 5, y: 7.3},
-                {x: 6, y: 4.3},
-                {x: 7, y: 5.1},
-              ]}
             />
           </VictoryGroup>
         </VictoryChart>
