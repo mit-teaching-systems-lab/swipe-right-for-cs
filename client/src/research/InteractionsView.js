@@ -23,6 +23,27 @@ class InteractionsView extends Component {
       return false;
     });
   }
+
+  percentRightPerProfile(interactions, key){
+    var totals = {};
+    var percents = {};
+    interactions.forEach(row =>{
+      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
+        if (!(row.interaction.turn[key] in totals)){
+          totals[row.interaction.turn[key]] = [0,0];
+        }
+        if (row.interaction.type === InteractionTypes.SWIPE_RIGHT){ 
+          totals[row.interaction.turn[key]][0] += 1;
+        }
+        totals[row.interaction.turn[key]][1] += 1;
+      }
+    });
+    for(var k in totals){
+      percents[k] = totals[k][0]/totals[k][1]*100;
+    }
+    return percents;
+  }
+
   render() {  
     // unpack!
     //filter out testing data
@@ -34,8 +55,8 @@ class InteractionsView extends Component {
         {this.renderPercentSwipeRight(interactions)}
         {this.renderPercentRightPerProfile(interactions, 'profileKey')}
         {this.renderPercentRightPerProfile(interactions, 'profileName')}
-        {this.renderChart(interactions, 'profileName', "Swipes Right Per Person")}
-        {this.renderChart(interactions, 'profileKey',"Swipes Right Per Profile")}
+        {this.renderBarChart(interactions, 'profileName', "Swipes Right Per Person")}
+        {this.renderBarChart(interactions, 'profileKey',"Swipes Right Per Profile")}
         <table>{interactions.map(row =>{
           return <tr key = {row.id}>
             <td> {row.id} </td>
@@ -58,26 +79,11 @@ class InteractionsView extends Component {
   }
 
   renderPercentRightPerProfile(interactions, key){
-    var totals = {};
-    var percents = {};
-    interactions.forEach(row =>{
-      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
-        if (!(row.interaction.turn[key] in totals)){
-          totals[row.interaction.turn[key]] = [0,0];
-        }
-        if (row.interaction.type === InteractionTypes.SWIPE_RIGHT){ 
-          totals[row.interaction.turn[key]][0] += 1;
-        }
-        totals[row.interaction.turn[key]][1] += 1;
-      }
-    });
-    for(var k in totals){
-      percents[k] = totals[k][0]/totals[k][1]*100;
-    }
-    return JSON.stringify(percents, null,2);
+    const percents = this.percentRightPerProfile(interactions, key);
+    return <pre> {JSON.stringify(percents, null,2)} </pre>;
   }
-  renderChart(interactions, key, title){
-    const p = JSON.parse(this.renderPercentRightPerProfile(interactions, key));
+  renderBarChart(interactions, key, title){
+    const p = this.percentRightPerProfile(interactions, key);
     var keys=[]; 
     var d =[]; 
     var count = 0;
@@ -87,7 +93,7 @@ class InteractionsView extends Component {
         keys.push(row.interaction.turn[key]);
         count += 1;
         values.push(count);
-        d.push({x: count, y: p[row.interaction.turn[key]]}); 
+        d.push({x: count, y: p[row.interaction.turn[key]], totalSwipes: 400}); 
       }
     });
 
@@ -95,19 +101,21 @@ class InteractionsView extends Component {
       <div>
         <VictoryChart
           theme={VictoryTheme.material}
-          domain={{y: [0, keys.length]}}
+          domain={   {x: [0, 100], y: [0, keys.length]}   }
           style={{ parent: { maxWidth: "50%" } }}
-
+          padding={{ left: 90, top: 50, right: 50, bottom: 50 }}
         >
           <VictoryLabel text= {title} x={225} y={30} textAnchor="middle"/>
-          <VictoryAxis dependentAxis={true} tickValues={values} tickFormat={keys}/>
+          <VictoryAxis dependentAxis tickValues={values} tickFormat={keys}/>
+          <VictoryAxis/>
           <VictoryGroup horizontal
             offset={1}
             style={{ data: { width: 3 } }}
-            colorScale={["blue", "tomato", "gold"]}
+            colorScale={["tomato", "gold"]}
           >
             <VictoryBar
               data= {d}
+              labels={(data)=>(Number(data.y)).toFixed(2)}
             />
           </VictoryGroup>
         </VictoryChart>
