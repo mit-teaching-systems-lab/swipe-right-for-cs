@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import {InteractionTypes} from '../shared/data.js';
+import RatingsChart from './RatingsChart';
+import WorkshopsAnalysis from './WorkshopsAnalysis';
+import RawInteractionsTable from './RawInteractionsTable';
 import {
   VictoryBar,
   VictoryChart,
@@ -9,13 +13,47 @@ import {
   VictoryAxis,
   VictoryLabel
 } from 'victory'; 
-import _ from 'lodash';
+import './InteractionsView.css';
 
+
+//filter out testing and demo data
+function withoutDemoInteractions(interactions) {
+  return interactions.filter(row =>{  
+    if (row.session.workshopCode === 'foo') return false;
+    if (row.session.workshopCode === 'demo') return false;
+    if (row.session.workshopCode === 'code.org') return false;
+    if (row.session.workshopCode.indexOf('DEMO') === 0) return false;
+    if (row.session.identifier === undefined) return false;
+    if (row.session.identifier === 'UNKNOWN_IDENTIFIER') return false;
+    if (row.session.identifier === '') return false;
+    if (row.session.identifier === 'kevin') return false;
+    return true;
+  });
+}
 
 // Render a list of logged user interactions
 class InteractionsView extends Component {
   totalSwipes(interactions, key){
     return _.countBy(interactions, row => row.interaction.turn[key]);
+  }
+
+  percentRightPerProfile(interactions, key){
+    var totals = {};
+    var percents = {};
+    interactions.forEach(row =>{
+      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
+        if (!(row.interaction.turn[key] in totals)){
+          totals[row.interaction.turn[key]] = [0,0];
+        }
+        if (row.interaction.type === InteractionTypes.SWIPE_RIGHT){ 
+          totals[row.interaction.turn[key]][0] += 1;
+        }
+        totals[row.interaction.turn[key]][1] += 1;
+      }
+    });
+    for(var k in totals){
+      percents[k] = totals[k][0]/totals[k][1]*100;
+    }
   }
 
   percentRightPerProfile(interactions, key){
@@ -45,32 +83,46 @@ class InteractionsView extends Component {
       if (row.session.identifier === 'UNKNOWN_IDENTIFIER') return false;
       if (row.session.identifier === '') return false;
       if (row.session.identifier === 'kevin') return false;
-      return true;
-    });
-    return interactions.filter(row=>{
-      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
-        return true;
-      }
-      return false;
-    });
   }
 
   render() {  
-    const swipeInteractions = this.onlySwipes();
+    const interactions = withoutDemoInteractions(this.props.interactions);
+    const swipeInteractions = onlySwipes(interactions);
+
     if (swipeInteractions.length === 0){
       return <div> No Swipes! </div>;
     }
 
-    return( 
-      <div>
+    return (
+      <div className="InteractionsView">
+        <h1>Workshops</h1>
+        <WorkshopsAnalysis interactions={interactions} />
+        
+        <h1>Analysis</h1>
         {this.renderPercentSwipeRight(swipeInteractions)}
         {this.renderPercentRightPerProfile(swipeInteractions, 'profileKey')}
         {this.renderPercentRightPerProfile(swipeInteractions, 'profileName')}
-        {this.renderBarChart(swipeInteractions, 'profileName', "Swipes Right Per Person")}
-        {this.renderBarChart(swipeInteractions, 'profileKey',"Swipes Right Per Profile")}
+        <div className="InteractionsView-compare-panel">
+          {this.renderBarChart(swipeInteractions, 'profileName', "Swipes Right Per Person")}
+          <RatingsChart
+            interactions={interactions}
+            groupingKey="profileName"
+            chartTitle="How likely are they to take CS? by Person" />
+        </div>
+        <div className="InteractionsView-compare-panel">
+          {this.renderBarChart(swipeInteractions, 'profileKey',"Swipes Right Per Profile")}
+          <RatingsChart
+            interactions={interactions}
+            groupingKey="profileKey"
+            chartTitle="How likely are they to take CS? by Profile" />
+        </div>
+        
+        <h1>Raw data</h1>
+        <RawInteractionsTable interactions={this.props.interactions} />
       </div>
     );
   }
+
   renderPercentSwipeRight(interactions){
     var sum = 0;
     interactions.forEach(row =>{
@@ -85,6 +137,7 @@ class InteractionsView extends Component {
     const percents = this.percentRightPerProfile(interactions, key);
     return <pre> {JSON.stringify(percents, null,2)} </pre>;
   }
+
   renderBarChart(interactions, key, title){
     const p = this.percentRightPerProfile(interactions, key);
     const swipes = this.totalSwipes(interactions, key); 
@@ -104,7 +157,7 @@ class InteractionsView extends Component {
       <div>
         <VictoryChart
           theme={VictoryTheme.material}
-          domain={   {x: [0, 100], y: [0, barLabels.length]}   }
+          domain={{x: [0, 100], y: [0, barLabels.length]}}
           style={{ parent: { maxWidth: "50%" } }}
           padding={{ left: 90, top: 50, right: 90, bottom: 50 }}
         >

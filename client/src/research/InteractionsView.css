@@ -1,0 +1,10 @@
+.InteractionsView {
+  width: 100%;
+  margin: 10px;
+}
+
+.InteractionsView-compare-panel {
+  display: flex;
+  flex-direction: row;
+  height: 300;
+}
