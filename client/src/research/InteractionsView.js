@@ -53,6 +53,9 @@ class InteractionsView extends Component {
     const interactions = this.onlySwipes();
     // show it!
     //render data as a filterable table
+    if (interactions.length === 0){
+      return <div> No Swipes! </div>;
+    }
     return( 
       <div>
         {this.renderPercentSwipeRight(interactions)}

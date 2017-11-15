@@ -8,4 +8,7 @@ storiesOf('InteractionsView', module) //eslint-disable-line no-undef
     const db = require('../../../tmp/swipe-right-db.json');
     const {interactions} = db;
     return <InteractionsView interactions={interactions} />;
+  })
+  .add('empty', () => {
+    return <InteractionsView interactions={[]} />;
   });
