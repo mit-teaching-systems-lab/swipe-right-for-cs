@@ -5,25 +5,6 @@ import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup, VictoryAxis, Vict
 import _ from 'lodash';
 // Render a list of logged user interactions
 class InteractionsView extends Component {
-  onlySwipes(){
-    const interactions = this.props.interactions.filter(row =>{  
-      if (row.session.workshopCode === 'foo') return false;
-      if (row.session.workshopCode === 'demo') return false;
-      if (row.session.workshopCode === 'code.org') return false;
-      if (row.session.workshopCode.indexOf('DEMO') === 0) return false;
-      if (row.session.identifier === 'UNKNOWN_IDENTIFIER') return false;
-      if (row.session.identifier === '') return false;
-      if (row.session.identifier === 'kevin') return false;
-      return true;
-    });
-    return interactions.filter(row=>{
-      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
-        return true;
-      }
-      return false;
-    });
-  }
-
   totalSwipes(interactions, key){
     return _.countBy(interactions, row => row.interaction.turn[key]);
   }
@@ -46,6 +27,24 @@ class InteractionsView extends Component {
       percents[k] = totals[k][0]/totals[k][1]*100;
     }
     return percents;
+  }
+  onlySwipes(){
+    const interactions = this.props.interactions.filter(row =>{  
+      if (row.session.workshopCode === 'foo') return false;
+      if (row.session.workshopCode === 'demo') return false;
+      if (row.session.workshopCode === 'code.org') return false;
+      if (row.session.workshopCode.indexOf('DEMO') === 0) return false;
+      if (row.session.identifier === 'UNKNOWN_IDENTIFIER') return false;
+      if (row.session.identifier === '') return false;
+      if (row.session.identifier === 'kevin') return false;
+      return true;
+    });
+    return interactions.filter(row=>{
+      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
+        return true;
+      }
+      return false;
+    });
   }
 
   render() {  
@@ -81,7 +80,6 @@ class InteractionsView extends Component {
   renderBarChart(interactions, key, title){
     const p = this.percentRightPerProfile(interactions, key);
     const swipes = this.totalSwipes(interactions, key); 
-    console.log(swipes);
     var keys=[]; 
     var d =[]; 
     var count = 0;
