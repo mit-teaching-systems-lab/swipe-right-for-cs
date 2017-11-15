@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {InteractionTypes} from '../shared/data.js';
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup, VictoryAxis, VictoryLabel} from 'victory'; 
-
+import _ from 'lodash';
 // Render a list of logged user interactions
 class InteractionsView extends Component {
   onlySwipes(){
@@ -24,18 +24,22 @@ class InteractionsView extends Component {
     });
   }
 
+  totalSwipes(interactions, key){
+    return _.countBy(interactions, row => row.interaction.turn[key]);
+  }
+
   percentRightPerProfile(interactions, key){
+    const numSwipes = this.totalSwipes(interactions, key);
     var totals = {};
     var percents = {};
     interactions.forEach(row =>{
       if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
         if (!(row.interaction.turn[key] in totals)){
-          totals[row.interaction.turn[key]] = [0,0];
+          totals[row.interaction.turn[key]] = [0,numSwipes[row.interaction.turn[key]]];
         }
         if (row.interaction.type === InteractionTypes.SWIPE_RIGHT){ 
           totals[row.interaction.turn[key]][0] += 1;
         }
-        totals[row.interaction.turn[key]][1] += 1;
       }
     });
     for(var k in totals){
@@ -57,14 +61,6 @@ class InteractionsView extends Component {
         {this.renderPercentRightPerProfile(interactions, 'profileName')}
         {this.renderBarChart(interactions, 'profileName', "Swipes Right Per Person")}
         {this.renderBarChart(interactions, 'profileKey',"Swipes Right Per Profile")}
-        <table>{interactions.map(row =>{
-          return <tr key = {row.id}>
-            <td> {row.id} </td>
-            <td> {row.timestampz} </td>
-            <td> {row.interaction.type} </td>   
-            <td> {JSON.stringify(row.interaction)} </td>     
-          </tr>;
-        })}</table>
       </div>
     );
   }
@@ -84,6 +80,8 @@ class InteractionsView extends Component {
   }
   renderBarChart(interactions, key, title){
     const p = this.percentRightPerProfile(interactions, key);
+    const swipes = this.totalSwipes(interactions, key); 
+    console.log(swipes);
     var keys=[]; 
     var d =[]; 
     var count = 0;
@@ -93,7 +91,7 @@ class InteractionsView extends Component {
         keys.push(row.interaction.turn[key]);
         count += 1;
         values.push(count);
-        d.push({x: count, y: p[row.interaction.turn[key]], totalSwipes: 400}); 
+        d.push({x: count, y: p[row.interaction.turn[key]], totalSwipes: swipes[row.interaction.turn[key]]}); 
       }
     });
 
@@ -103,7 +101,7 @@ class InteractionsView extends Component {
           theme={VictoryTheme.material}
           domain={   {x: [0, 100], y: [0, keys.length]}   }
           style={{ parent: { maxWidth: "50%" } }}
-          padding={{ left: 90, top: 50, right: 50, bottom: 50 }}
+          padding={{ left: 90, top: 50, right: 90, bottom: 50 }}
         >
           <VictoryLabel text= {title} x={225} y={30} textAnchor="middle"/>
           <VictoryAxis dependentAxis tickValues={values} tickFormat={keys}/>
@@ -115,7 +113,7 @@ class InteractionsView extends Component {
           >
             <VictoryBar
               data= {d}
-              labels={(data)=>(Number(data.y)).toFixed(2)}
+              labels={(data)=>(Number(data.y)).toFixed(2) + "% of " + data.totalSwipes}
             />
           </VictoryGroup>
         </VictoryChart>
