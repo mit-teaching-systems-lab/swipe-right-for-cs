@@ -39,6 +39,7 @@
     "concurrently": "^3.5.0",
     "eslint": "^4.8.0",
     "eslint-plugin-node": "^5.2.0",
-    "ngrok": "^2.2.22"
+    "ngrok": "^2.2.22",
+    "node-mocks-http": "^1.6.6"
   }
 }
