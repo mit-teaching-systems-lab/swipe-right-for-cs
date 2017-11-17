@@ -3,22 +3,15 @@ import PropTypes from 'prop-types';
 import {InteractionTypes} from '../shared/data.js';
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup, VictoryAxis, VictoryLabel} from 'victory'; 
 import _ from 'lodash';
+import BubbleChart from './BubbleChart';
+import percentRightPerProfile from './calculations';
+
 // Render a list of logged user interactions
 class InteractionsView extends Component {
   totalSwipes(interactions, key){
     return _.countBy(interactions, row => row.interaction.turn[key]);
   }
 
-  percentRightPerProfile(interactions, key){
-    const numSwipes = this.totalSwipes(interactions, key);
-    const rightSwipes = _.countBy(this.rightSwipes(interactions), row => row.interaction.turn[key]);
-    var percents = {};
-
-    for(var x in numSwipes){
-      percents[x] = rightSwipes[x]/numSwipes[x]*100;
-    }
-    return percents;
-  }
   rightSwipes(interactions){
     return interactions.filter(row =>{
       if (row.interaction.type === InteractionTypes.SWIPE_RIGHT) return true;
@@ -55,6 +48,7 @@ class InteractionsView extends Component {
     }
     return( 
       <div>
+        <BubbleChart swipeInteractions={swipeInteractions}/>
         {this.renderPercentSwipeRight(swipeInteractions)}
         {this.renderPercentRightPerProfile(swipeInteractions, 'profileKey')}
         {this.renderPercentRightPerProfile(swipeInteractions, 'profileName')}
@@ -74,11 +68,11 @@ class InteractionsView extends Component {
   }
 
   renderPercentRightPerProfile(interactions, key){
-    const percents = this.percentRightPerProfile(interactions, key);
+    const percents = percentRightPerProfile(interactions, key);
     return <pre> {JSON.stringify(percents, null,2)} </pre>;
   }
   renderBarChart(interactions, key, title){
-    const p = this.percentRightPerProfile(interactions, key);
+    const p = percentRightPerProfile(interactions, key);
     const swipes = this.totalSwipes(interactions, key); 
     var barLabels=[]; 
     var dataPoints =[]; 
