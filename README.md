@@ -32,4 +32,14 @@ CREATE TABLE interactions (
   session jsonb,
   timestampz timestamptz
 );
+CREATE TABLE links (
+  id serial primary key,
+  email text
+  link text
+  timestampz timestamptz
+);
+CREATE TABLE whitelist (
+  id serial primary key,
+  email text,
+);
 ```
