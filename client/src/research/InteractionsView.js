@@ -23,7 +23,6 @@ class InteractionsView extends Component {
     return interactions.filter(row =>{
       if (row.interaction.type === InteractionTypes.SWIPE_RIGHT) return true;
       return false;
-
     });
   }
   onlySwipes(){
@@ -83,15 +82,13 @@ class InteractionsView extends Component {
     const swipes = this.totalSwipes(interactions, key); 
     var barLabels=[]; 
     var dataPoints =[]; 
-    var count = 0;
-    var values = [];
+    var barIndices = [];
     interactions.forEach(row =>{
       var rowKey = row.interaction.turn[key];
       if (!(barLabels.includes(rowKey))){ 
         barLabels.push(rowKey); 
-        count += 1;
-        values.push(count);
-        dataPoints.push({x: count, y: p[rowKey], totalSwipes: swipes[rowKey]}); 
+        barIndices.push(barIndices.length + 1);
+        dataPoints.push({x: barIndices.length, y: p[rowKey], totalSwipes: swipes[rowKey]}); 
       }
     });
 
@@ -104,7 +101,7 @@ class InteractionsView extends Component {
           padding={{ left: 90, top: 50, right: 90, bottom: 50 }}
         >
           <VictoryLabel text= {title} x={225} y={30} textAnchor="middle"/>
-          <VictoryAxis dependentAxis tickValues={values} tickFormat={barLabels}/>
+          <VictoryAxis dependentAxis tickValues={barIndices} tickFormat={barLabels}/>
           <VictoryAxis/>
           <VictoryGroup horizontal
             offset={1}
