@@ -74,7 +74,7 @@ class RatingsChart extends React.Component {
         padding={{ left: 90, top: 50, right: 50, bottom: 50 }}
       >
         <VictoryLabel text={chartTitle} x={225} y={30} textAnchor="middle"/>
-        <VictoryAxis dependentAxis tickValues={labels} />
+        <VictoryAxis dependentAxis tickValues={labels.map((label, index) => index + 1)} tickFormat={labels}/>
         <VictoryAxis
           tickValues={[0, .2, .4, .6, .8, 1]}
           tickFormat={t => `${Math.round(t * 100)}%`} />
@@ -96,6 +96,6 @@ RatingsChart.propTypes = {
   interactions: PropTypes.arrayOf(PropTypes.object).isRequired,
   groupingKey: PropTypes.string.isRequired,
   chartTitle: PropTypes.string.isRequired
-}
+};
 
 export default RatingsChart;
