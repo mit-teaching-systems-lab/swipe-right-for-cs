@@ -1,13 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {InteractionTypes} from '../shared/data.js';
-
-
+import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup, VictoryAxis, VictoryLabel} from 'victory'; 
+import _ from 'lodash';
 // Render a list of logged user interactions
 class InteractionsView extends Component {
-  render() {  
-    // unpack!
-    //filter out testing data
+  totalSwipes(interactions, key){
+    return _.countBy(interactions, row => row.interaction.turn[key]);
+  }
+
+  percentRightPerProfile(interactions, key){
+    const numSwipes = this.totalSwipes(interactions, key);
+    const rightSwipes = _.countBy(this.rightSwipes(interactions), row => row.interaction.turn[key]);
+    var percents = {};
+
+    for(var x in numSwipes){
+      percents[x] = rightSwipes[x]/numSwipes[x]*100;
+    }
+    return percents;
+  }
+  rightSwipes(interactions){
+    return interactions.filter(row =>{
+      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT) return true;
+      return false;
+    });
+  }
+  onlySwipes(){
     const interactions = this.props.interactions.filter(row =>{  
       if (row.session.workshopCode === 'foo') return false;
       if (row.session.workshopCode === 'demo') return false;
@@ -18,20 +36,30 @@ class InteractionsView extends Component {
       if (row.session.identifier === 'kevin') return false;
       return true;
     });
+    return interactions.filter(row=>{
+      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
+        return true;
+      }
+      return false;
+    });
+  }
+
+  render() {  
+    // unpack!
+    //filter out testing data
+    const swipeInteractions = this.onlySwipes();
     // show it!
     //render data as a filterable table
+    if (swipeInteractions.length === 0){
+      return <div> No Swipes! </div>;
+    }
     return( 
       <div>
-        {this.renderPercentSwipeRight(interactions)}
-        {this.renderPercentRightPerProfile(interactions)}
-        <table>{interactions.map(row =>{
-          return <tr key = {row.id}>
-            <td> {row.id} </td>
-            <td> {row.timestampz} </td>
-            <td> {row.interaction.type} </td>   
-            <td> {JSON.stringify(row.interaction)} </td>     
-          </tr>;
-        })}</table>
+        {this.renderPercentSwipeRight(swipeInteractions)}
+        {this.renderPercentRightPerProfile(swipeInteractions, 'profileKey')}
+        {this.renderPercentRightPerProfile(swipeInteractions, 'profileName')}
+        {this.renderBarChart(swipeInteractions, 'profileName', "Swipes Right Per Person")}
+        {this.renderBarChart(swipeInteractions, 'profileKey',"Swipes Right Per Profile")}
       </div>
     );
   }
@@ -45,27 +73,50 @@ class InteractionsView extends Component {
     return sum/interactions.length*100;
   }
 
-  renderPercentRightPerProfile(interactions){
-    var totals = {};
-    var percents = {};
+  renderPercentRightPerProfile(interactions, key){
+    const percents = this.percentRightPerProfile(interactions, key);
+    return <pre> {JSON.stringify(percents, null,2)} </pre>;
+  }
+  renderBarChart(interactions, key, title){
+    const p = this.percentRightPerProfile(interactions, key);
+    const swipes = this.totalSwipes(interactions, key); 
+    var barLabels=[]; 
+    var dataPoints =[]; 
+    var barIndices = [];
     interactions.forEach(row =>{
-      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
-        if (row.interaction.turn.profileKey in totals){
-          if (row.interaction.type === InteractionTypes.SWIPE_RIGHT) totals[row.interaction.turn.profileKey][0] += 1;
-          totals[row.interaction.turn.profileKey][1] += 1;
-        }
-        else{
-          totals[row.interaction.turn.profileKey] = [1,1];
-        }
-      }
-      for (var k in totals){
-        percents[k] = totals[k][0]/totals[k][1]*100 ;
+      var rowKey = row.interaction.turn[key];
+      if (!(barLabels.includes(rowKey))){ 
+        barLabels.push(rowKey); 
+        barIndices.push(barIndices.length + 1);
+        dataPoints.push({x: barIndices.length, y: p[rowKey], totalSwipes: swipes[rowKey]}); 
       }
     });
-    return JSON.stringify(percents);
+
+    return (
+      <div>
+        <VictoryChart
+          theme={VictoryTheme.material}
+          domain={   {x: [0, 100], y: [0, barLabels.length]}   }
+          style={{ parent: { maxWidth: "50%" } }}
+          padding={{ left: 90, top: 50, right: 90, bottom: 50 }}
+        >
+          <VictoryLabel text= {title} x={225} y={30} textAnchor="middle"/>
+          <VictoryAxis dependentAxis tickValues={barIndices} tickFormat={barLabels}/>
+          <VictoryAxis/>
+          <VictoryGroup horizontal
+            offset={1}
+            style={{ data: { width: 3 } }}
+            colorScale={["tomato", "gold"]}
+          >
+            <VictoryBar
+              data= {dataPoints}
+              labels={(data)=>(Number(data.y)).toFixed(2) + "% of " + data.totalSwipes}
+            />
+          </VictoryGroup>
+        </VictoryChart>
+      </div>
+    );
   }
-
-
 }
 InteractionsView.propTypes = {
   interactions: PropTypes.array.isRequired
