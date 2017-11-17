@@ -11,22 +11,20 @@ class InteractionsView extends Component {
 
   percentRightPerProfile(interactions, key){
     const numSwipes = this.totalSwipes(interactions, key);
-    var totals = {};
+    const rightSwipes = _.countBy(this.rightSwipes(interactions), row => row.interaction.turn[key]);
     var percents = {};
-    interactions.forEach(row =>{
-      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
-        if (!(row.interaction.turn[key] in totals)){
-          totals[row.interaction.turn[key]] = [0,numSwipes[row.interaction.turn[key]]];
-        }
-        if (row.interaction.type === InteractionTypes.SWIPE_RIGHT){ 
-          totals[row.interaction.turn[key]][0] += 1;
-        }
-      }
-    });
-    for(var k in totals){
-      percents[k] = totals[k][0]/totals[k][1]*100;
+
+    for(var x in numSwipes){
+      percents[x] = rightSwipes[x]/numSwipes[x]*100;
     }
     return percents;
+  }
+  rightSwipes(interactions){
+    return interactions.filter(row =>{
+      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT) return true;
+      return false;
+
+    });
   }
   onlySwipes(){
     const interactions = this.props.interactions.filter(row =>{  
@@ -50,19 +48,19 @@ class InteractionsView extends Component {
   render() {  
     // unpack!
     //filter out testing data
-    const interactions = this.onlySwipes();
+    const swipeInteractions = this.onlySwipes();
     // show it!
     //render data as a filterable table
-    if (interactions.length === 0){
+    if (swipeInteractions.length === 0){
       return <div> No Swipes! </div>;
     }
     return( 
       <div>
-        {this.renderPercentSwipeRight(interactions)}
-        {this.renderPercentRightPerProfile(interactions, 'profileKey')}
-        {this.renderPercentRightPerProfile(interactions, 'profileName')}
-        {this.renderBarChart(interactions, 'profileName', "Swipes Right Per Person")}
-        {this.renderBarChart(interactions, 'profileKey',"Swipes Right Per Profile")}
+        {this.renderPercentSwipeRight(swipeInteractions)}
+        {this.renderPercentRightPerProfile(swipeInteractions, 'profileKey')}
+        {this.renderPercentRightPerProfile(swipeInteractions, 'profileName')}
+        {this.renderBarChart(swipeInteractions, 'profileName', "Swipes Right Per Person")}
+        {this.renderBarChart(swipeInteractions, 'profileKey',"Swipes Right Per Profile")}
       </div>
     );
   }
@@ -83,16 +81,17 @@ class InteractionsView extends Component {
   renderBarChart(interactions, key, title){
     const p = this.percentRightPerProfile(interactions, key);
     const swipes = this.totalSwipes(interactions, key); 
-    var keys=[]; 
-    var d =[]; 
+    var barLabels=[]; 
+    var dataPoints =[]; 
     var count = 0;
     var values = [];
     interactions.forEach(row =>{
-      if (!(keys.includes(row.interaction.turn[key]))){ 
-        keys.push(row.interaction.turn[key]);
+      var rowKey = row.interaction.turn[key];
+      if (!(barLabels.includes(rowKey))){ 
+        barLabels.push(rowKey); 
         count += 1;
         values.push(count);
-        d.push({x: count, y: p[row.interaction.turn[key]], totalSwipes: swipes[row.interaction.turn[key]]}); 
+        dataPoints.push({x: count, y: p[rowKey], totalSwipes: swipes[rowKey]}); 
       }
     });
 
@@ -100,12 +99,12 @@ class InteractionsView extends Component {
       <div>
         <VictoryChart
           theme={VictoryTheme.material}
-          domain={   {x: [0, 100], y: [0, keys.length]}   }
+          domain={   {x: [0, 100], y: [0, barLabels.length]}   }
           style={{ parent: { maxWidth: "50%" } }}
           padding={{ left: 90, top: 50, right: 90, bottom: 50 }}
         >
           <VictoryLabel text= {title} x={225} y={30} textAnchor="middle"/>
-          <VictoryAxis dependentAxis tickValues={values} tickFormat={keys}/>
+          <VictoryAxis dependentAxis tickValues={values} tickFormat={barLabels}/>
           <VictoryAxis/>
           <VictoryGroup horizontal
             offset={1}
@@ -113,7 +112,7 @@ class InteractionsView extends Component {
             colorScale={["tomato", "gold"]}
           >
             <VictoryBar
-              data= {d}
+              data= {dataPoints}
               labels={(data)=>(Number(data.y)).toFixed(2) + "% of " + data.totalSwipes}
             />
           </VictoryGroup>
