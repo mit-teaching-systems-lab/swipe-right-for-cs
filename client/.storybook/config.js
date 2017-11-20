@@ -11,6 +11,7 @@ function loadStories() {
   require('../src/ThanksPhase.story.js');
   require('../src/loaders/loadDataForCohort.story.js');
   require('../src/research/InteractionsView.story.js');
+  require('../src/research/LoginPage.story.js');
   // You can require as many stories as you need.
 }
 
