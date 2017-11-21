@@ -8,6 +8,14 @@
   font-weight: bold;
 }
 
+.BiasAnalysis-sort {
+  color: darkblue;
+  text-decoration: underline;
+  display: inline-block;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
 .BiasAnalysis-legend-panel {
   flex: 1;
   padding: 20px;

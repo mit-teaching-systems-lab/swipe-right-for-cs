@@ -4,45 +4,33 @@ import __countBy from 'lodash/countBy';
 import __find from 'lodash/find';
 import __uniq from 'lodash/uniq';
 import __groupBy from 'lodash/groupBy';
+import __sortBy from 'lodash/sortBy';
 import __mapValues from 'lodash/mapValues';
 import CountChart from './CountChart';
 import PercentageChart from './PercentageChart';
 import RatingsChart from './RatingsChart';
 import Select from '../util/Select';
-import {InteractionTypes, Choices} from '../shared/data.js';
+import {Choices} from '../shared/data.js';
+import {
+  isRightSwipe,
+  isRating,
+  profileNameFromSwipe,
+  profileNameFromRating,
+  profileKeyFromSwipe,
+  profileKeyFromRating
+} from './functions.js';
 import {isSwipe} from './functions';
 import './BiasAnalysis.css';
 
-function profileNameFromSwipe(row) {
-  return row.interaction.turn.profileName;
-}
 
-function profileNameFromRating(row) {
-  return row.interaction.student.profileName;
-}
-
-function profileKeyFromSwipe(row) {
-  return row.interaction.turn.profileKey;
-}
-
-function profileKeyFromRating(row) {
-  return row.interaction.student.profileKey;
-}
-
-function isRightSwipe(row) {
-  return (row.interaction.type === InteractionTypes.SWIPE_RIGHT);
-}
-
-function isRating(row) {
-  return (row.interaction.type === InteractionTypes.STUDENT_RATING);
-}
-
-// we want:
-//  by profileKey: [{groupKey, swipeCount, swipeRightPercent, ratings: [{0: percent, 1: percent, 2: percent}]}]
-//  by profileName: [{groupKey, swipeCount, swipeRightPercent, ratings: [{0: percent, 1: percent, 2: percent}]}]
+// This computes data for slicing by an attribute like profileKey or profileName.
+// It's computed here so that sorting can be shared across views.
+//
+// The shape is:
+// [{groupKey, swipeCount, swipeRightPercent, ratings: [{0: percentage, 1: percentage, 2: percentage}]}]
 function createChartData(allInteractions, groupFns, sorter) {
-  // computeChartData(interactions, sorter, row => row.interaction.turn.profileName)
   const {swipeGroupFn, ratingGroupFn} = groupFns;
+
   // exposure and swipe percentage data
   const swipeInteractions = allInteractions.filter(isSwipe);
   const groupedSwipeInteractions = __groupBy(swipeInteractions, swipeGroupFn);
@@ -59,10 +47,9 @@ function createChartData(allInteractions, groupFns, sorter) {
   // ratings data
   const ratingsDataByKey = computeRatingsMap(allInteractions, ratingGroupFn);
 
-  // splice back together
+  // splice together into a single list
   const groupKeys = __uniq(Object.keys(ratingsDataByKey).concat(Object.keys(swipeDataByKey)));
-  const labels = groupKeys;
-  const dataPoints = groupKeys.map(groupKey => {
+  const rawDataPoints = groupKeys.map(groupKey => {
     const swipeData = swipeDataByKey[groupKey];
     const {swipeCount, swipeRightPercent} = swipeData;
     const ratings = ratingsDataByKey[groupKey];
@@ -74,9 +61,9 @@ function createChartData(allInteractions, groupFns, sorter) {
     };
   });
 
-  // sort these
-  // TODO(kr)
-
+  // sort
+  const dataPoints = __sortBy(rawDataPoints, sorter);
+  const labels = dataPoints.map(d => d.groupKey);
   return {labels, dataPoints};
 }
 
@@ -91,7 +78,7 @@ function computeRatingsMap(allInteractions, groupFn) {
       const ratingCount = ratingCountMap[ratingValue];
       const percentage = ratingCount / totalRatingsCount;
       return {
-        ratingValue,
+        ratingValue: parseInt(ratingValue, 10),
         percentage
       };
     });
@@ -99,23 +86,11 @@ function computeRatingsMap(allInteractions, groupFn) {
 }
 
 
-// function ratingsSorter(sortStrategy, unsortedDataPoints) {
-//   const sortByChoiceIndex ={
-//     'likelihood-in': '0',
-//     'likelihood-another-nudge': '2',
-//     'exposure': '1', //TODO(kr)
-//     'swipes': '1'//TODO(kr)
-//   }[sortStrategy.key];
-//   const unsortedLabels = __uniq(unsortedDataPoints.map(d => d.x));
-//   const labels = __sortBy(unsortedLabels, label => {
-//     const d = unsortedDataPoints.find(d => d.ratingValue === sortByChoiceIndex && d.x === label);
-//     return d.y;
-//   });
-//   const dataPoints = __sortBy(unsortedDataPoints, d => labels.indexOf(d.x));
-//   return {labels, dataPoints};
-// }
-
-
+const defaultSortStrategies = [
+  { key: 'swipe-percentage', fn: d => d.swipeRightPercent },
+  { key: 'exposure', fn: d => d.swipeCount },
+  { key: 'likelihood-in', fn: d => __find(d.ratings, { ratingValue: 0}).percentage }
+];
 
 
 // Shows the analysis about bias related to gender, race, ethnicity
@@ -123,33 +98,45 @@ function computeRatingsMap(allInteractions, groupFn) {
 class BiasAnalysis extends React.Component {
   constructor(props) {
     super(props);
-    this.renderForSortStrategy = this.renderForSortStrategy.bind(this);
+    this.state = {
+      sortStrategies: defaultSortStrategies,
+      sortStrategyKey: defaultSortStrategies[0].key
+    };
+    this.onSortClicked = this.onSortClicked.bind(this);
+  }
+
+  currentSorter() {
+    const {sortStrategies, sortStrategyKey} = this.state;
+    const sortStrategy = __find(sortStrategies, { key: sortStrategyKey });
+    return sortStrategy ? sortStrategy.fn : ((d, i) => i);
+  }
+
+  onSortClicked(sortStrategyKey, e) {
+    this.setState({sortStrategyKey});
+    e.preventDefault();
   }
 
   render() {
-    const sortStrategyKeys = [
-      'likelihood-in',
-      'likelihood-another-nudge'
-      // 'exposure',
-      // 'swipes'
-    ];
+    const {sortStrategyKey} = this.state;
     return (
       <div className="BiasAnalysis">
-        <Select values={sortStrategyKeys} render={this.renderForSortStrategy} />
+        {this.renderForSortStrategy(sortStrategyKey)}
       </div>
     );
   }
 
   renderForSortStrategy(sortStrategyKey) {
     const {consentedInteractions} = this.props;
+    const sorter = this.currentSorter();
     const chartDataForProfileName = createChartData(consentedInteractions, {
       swipeGroupFn: profileNameFromSwipe,
       ratingGroupFn: profileNameFromRating
-    }, sortStrategyKey);
+    }, sorter);
     const chartDataForProfileKey = createChartData(consentedInteractions, {
       swipeGroupFn: profileKeyFromSwipe,
       ratingGroupFn: profileKeyFromRating
-    }, sortStrategyKey);
+    }, sorter);
+
     return (
       <div>
         {this.renderExplanations()}
@@ -163,15 +150,24 @@ class BiasAnalysis extends React.Component {
     return (
       <div className="BiasAnalysis-compare-panel">
         <div className="BiasAnalysis-legend-panel">
-          <div className="BiasAnalysis-legend-title">Exposure</div>
+          <div className="BiasAnalysis-legend-title">
+            Exposure
+            <div className="BiasAnalysis-sort" onClick={this.onSortClicked.bind(this, 'exposure')}>sort</div>
+          </div>
           This shows the exposure to each condition.  Six profiles were mandatory, while others were only seen by early finishers.
         </div>
         <div className="BiasAnalysis-legend-panel">
-          <div className="BiasAnalysis-legend-title">Swipe right rate</div>
+          <div className="BiasAnalysis-legend-title">
+            Swipe right rate
+            <div className="BiasAnalysis-sort" onClick={this.onSortClicked.bind(this, 'swipe-percentage')}>sort</div>
+          </div>
           {'This shows the "swipe right" percentage for each person and each profile.'}
         </div>
         <div className="BiasAnalysis-legend-panel">
-          <div className="BiasAnalysis-legend-title">Likelihood to take CS</div>
+          <div className="BiasAnalysis-legend-title">
+            Likelihood to take CS
+            <div className="BiasAnalysis-sort" onClick={this.onSortClicked.bind(this, 'likelihood-in')}>sort</div>
+          </div>
           {'"How likely are they to take CS?"'}
           <div>{Choices.all().map(choice =>
             <div key={choice.choiceText} className="BiasAnalysis-likelihood-choice">

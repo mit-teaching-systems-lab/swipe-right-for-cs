@@ -81,3 +81,27 @@ export function isSwipe(row) {
 export function formatPercent(percent) {
   return Math.round(percent * 100) + '%';
 }
+
+export function profileNameFromSwipe(row) {
+  return row.interaction.turn.profileName;
+}
+
+export function profileNameFromRating(row) {
+  return row.interaction.student.profileName;
+}
+
+export function profileKeyFromSwipe(row) {
+  return row.interaction.turn.profileKey;
+}
+
+export function profileKeyFromRating(row) {
+  return row.interaction.student.profileKey;
+}
+
+export function isRightSwipe(row) {
+  return (row.interaction.type === InteractionTypes.SWIPE_RIGHT);
+}
+
+export function isRating(row) {
+  return (row.interaction.type === InteractionTypes.STUDENT_RATING);
+}
