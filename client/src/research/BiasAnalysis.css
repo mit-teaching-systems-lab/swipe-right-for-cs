@@ -8,12 +8,31 @@
   font-weight: bold;
 }
 
+.BiasAnalysis-data-sources {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px;
+  margin-right: 10px;
+}
+
+.BiasAnalysis-button {
+  display: inline-block;
+  color: darkblue;
+  text-decoration: underline;
+  padding: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  user-select: none;
+}
+
 .BiasAnalysis-sort {
   color: darkblue;
   text-decoration: underline;
   display: inline-block;
   margin-left: 15px;
   cursor: pointer;
+  user-select: none;
 }
 
 .BiasAnalysis-legend-panel {

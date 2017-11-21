@@ -1,5 +1,6 @@
 import {InteractionTypes, Session} from '../shared/data.js';
 import __values from 'lodash/values';
+import __sample from 'lodash/sample';
 
 
 //filter out testing and demo data
@@ -104,4 +105,32 @@ export function isRightSwipe(row) {
 
 export function isRating(row) {
   return (row.interaction.type === InteractionTypes.STUDENT_RATING);
+}
+
+export function simulatedSwipe(row) {
+  const types = [
+    InteractionTypes.SWIPE_RIGHT,
+    InteractionTypes.SWIPE_LEFT
+  ];
+  return {
+    ...row,
+    interaction: {
+      ...row.interaction,
+      type: __sample(types)
+    }
+  };
+}
+
+export function simulatedRating(row) {
+  const {choices} = row.interaction;
+  const choiceText = __sample(choices);
+  const choiceIndex = choices.indexOf(choiceText);
+  return {
+    ...row,
+    interaction: {
+      ...row.interaction,
+      choiceText,
+      choiceIndex
+    }
+  };
 }

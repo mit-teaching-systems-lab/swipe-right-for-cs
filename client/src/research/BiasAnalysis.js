@@ -6,10 +6,10 @@ import __uniq from 'lodash/uniq';
 import __groupBy from 'lodash/groupBy';
 import __sortBy from 'lodash/sortBy';
 import __mapValues from 'lodash/mapValues';
+import __memoize from 'lodash/memoize';
 import CountChart from './CountChart';
 import PercentageChart from './PercentageChart';
 import RatingsChart from './RatingsChart';
-import Select from '../util/Select';
 import {Choices} from '../shared/data.js';
 import {
   isRightSwipe,
@@ -17,7 +17,9 @@ import {
   profileNameFromSwipe,
   profileNameFromRating,
   profileKeyFromSwipe,
-  profileKeyFromRating
+  profileKeyFromRating,
+  simulatedSwipe,
+  simulatedRating
 } from './functions.js';
 import {isSwipe} from './functions';
 import './BiasAnalysis.css';
@@ -25,10 +27,11 @@ import './BiasAnalysis.css';
 
 // This computes data for slicing by an attribute like profileKey or profileName.
 // It's computed here so that sorting can be shared across views.
+// It also supports simulating each data.
 //
 // The shape is:
 // [{groupKey, swipeCount, swipeRightPercent, ratings: [{0: percentage, 1: percentage, 2: percentage}]}]
-function createChartData(allInteractions, groupFns, sorter) {
+function createChartData(allInteractions, groupFns, sorter, options = {}) {
   const {swipeGroupFn, ratingGroupFn} = groupFns;
 
   // exposure and swipe percentage data
@@ -45,7 +48,7 @@ function createChartData(allInteractions, groupFns, sorter) {
   });
 
   // ratings data
-  const ratingsDataByKey = computeRatingsMap(allInteractions, ratingGroupFn);
+  const ratingsDataByKey = computeRatingsMap(allInteractions, ratingGroupFn, options);
 
   // splice together into a single list
   const groupKeys = __uniq(Object.keys(ratingsDataByKey).concat(Object.keys(swipeDataByKey)));
@@ -69,7 +72,7 @@ function createChartData(allInteractions, groupFns, sorter) {
 
 
 // Returns {groupKey: [{ratingValue, percentage}]
-function computeRatingsMap(allInteractions, groupFn) {
+function computeRatingsMap(allInteractions, groupFn, options = {}) {
   const ratingInteractions = allInteractions.filter(isRating);
   return __mapValues(__groupBy(ratingInteractions, groupFn), interactions => {
     const totalRatingsCount = interactions.length;
@@ -93,22 +96,41 @@ const defaultSortStrategies = [
 ];
 
 
+function simulatedInteractionsForSeed(simulateSeed, interactions) {
+  console.log('simulateSeed', simulateSeed);
+  if (simulateSeed === null) return interactions;
+  return interactions.map(row => {
+    if (isSwipe(row)) return simulatedSwipe(row);
+    if (isRating(row)) return simulatedRating(row);
+    return row;
+  });
+}
+
 // Shows the analysis about bias related to gender, race, ethnicity
 // for swiping and for expectations about taking CS.
 class BiasAnalysis extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      simulateSeed: Math.random(),
       sortStrategies: defaultSortStrategies,
       sortStrategyKey: defaultSortStrategies[0].key
     };
     this.onSortClicked = this.onSortClicked.bind(this);
+    this.simulatedInteractionsForSeed = __memoize(simulatedInteractionsForSeed);
   }
 
   currentSorter() {
     const {sortStrategies, sortStrategyKey} = this.state;
     const sortStrategy = __find(sortStrategies, { key: sortStrategyKey });
     return sortStrategy ? sortStrategy.fn : ((d, i) => i);
+  }
+
+  // Allows simulating interactions as a way to feel "noise" in the data
+  interactions() {
+    const {consentedInteractions} = this.props;
+    const {simulateSeed} = this.state;
+    return this.simulatedInteractionsForSeed(simulateSeed, consentedInteractions);
   }
 
   onSortClicked(sortStrategyKey, e) {
@@ -126,22 +148,33 @@ class BiasAnalysis extends React.Component {
   }
 
   renderForSortStrategy(sortStrategyKey) {
-    const {consentedInteractions} = this.props;
+    const interactions = this.interactions();
     const sorter = this.currentSorter();
-    const chartDataForProfileName = createChartData(consentedInteractions, {
+    const chartDataForProfileName = createChartData(interactions, {
       swipeGroupFn: profileNameFromSwipe,
       ratingGroupFn: profileNameFromRating
     }, sorter);
-    const chartDataForProfileKey = createChartData(consentedInteractions, {
+    const chartDataForProfileKey = createChartData(interactions, {
       swipeGroupFn: profileKeyFromSwipe,
       ratingGroupFn: profileKeyFromRating
     }, sorter);
 
     return (
       <div>
+        {this.renderSimulationPanel()}
         {this.renderExplanations()}
         {this.renderPanelFor('Name', chartDataForProfileName)}
         {this.renderPanelFor('Profile', chartDataForProfileKey)}
+      </div>
+    );
+  }
+
+  renderSimulationPanel() {
+    return (
+      <div>
+        <div className="BiasAnalysis-data-sources">Data</div>
+        <div className="BiasAnalysis-button" onClick={() => this.setState({simulateSeed: Math.random()})}>simulate!</div>
+        <div className="BiasAnalysis-button" onClick={() => this.setState({simulateSeed: null})}>real data please!</div>
       </div>
     );
   }
