@@ -4,8 +4,9 @@ import './Swipeable.css';
 import PropTypes from 'prop-types';
 import Bounceable from './Bounceable.js';
 import SwipeableViews from 'react-swipeable-views';
-import {bindKeyboard} from 'react-swipeable-views-utils';
-const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
+import keycode from 'keycode';
+import EventListener from 'react-event-listener';
+
 
 const styles = {
   fullSize: {
@@ -25,6 +26,7 @@ class Swipeable extends Component {
     };
     this.onChangeIndex = this.onChangeIndex.bind(this);
     this.onTransitionEnd = this.onTransitionEnd.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
   onChangeIndex(index) {
@@ -36,6 +38,17 @@ class Swipeable extends Component {
     const {onSwipeLeft, onSwipeRight} = this.props;
     if (onSwipeRight && swipeIndex === 0) return onSwipeRight();
     if (swipeIndex === 2) return onSwipeLeft();
+  }
+
+  // This changes the state, which triggers render and that
+  // leads to the animated transition, which triggers onTransitionEnd.
+  onKeyDown(event) {
+    const {swipeIndex} = this.state;
+    if (swipeIndex !== 1) return;
+
+    const keyName = keycode(event);
+    if (keyName === 'left') return this.onChangeIndex(2);
+    if (keyName === 'right') return this.onChangeIndex(0);
   }
 
   render() {
@@ -68,18 +81,20 @@ class Swipeable extends Component {
       onSwipeLeft && <div key="right" className="Swipeable-right">&nbsp;</div>
     ]);
     return (
-      <BindKeyboardSwipeableViews
-        resistance={true}
-        className="Swipeable-views"
-        enableMouseEvents={true}
-        springConfig={springConfig}
-        slideStyle={styles.fullSize} 
-        containerStyle={styles.fullSize}
-        index={swipeIndex}
-        onChangeIndex={this.onChangeIndex}
-        onTransitionEnd={this.onTransitionEnd}>
-        {elements}
-      </BindKeyboardSwipeableViews>
+      <EventListener target="window" onKeyDown={this.onKeyDown}>
+        <SwipeableViews
+          resistance={true}
+          className="Swipeable-views"
+          enableMouseEvents={true}
+          springConfig={springConfig}
+          slideStyle={styles.fullSize} 
+          containerStyle={styles.fullSize}
+          index={swipeIndex}
+          onChangeIndex={this.onChangeIndex}
+          onTransitionEnd={this.onTransitionEnd}>
+          {elements}
+        </SwipeableViews>
+      </EventListener>
     );
   }
 }
