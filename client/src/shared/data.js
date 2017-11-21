@@ -118,14 +118,44 @@ const Session = {
 
     return params;
   },
-  isUnknownEmail(session) {
-    return (session.email === Session.unknownEmail());
-  },
   unknownEmail() {
     return 'unknown@mit.edu';
   },
   unknownIdentifier() {
     return 'UNKNOWN_IDENTIFIER';
+  },
+  identifier(session) {
+    return session.identifier;
+  },
+  workshopCode(session) {
+    return session.workshopCode;
+  },
+  isUnknownEmail(session) {
+    return (session.email === Session.unknownEmail());
+  },
+  isUnknownIdentifier(identifier) {
+    return (identifier === Session.unknownIdentifier());
+  },
+  isBlankIdentifier(identifier) {
+    if (identifier === undefined) return true;
+    if (identifier === null) return true;
+    if (identifier === '') return true;
+    return false;
+  },
+  isDeveloperIdentifier(identifier) {
+    return (identifier === 'kevin');
+  }
+};
+
+
+// Describe choices in rating
+const Choices ={
+  all() {
+    return [
+      { choiceIndex: 0, choiceText: "They're in" },
+      { choiceIndex: 1, choiceText: "They need one more nudge" },
+      { choiceIndex: 2, choiceText: "I didn't get there yet" }
+    ];
   }
 };
 
@@ -171,6 +201,7 @@ module.exports = { // eslint-disable-line no-undef
   Interactions,
   Session,
   Log,
+  Choices,
   hashCode,
   sha,
   consistentShuffleForKey

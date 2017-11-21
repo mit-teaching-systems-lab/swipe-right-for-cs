@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  className="BiasAnalysis"
+>
+  <div>
+    <div>
+      <div
+        className="BiasAnalysis-data-sources"
+      >
+        Data
+      </div>
+      <div
+        className="BiasAnalysis-button"
+        onClick={[Function]}
+      >
+        simulate!
+      </div>
+      <div
+        className="BiasAnalysis-button"
+        onClick={[Function]}
+      >
+        real data please!
+      </div>
+    </div>
+    <div
+      className="BiasAnalysis-compare-panel"
+    >
+      <div
+        className="BiasAnalysis-legend-panel"
+      >
+        <div
+          className="BiasAnalysis-legend-title"
+        >
+          Exposure
+          <div
+            className="BiasAnalysis-button"
+            onClick={[Function]}
+          >
+            sort
+          </div>
+        </div>
+        This shows the exposure to each condition.  Six profiles were mandatory, while others were only seen by early finishers.
+      </div>
+      <div
+        className="BiasAnalysis-legend-panel"
+      >
+        <div
+          className="BiasAnalysis-legend-title"
+        >
+          Swipe right rate
+          <div
+            className="BiasAnalysis-button"
+            onClick={[Function]}
+          >
+            sort
+          </div>
+        </div>
+        This shows the "swipe right" percentage for each person and each profile.
+      </div>
+      <div
+        className="BiasAnalysis-legend-panel"
+      >
+        <div
+          className="BiasAnalysis-legend-title"
+        >
+          Likelihood to take CS
+          <div
+            className="BiasAnalysis-button"
+            onClick={[Function]}
+          >
+            sort
+          </div>
+        </div>
+        "How likely are they to take CS?"
+        <div>
+          <div
+            className="BiasAnalysis-likelihood-choice"
+          >
+            0
+            : 
+            They're in
+          </div>
+          <div
+            className="BiasAnalysis-likelihood-choice"
+          >
+            1
+            : 
+            They need one more nudge
+          </div>
+          <div
+            className="BiasAnalysis-likelihood-choice"
+          >
+            2
+            : 
+            I didn't get there yet
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      No data points!
+    </div>
+    <div>
+      No data points!
+    </div>
+  </div>
+</div>
+`;
