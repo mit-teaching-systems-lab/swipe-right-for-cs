@@ -10,7 +10,12 @@ class RawInteractionsTable extends React.Component {
     const {interactions} = this.props;
     const marginRight = 10;
     return (
-      <div style={{marginRight, border: '1px solid #eee'}}>
+      <div style={{
+        marginRight,
+        marginBottom: 100,
+        border: '1px solid #eee',
+        fontSize: 10
+      }}>
         <AutoSizer disableHeight>
           {({width}) => (
             <Table

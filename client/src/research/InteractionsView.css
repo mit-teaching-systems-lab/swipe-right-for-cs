@@ -3,7 +3,7 @@
   margin: 10px;
 }
 
-.InteractionsView-compare-panel {
-  display: flex;
-  flex-direction: row;
+.InteractionView-analysis {
+  margin: 20px;
+  margin-bottom: 100px;
 }

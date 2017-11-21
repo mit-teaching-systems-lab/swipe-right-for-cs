@@ -1,0 +1,20 @@
+.BiasAnalysis-compare-panel {
+  display: flex;
+  flex-direction: row;
+}
+
+.BiasAnalysis-legend-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.BiasAnalysis-legend-panel {
+  flex: 1;
+  padding: 20px;
+  padding-bottom: 0;
+  font-size: 14px;
+}
+
+.BiasAnalysis-likelihood-choice {
+  margin-left: 10px;
+}
