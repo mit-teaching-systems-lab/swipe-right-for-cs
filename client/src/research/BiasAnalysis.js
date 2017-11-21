@@ -97,7 +97,6 @@ const defaultSortStrategies = [
 
 
 function simulatedInteractionsForSeed(simulateSeed, interactions) {
-  console.log('simulateSeed', simulateSeed);
   if (simulateSeed === null) return interactions;
   return interactions.map(row => {
     if (isSwipe(row)) return simulatedSwipe(row);
@@ -117,7 +116,9 @@ class BiasAnalysis extends React.Component {
       sortStrategyKey: defaultSortStrategies[0].key
     };
     this.onSortClicked = this.onSortClicked.bind(this);
-    this.simulatedInteractionsForSeed = __memoize(simulatedInteractionsForSeed);
+    this.onSimulateClicked = this.onSimulateClicked.bind(this);
+    this.onRealDataClicked = this.onRealDataClicked.bind(this);
+    this.simulatedInteractionsForSeed = __memoize(simulatedInteractionsForSeed); // memoizing keeps randomization consistent
   }
 
   currentSorter() {
@@ -130,12 +131,20 @@ class BiasAnalysis extends React.Component {
   interactions() {
     const {consentedInteractions} = this.props;
     const {simulateSeed} = this.state;
-    return this.simulatedInteractionsForSeed(simulateSeed, consentedInteractions);
+    return this.simulatedInteractionsForSeed(simulateSeed, consentedInteractions); // memoized for seed only
   }
 
   onSortClicked(sortStrategyKey, e) {
     this.setState({sortStrategyKey});
     e.preventDefault();
+  }
+
+  onSimulateClicked() {
+    this.setState({ simulateSeed: Math.random() });
+  }
+
+  onRealDataClicked() {
+    this.setState({ simulateSeed: null });
   }
 
   render() {
@@ -173,8 +182,8 @@ class BiasAnalysis extends React.Component {
     return (
       <div>
         <div className="BiasAnalysis-data-sources">Data</div>
-        <div className="BiasAnalysis-button" onClick={() => this.setState({simulateSeed: Math.random()})}>simulate!</div>
-        <div className="BiasAnalysis-button" onClick={() => this.setState({simulateSeed: null})}>real data please!</div>
+        <div className="BiasAnalysis-button" onClick={this.onSimulateClicked}>simulate!</div>
+        <div className="BiasAnalysis-button" onClick={this.onRealDataClicked}>real data please!</div>
       </div>
     );
   }
@@ -185,21 +194,21 @@ class BiasAnalysis extends React.Component {
         <div className="BiasAnalysis-legend-panel">
           <div className="BiasAnalysis-legend-title">
             Exposure
-            <div className="BiasAnalysis-sort" onClick={this.onSortClicked.bind(this, 'exposure')}>sort</div>
+            <div className="BiasAnalysis-button" onClick={this.onSortClicked.bind(this, 'exposure')}>sort</div>
           </div>
           This shows the exposure to each condition.  Six profiles were mandatory, while others were only seen by early finishers.
         </div>
         <div className="BiasAnalysis-legend-panel">
           <div className="BiasAnalysis-legend-title">
             Swipe right rate
-            <div className="BiasAnalysis-sort" onClick={this.onSortClicked.bind(this, 'swipe-percentage')}>sort</div>
+            <div className="BiasAnalysis-button" onClick={this.onSortClicked.bind(this, 'swipe-percentage')}>sort</div>
           </div>
           {'This shows the "swipe right" percentage for each person and each profile.'}
         </div>
         <div className="BiasAnalysis-legend-panel">
           <div className="BiasAnalysis-legend-title">
             Likelihood to take CS
-            <div className="BiasAnalysis-sort" onClick={this.onSortClicked.bind(this, 'likelihood-in')}>sort</div>
+            <div className="BiasAnalysis-button" onClick={this.onSortClicked.bind(this, 'likelihood-in')}>sort</div>
           </div>
           {'"How likely are they to take CS?"'}
           <div>{Choices.all().map(choice =>
@@ -214,6 +223,9 @@ class BiasAnalysis extends React.Component {
 
   renderPanelFor(caption, chartDataForProfileName) {
     const {labels, dataPoints} = chartDataForProfileName;
+    if (dataPoints.length === 0) return <div>No data points!</div>;
+
+    // Compute
     const exposureMap = {};
     const percentageMap = {};
     labels.forEach(label => {

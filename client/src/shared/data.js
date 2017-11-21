@@ -147,6 +147,8 @@ const Session = {
   }
 };
 
+
+// Describe choices in rating
 const Choices ={
   all() {
     return [
