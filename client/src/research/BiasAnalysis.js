@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import __countBy from 'lodash/countBy';
-import __sortBy from 'lodash/sortBy';
 import __find from 'lodash/find';
 import __uniq from 'lodash/uniq';
 import __groupBy from 'lodash/groupBy';

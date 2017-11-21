@@ -26,7 +26,9 @@ class InteractionsView extends Component {
         
         <h1>What evidence do we see of bias?</h1>
         <div className="InteractionView-analysis">
-          <BiasAnalysis consentedInteractions={consentedCodeOrgInteractions} />
+          {consentedCodeOrgInteractions.length > 0
+            ? <BiasAnalysis consentedInteractions={consentedCodeOrgInteractions} />
+            : 'No swipes!'}
         </div>
         
         <h1>What does the raw data look like?</h1>

@@ -59,7 +59,7 @@ export function didConsentMap(interactions) {
 export function consentRateFor(interactions) {
   const consentMap = didConsentMap(interactions);
   const consentValues = __values(consentMap);
-  return consentValues.reduce((sum, n) => sum + (n ? 1 : 0)) / consentValues.length;
+  return consentValues.reduce((sum, n) => sum + (n ? 1 : 0), 0) / consentValues.length;
 }
 
 export function onlyConsentedInteractions(interactions) {
