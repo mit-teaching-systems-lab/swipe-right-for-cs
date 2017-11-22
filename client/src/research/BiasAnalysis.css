@@ -1,0 +1,38 @@
+.BiasAnalysis-compare-panel {
+  display: flex;
+  flex-direction: row;
+}
+
+.BiasAnalysis-legend-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.BiasAnalysis-data-sources {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px;
+  margin-right: 10px;
+}
+
+.BiasAnalysis-button {
+  display: inline-block;
+  color: darkblue;
+  text-decoration: underline;
+  padding: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  user-select: none;
+}
+
+.BiasAnalysis-legend-panel {
+  flex: 1;
+  padding: 20px;
+  padding-bottom: 0;
+  font-size: 14px;
+}
+
+.BiasAnalysis-likelihood-choice {
+  margin-left: 10px;
+}
