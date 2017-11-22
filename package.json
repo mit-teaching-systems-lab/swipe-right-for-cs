@@ -10,7 +10,7 @@
     "start": "yarn run dev",
     "test": "yarn run lint && yarn run jest && cd client && yarn run test",
     "heroku-postbuild": "cd client && yarn run build",
-    "dev": "concurrently \"NODE_ENV=development yarn run server-dev\" \"yarn run client\" \"yarn run storybook\"",
+    "dev": "concurrently \"yarn run server-dev\" \"yarn run client\" \"yarn run storybook\"",
     "server": "node server/index.js",
     "server-dev": "NODE_ENV=development DATABASE_URL=http://localhost:5432/swipe-right-db yarn run server",
     "client": "cd client && yarn run start",

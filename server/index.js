@@ -52,8 +52,8 @@ app.get('/api/peers/:workshopCode', peerResponsesEndpoint.bind(null, pool));
 app.post('/api/share', limiter, emailMyResponsesEndpoint.bind(null, config.mailgunEnv));
 
 // Endpoints for researcher login
-app.post('/api/research/login', limiter, loginEndpoint);
-app.post('/api/research/email', limiter, emailLinkEndpoint);
+app.post('/api/research/login', limiter, loginEndpoint.bind(null, pool, config.mailgunEnv));
+app.post('/api/research/email', limiter, emailLinkEndpoint.bind(null, config.mailgunEnv));
 
 // Endpoints for authenticated researchers to access data
 app.get('/api/research/interactions', onlyAllowResearchers, interactionsEndpoint.bind(null, pool));
