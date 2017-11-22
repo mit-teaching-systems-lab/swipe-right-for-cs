@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const uuid = require('uuid');
 const qs = require('querystring');
 const crypto = require('crypto');
@@ -37,11 +39,8 @@ function onlyAllowResearchers(request, response, next) {
 
   if (process.env.NODE_ENV === 'development') return next();
 
-  // if (request.headers['token'] == '????'){
-  //   return next();
-  // }
-  const token = req.header['token'];
-  const email = req.header['email'];
+  const token = req.body['token'];
+  const email = req.body['email'];
   const now = new Date();
 
   // Check if link is in links DB
@@ -59,7 +58,6 @@ function onlyAllowResearchers(request, response, next) {
     console.log({ error: err });
   });
 
-  //TODO: store result somehow
   const resultFound = true;
   if (resultFound) {
     return  next();
@@ -72,7 +70,6 @@ function sha(value) {
 }
 
 function insertLink(pool, email, domain) {
-  console.log('4. insertLink called');
   const linkToken = uuid.v4();
   //TODO: what should link look like???
   const link = `${domain}/review_link?${qs.stringify({linkToken})}`;
@@ -90,71 +87,73 @@ function insertLink(pool, email, domain) {
   }
 
   function emailLink(mailgunEnv, email, link) {
-    // Email link to user
-    console.log('7. sending link to ' + sha(email));
-    //Not sure how to use existing email architecture.
-    //Looking at endpoints.js: emailMyresponsesEndpoint->sendEmails.js: sendResponsesEmail->email.js: sendEmail
-    //This is based on old threeflows code and current swipe right code
-    // const html = renderEmail({link});
-    const html = '<html><head><title>Page Title</title></head><body><h1>This is a Heading</h1><p>This is a paragraph.</p></body></html>';
+    const linkText = link;
+    const loginlinkFilename = path.join(__dirname,'game/emails/loginlink.html.mustache');
+    const html = renderEmail(loginlinkFilename,{linkText});
+    fs.writeFileSync('/Users/keving17/Documents/Github/TSL/swipe-right-for-cs/server/test.html',html);
     const info = {
       toEmail: email,
       fromEmail: 'swipe-right-bot@tsl.mit.edu',
       subject: 'Swipe Right for CS: Login Link'
     };
-    // TODO: figure out emails later
-    // sendEmail(mailgunEnv, info, html, (err, res) => {
-    //   if (err) {
-    //     console.log("Mailgun request (err):\n  " + JSON.stringify(err, null, 2));
-    //   }
-    //   console.log("Mailgun returned:\n  " + JSON.stringify(res, null, 2));
-    // });
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('No emailing in development mode. Go to the following link to move forward.');
+      console.log(link);
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+      sendEmail(mailgunEnv, info, html, (err, mailgunResponse) => {
+        if (err) {
+          console.log("Mailgun request (err):\n  " + JSON.stringify(err, null, 2));
+          return reject(err);
+        }
+        console.log("Mailgun returned:\n  " + JSON.stringify(mailgunResponse, null, 2));
+        return resolve();   
+      });
+    });
   }
 
-function loginEndpoint(pool, mailgunEnv, req, res){
-  //This generates link AND sends email???
-
+function loginEndpoint(pool, mailgunEnv, request, response){
   // TODO:
   // 1. Check that the email is in the whitelist in the `researchers` database table
   // 2. Insert a new record to the `links` database table
   // 3. Send an email to the researcher with that link in it (generate email with Mustache template, send it with Mailgun)
   // 4. Return a 200 response
 
-  console.log('1. loginEndpoint function called');
-  // const email = req.body['email'];
-    const email = 'keving17@mit.edu';
+  const email = request.body['email'];
+  const pass = request.body['pass'];
 
-
-  // Check if email is on whitelist
-  const whitelistSQL = 'SELECT * FROM whitelist WHERE email=$1 ORDER BY id ASC LIMIT 1';
-  const whitelistValues = [email];
-  pool.query(whitelistSQL, whitelistValues)
-  // const link = null;
-  .then(results => {
-    // console.log('results:' + results);
-      console.log('2. matches found: ' + results.rowCount);
-      if (results.rowCount == "0") {
-        console.log('not authorized');
+  isOnWhitelist(pool, email, pass)
+    .then(isNotAuthorized => {
+      if (isNotAuthorized) {
+        return response.status(405).end();
       } else {
-        console.log('3. authorized');
-        return insertLink(pool,email, getDomain(req));
+        const domain = getDomain(request);
+        return createLinkAndEmail(pool, mailgunEnv, email, domain)
+          .then(result => response.status(200).end());
       }
-  })
-  .then(link => {
-    console.log('5. returned link: '+link);
-    return new Promise(function(resolve, reject) {
-      //This seems to be called before previous operation is complete....
-      // variable link is always undefined
-      console.log('6. final promise');
-      emailLink(mailgunEnv, email, link);
+    })
+    .catch(err => {
+      console.log('loginEndpoint returned error');
+      console.log({ error: err });
+      response.status(500).end();
     });
-  })
-  .catch(err => {
-    console.log('loginEndpoint returned error');
-    console.log({ error: err });
-  });
+}
 
-  //Should probably do something about returning status?
+function isOnWhitelist(pool, email, pass){
+  const whitelistSQL = 'SELECT * FROM whitelist WHERE email=$1 AND pass=$2 ORDER BY id ASC LIMIT 1';
+  const whitelistValues = [email, pass];
+  return pool.query(whitelistSQL, whitelistValues)
+    .then(results => Promise.resolve(results.rowCount === 0));
+}
+
+function createLinkAndEmail(pool, mailgunEnv, email, domain) {
+  return insertLink(pool,email, domain)
+    .then(link => {
+      return emailLink(mailgunEnv, email, link);
+    })
 }
 
 function emailLinkEndpoint(mailgunEnv, req, res){
