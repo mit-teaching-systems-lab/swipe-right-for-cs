@@ -1,0 +1,996 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  className="VictoryContainer"
+  style={
+    Object {
+      "height": "100%",
+      "pointerEvents": "none",
+      "position": "relative",
+      "touchAction": "none",
+      "userSelect": "none",
+      "width": "100%",
+    }
+  }
+>
+  <svg
+    aria-labelledby="victory-container-1-title victory-container-1-desc"
+    height={350}
+    role="img"
+    style={
+      Object {
+        "height": "100%",
+        "pointerEvents": "all",
+        "width": "100%",
+      }
+    }
+    viewBox="0 0 350 350"
+    width={350}
+  >
+    <text
+      className={undefined}
+      dx={0}
+      dy={4.97}
+      transform={undefined}
+      x={225}
+      y={30}
+    >
+      <tspan
+        dx={0}
+        dy={undefined}
+        style={
+          Object {
+            "fill": "#252525",
+            "fontFamily": "'Gill Sans', 'Gill Sans MT', 'Ser­avek', 'Trebuchet MS', sans-serif",
+            "fontSize": 14,
+            "parent": Object {
+              "height": "100%",
+              "userSelect": "none",
+              "width": "100%",
+            },
+            "stroke": "transparent",
+          }
+        }
+        textAnchor="middle"
+        x={225}
+      >
+        Percentage chart
+      </tspan>
+    </text>
+    <g
+      role="presentation"
+    >
+      <line
+        className={undefined}
+        role="presentation"
+        shapeRendering="auto"
+        style={
+          Object {
+            "fill": "transparent",
+            "stroke": "#90A4AE",
+            "strokeLinecap": "round",
+            "strokeLinejoin": "round",
+            "strokeWidth": 2,
+          }
+        }
+        vectorEffect="non-scaling-stroke"
+        x1={90}
+        x2={90}
+        y1={50}
+        y2={300}
+      />
+      <g
+        role="presentation"
+      >
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "none",
+              "pointerEvents": "visible",
+              "stroke": "#ECEFF1",
+              "strokeDasharray": "10, 5",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={90}
+          x2={260}
+          y1={216.66666666666669}
+          y2={216.66666666666669}
+        />
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "transparent",
+              "size": 5,
+              "stroke": "#90A4AE",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+              "strokeWidth": 1,
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={90}
+          x2={85}
+          y1={216.66666666666669}
+          y2={216.66666666666669}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={4.26}
+          transform={undefined}
+          x={77}
+          y={216.66666666666669}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="end"
+            x={77}
+          >
+            kevin
+          </tspan>
+        </text>
+      </g>
+      <g
+        role="presentation"
+      >
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "none",
+              "pointerEvents": "visible",
+              "stroke": "#ECEFF1",
+              "strokeDasharray": "10, 5",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={90}
+          x2={260}
+          y1={133.33333333333334}
+          y2={133.33333333333334}
+        />
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "transparent",
+              "size": 5,
+              "stroke": "#90A4AE",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+              "strokeWidth": 1,
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={90}
+          x2={85}
+          y1={133.33333333333334}
+          y2={133.33333333333334}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={4.26}
+          transform={undefined}
+          x={77}
+          y={133.33333333333334}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="end"
+            x={77}
+          >
+            gabby
+          </tspan>
+        </text>
+      </g>
+      <g
+        role="presentation"
+      >
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "none",
+              "pointerEvents": "visible",
+              "stroke": "#ECEFF1",
+              "strokeDasharray": "10, 5",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={90}
+          x2={260}
+          y1={50}
+          y2={50}
+        />
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "transparent",
+              "size": 5,
+              "stroke": "#90A4AE",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+              "strokeWidth": 1,
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={90}
+          x2={85}
+          y1={50}
+          y2={50}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={4.26}
+          transform={undefined}
+          x={77}
+          y={50}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="end"
+            x={77}
+          >
+            brook
+          </tspan>
+        </text>
+      </g>
+    </g>
+    <g
+      role="presentation"
+    >
+      <line
+        className={undefined}
+        role="presentation"
+        shapeRendering="auto"
+        style={
+          Object {
+            "fill": "transparent",
+            "stroke": "#90A4AE",
+            "strokeLinecap": "round",
+            "strokeLinejoin": "round",
+            "strokeWidth": 2,
+          }
+        }
+        vectorEffect="non-scaling-stroke"
+        x1={90}
+        x2={260}
+        y1={300}
+        y2={300}
+      />
+      <g
+        role="presentation"
+      >
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "none",
+              "pointerEvents": "visible",
+              "stroke": "#ECEFF1",
+              "strokeDasharray": "10, 5",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={90}
+          x2={90}
+          y1={300}
+          y2={50}
+        />
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "transparent",
+              "size": 5,
+              "stroke": "#90A4AE",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+              "strokeWidth": 1,
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={90}
+          x2={90}
+          y1={300}
+          y2={305}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={10.26}
+          transform={undefined}
+          x={90}
+          y={313}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="middle"
+            x={90}
+          >
+            0%
+          </tspan>
+        </text>
+      </g>
+      <g
+        role="presentation"
+      >
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "none",
+              "pointerEvents": "visible",
+              "stroke": "#ECEFF1",
+              "strokeDasharray": "10, 5",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={124}
+          x2={124}
+          y1={300}
+          y2={50}
+        />
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "transparent",
+              "size": 5,
+              "stroke": "#90A4AE",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+              "strokeWidth": 1,
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={124}
+          x2={124}
+          y1={300}
+          y2={305}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={10.26}
+          transform={undefined}
+          x={124}
+          y={313}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="middle"
+            x={124}
+          >
+            20%
+          </tspan>
+        </text>
+      </g>
+      <g
+        role="presentation"
+      >
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "none",
+              "pointerEvents": "visible",
+              "stroke": "#ECEFF1",
+              "strokeDasharray": "10, 5",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={158}
+          x2={158}
+          y1={300}
+          y2={50}
+        />
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "transparent",
+              "size": 5,
+              "stroke": "#90A4AE",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+              "strokeWidth": 1,
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={158}
+          x2={158}
+          y1={300}
+          y2={305}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={10.26}
+          transform={undefined}
+          x={158}
+          y={313}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="middle"
+            x={158}
+          >
+            40%
+          </tspan>
+        </text>
+      </g>
+      <g
+        role="presentation"
+      >
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "none",
+              "pointerEvents": "visible",
+              "stroke": "#ECEFF1",
+              "strokeDasharray": "10, 5",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={192}
+          x2={192}
+          y1={300}
+          y2={50}
+        />
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "transparent",
+              "size": 5,
+              "stroke": "#90A4AE",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+              "strokeWidth": 1,
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={192}
+          x2={192}
+          y1={300}
+          y2={305}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={10.26}
+          transform={undefined}
+          x={192}
+          y={313}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="middle"
+            x={192}
+          >
+            60%
+          </tspan>
+        </text>
+      </g>
+      <g
+        role="presentation"
+      >
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "none",
+              "pointerEvents": "visible",
+              "stroke": "#ECEFF1",
+              "strokeDasharray": "10, 5",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={226}
+          x2={226}
+          y1={300}
+          y2={50}
+        />
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "transparent",
+              "size": 5,
+              "stroke": "#90A4AE",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+              "strokeWidth": 1,
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={226}
+          x2={226}
+          y1={300}
+          y2={305}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={10.26}
+          transform={undefined}
+          x={226}
+          y={313}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="middle"
+            x={226}
+          >
+            80%
+          </tspan>
+        </text>
+      </g>
+      <g
+        role="presentation"
+      >
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "none",
+              "pointerEvents": "visible",
+              "stroke": "#ECEFF1",
+              "strokeDasharray": "10, 5",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={260}
+          x2={260}
+          y1={300}
+          y2={50}
+        />
+        <line
+          className={undefined}
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "fill": "transparent",
+              "size": 5,
+              "stroke": "#90A4AE",
+              "strokeLinecap": "round",
+              "strokeLinejoin": "round",
+              "strokeWidth": 1,
+            }
+          }
+          vectorEffect="non-scaling-stroke"
+          x1={260}
+          x2={260}
+          y1={300}
+          y2={305}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={10.26}
+          transform={undefined}
+          x={260}
+          y={313}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="middle"
+            x={260}
+          >
+            100%
+          </tspan>
+        </text>
+      </g>
+    </g>
+    <g>
+      <g
+        role="presentation"
+      >
+        <path
+          className={undefined}
+          d="M 90, 307
+              L 90, 293
+              L 90, 293
+              A 0 0 0 0 0, 90, 293
+              L 90, 307
+              A 0 0 0 0 0, 90, 307
+              L 90, 307
+              z"
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "_x1": 0,
+              "fill": "tomato",
+              "padding": 8,
+              "stroke": "tomato",
+              "strokeWidth": 0,
+              "width": 14,
+            }
+          }
+          transform={undefined}
+        />
+        <path
+          className={undefined}
+          d="M 90, 223.66666666666669
+              L 90, 209.66666666666669
+              L 110.4, 209.66666666666669
+              A 0 0 0 0 1, 110.4, 209.66666666666669
+              L 110.4, 223.66666666666669
+              A 0 0 0 0 1, 110.4, 223.66666666666669
+              L 90, 223.66666666666669
+              z"
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "_x1": 1,
+              "fill": "tomato",
+              "padding": 8,
+              "stroke": "tomato",
+              "strokeWidth": 0,
+              "width": 14,
+            }
+          }
+          transform={undefined}
+        />
+        <path
+          className={undefined}
+          d="M 90, 140.33333333333334
+              L 90, 126.33333333333334
+              L 147.8, 126.33333333333334
+              A 0 0 0 0 1, 147.8, 126.33333333333334
+              L 147.8, 140.33333333333334
+              A 0 0 0 0 1, 147.8, 140.33333333333334
+              L 90, 140.33333333333334
+              z"
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "_x1": 2,
+              "fill": "tomato",
+              "padding": 8,
+              "stroke": "tomato",
+              "strokeWidth": 0,
+              "width": 14,
+            }
+          }
+          transform={undefined}
+        />
+        <path
+          className={undefined}
+          d="M 90, 57
+              L 90, 43
+              L 142.7, 43
+              A 0 0 0 0 1, 142.7, 43
+              L 142.7, 57
+              A 0 0 0 0 1, 142.7, 57
+              L 90, 57
+              z"
+          role="presentation"
+          shapeRendering="auto"
+          style={
+            Object {
+              "_x1": 3,
+              "fill": "tomato",
+              "padding": 8,
+              "stroke": "tomato",
+              "strokeWidth": 0,
+              "width": 14,
+            }
+          }
+          transform={undefined}
+        />
+        <text
+          className={undefined}
+          dx={0}
+          dy={4.26}
+          transform={undefined}
+          x={98}
+          y={300}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="start"
+            x={98}
+          >
+            
+          </tspan>
+        </text>
+        <text
+          className={undefined}
+          dx={0}
+          dy={4.26}
+          transform={undefined}
+          x={118.4}
+          y={216.66666666666669}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="start"
+            x={118.4}
+          >
+            12%
+          </tspan>
+        </text>
+        <text
+          className={undefined}
+          dx={0}
+          dy={4.26}
+          transform={undefined}
+          x={155.8}
+          y={133.33333333333334}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="start"
+            x={155.8}
+          >
+            34%
+          </tspan>
+        </text>
+        <text
+          className={undefined}
+          dx={0}
+          dy={4.26}
+          transform={undefined}
+          x={150.7}
+          y={50}
+        >
+          <tspan
+            dx={0}
+            dy={undefined}
+            style={
+              Object {
+                "fill": "#455A64",
+                "fontFamily": "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
+                "fontSize": 12,
+                "letterSpacing": "normal",
+                "padding": 8,
+                "stroke": "transparent",
+                "strokeWidth": 0,
+              }
+            }
+            textAnchor="start"
+            x={150.7}
+          >
+            31%
+          </tspan>
+        </text>
+      </g>
+    </g>
+  </svg>
+  <div
+    style={
+      Object {
+        "height": "100%",
+        "left": 0,
+        "position": "absolute",
+        "top": 0,
+        "width": "100%",
+        "zIndex": 99,
+      }
+    }
+  >
+    <svg
+      height={350}
+      style={
+        Object {
+          "height": "100%",
+          "overflow": "visible",
+          "width": "100%",
+        }
+      }
+      viewBox="0 0 350 350"
+      width={350}
+    />
+  </div>
+</div>
+`;

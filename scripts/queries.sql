@@ -11,6 +11,7 @@ WHERE 1=1
   AND session->>'workshopCode' NOT LIKE 'DEMO%'
   AND session->>'workshopCode' NOT IN ('foo', 'demo', 'code.org')
   AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
+  -- AND timestampz > '2017-10-28 00:00:00.000+00'
 GROUP BY cohort_number
 ORDER BY cohort_number ASC, identifier_count DESC;
 
@@ -41,6 +42,7 @@ WHERE 1=1
   AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
 GROUP BY identifier;
 
+
 --- how many sessions for unknown identifiers?
 SELECT
   session->>'identifier' as identifier,
@@ -58,7 +60,7 @@ SELECT * FROM interactions where session->>'sessionId' = 'xyz';
 
 
 --- how many code.org gave consent versus declined?
-SELECT count(*) as declined FROM interactions
+SELECT count(*) as consented FROM interactions
 where 1=1
   AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
   AND interaction->>'type' = 'GAVE_CONSENT:nQddiko2aPPOfmKy8pC3r//eBr82OzD9smVMJPdUZRo=';

@@ -8,7 +8,7 @@ import Select from '../util/Select.js';
 import StudentProfile from '../StudentProfile.js';
 
 
-storiesOf('loadDataForCohort', module) //eslint-disable-line no-undef
+storiesOf('Research/loadDataForCohort', module) //eslint-disable-line no-undef
   .add('normal', () => {
     // render across multiple workshop codes in columns
     const workshopCodes = [

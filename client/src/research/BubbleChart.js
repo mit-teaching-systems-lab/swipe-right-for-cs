@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {percentRightPerProfile} from './calculations';
 import _ from 'lodash';
-
+import {
+  isSwipe
+} from './functions.js';
 
 class BubbleChart extends Component{
   grouping(interactions, key){
@@ -12,8 +14,8 @@ class BubbleChart extends Component{
     return groups;
   }
 
-  render(){
-    const interactions = this.props.swipeInteractions;
+  render() {
+    const interactions = this.props.consentedInteractions.filter(isSwipe);
     const profileKeys = _.uniq(_.map(interactions, row=>{
       return row.interaction.turn.profileKey;
     }));
@@ -43,25 +45,11 @@ class BubbleChart extends Component{
         })}
       </table>
     );
-
-
-  //   _.forIn(groupedByKey, row=>{
-  //     var currentRow = document.createElement("TR");
-  //     _.forIn(row, col =>{
-  //       console.log(row, col)
-  //       var cell = currentRow.insertCell();
-  //       cell.innerHTML = col
-  //     });
-  //     console.log(currentRow)
-  //     var r = bubbleTable.insertRow();
-  //     r.innerHTML = currentRow
-  //   });
-  //   return bubbleTable;
   } 
 }
 
 BubbleChart.propTypes = {
-  swipeInteractions: PropTypes.array.isRequired
+  consentedInteractions: PropTypes.array.isRequired
 };
 
 export default BubbleChart;

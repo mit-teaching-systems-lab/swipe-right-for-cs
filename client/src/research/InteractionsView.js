@@ -1,103 +1,41 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {InteractionTypes} from '../shared/data.js';
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup, VictoryAxis, VictoryLabel} from 'victory'; 
-import BubbleChart from './BubbleChart';
-import {percentRightPerProfile, totalSwipes} from './calculations';
+import WorkshopsAnalysis from './WorkshopsAnalysis';
+import BiasAnalysis from './BiasAnalysis';
+import RawInteractionsTable from './RawInteractionsTable';
+import './InteractionsView.css';
+import {
+  onlyConsentedInteractions,
+  withoutDemoInteractions
+} from './functions';
 
-// Render a list of logged user interactions
+
+// Show different analyses of user interactions
 class InteractionsView extends Component {
-
-  onlySwipes(){
-    const interactions = this.props.interactions.filter(row =>{  
-      if (row.session.workshopCode === 'foo') return false;
-      if (row.session.workshopCode === 'demo') return false;
-      if (row.session.workshopCode === 'code.org') return false;
-      if (row.session.workshopCode.indexOf('DEMO') === 0) return false;
-      if (row.session.identifier === 'UNKNOWN_IDENTIFIER') return false;
-      if (row.session.identifier === '') return false;
-      if (row.session.identifier === 'kevin') return false;
-      return true;
-    });
-    return interactions.filter(row=>{
-      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT || row.interaction.type === InteractionTypes.SWIPE_LEFT){
-        return true;
-      }
-      return false;
-    });
-  }
-
   render() {  
-    // unpack!
-    //filter out testing data
-    const swipeInteractions = this.onlySwipes();
-    // show it!
-    //render data as a filterable table
-    if (swipeInteractions.length === 0){
-      return <div> No Swipes! </div>;
-    }
-    return( 
-      <div>
-        <BubbleChart swipeInteractions={swipeInteractions}/>
-        {this.renderPercentSwipeRight(swipeInteractions)}
-        {this.renderPercentRightPerProfile(swipeInteractions, 'profileKey')}
-        {this.renderPercentRightPerProfile(swipeInteractions, 'profileName')}
-        {this.renderBarChart(swipeInteractions, 'profileName', "Swipes Right Per Person")}
-        {this.renderBarChart(swipeInteractions, 'profileKey',"Swipes Right Per Profile")}
-      </div>
-    );
-  }
-  renderPercentSwipeRight(interactions){
-    var sum = 0;
-    interactions.forEach(row =>{
-      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT){
-        sum += 1;
-      }
-    });
-    return sum/interactions.length*100;
-  }
-
-  renderPercentRightPerProfile(interactions, key){
-    const percents = percentRightPerProfile(interactions, key);
-    return <pre> {JSON.stringify(percents, null,2)} </pre>;
-  }
-  renderBarChart(interactions, key, title){
-    const p = percentRightPerProfile(interactions, key);
-    const swipes = totalSwipes(interactions, key); 
-    var barLabels=[]; 
-    var dataPoints =[]; 
-    var barIndices = [];
-    interactions.forEach(row =>{
-      var rowKey = row.interaction.turn[key];
-      if (!(barLabels.includes(rowKey))){ 
-        barLabels.push(rowKey); 
-        barIndices.push(barIndices.length + 1);
-        dataPoints.push({x: barIndices.length, y: p[rowKey], totalSwipes: swipes[rowKey]}); 
-      }
-    });
+    const rawInteractions = this.props.interactions;
+    const codeOrgInteractions = withoutDemoInteractions(rawInteractions);
+    const consentedCodeOrgInteractions = onlyConsentedInteractions(codeOrgInteractions);
 
     return (
-      <div>
-        <VictoryChart
-          theme={VictoryTheme.material}
-          domain={   {x: [0, 100], y: [0, barLabels.length]}   }
-          style={{ parent: { maxWidth: "50%" } }}
-          padding={{ left: 90, top: 50, right: 90, bottom: 50 }}
-        >
-          <VictoryLabel text= {title} x={225} y={30} textAnchor="middle"/>
-          <VictoryAxis dependentAxis tickValues={barIndices} tickFormat={barLabels}/>
-          <VictoryAxis/>
-          <VictoryGroup horizontal
-            offset={1}
-            style={{ data: { width: 3 } }}
-            colorScale={["tomato", "gold"]}
-          >
-            <VictoryBar
-              data= {dataPoints}
-              labels={(data)=>(Number(data.y)).toFixed(2) + "% of " + data.totalSwipes}
-            />
-          </VictoryGroup>
-        </VictoryChart>
+      <div className="InteractionsView">
+        <h1>What happened in each workshop?</h1>
+        <div className="InteractionView-analysis">
+          <WorkshopsAnalysis codeOrgInteractions={codeOrgInteractions} />
+        </div>
+        
+        <h1>What evidence do we see of bias?</h1>
+        <div className="InteractionView-analysis">
+          {consentedCodeOrgInteractions.length > 0
+            ? <BiasAnalysis consentedInteractions={consentedCodeOrgInteractions} />
+            : 'No swipes!'}
+        </div>
+        
+        <h1>What does the raw data look like?</h1>
+        <div className="InteractionView-analysis">
+          <div style={{marginBottom: 20, color: 'red'}}>Warning: this includes unconsented data as well.</div>
+          <RawInteractionsTable interactions={rawInteractions} />
+        </div>
       </div>
     );
   }

@@ -28,6 +28,7 @@ class ReviewPhaseView extends Component {
         <div className="ReviewPhaseView-content">
           <p className="Global-header-font">Round 3: Review</p>
           <p>{"Here are the top three arguments for each student, based on how other folks in the workshop responded."}</p>
+          <p>{"How would you approach recruiting conversations differently with different students?"}</p>
         </div>
         <div className="ReviewPhaseView-students">
           {students.map((student) => {
