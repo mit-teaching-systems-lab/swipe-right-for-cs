@@ -1,0 +1,12 @@
+.WorkshopAnalysis-caption {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px;
+  margin-left: 10px;
+}
+
+.WorkshopAnalysis-table {
+  border: 1px solid #eee;
+  font-size: 10px;
+}
