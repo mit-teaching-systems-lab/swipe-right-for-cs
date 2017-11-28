@@ -117,61 +117,43 @@ function insertLink(pool, email, domain) {
     });
   }
 
-function checkHeader(request,field){
-  try{
-    return request.body[field];
-  }
-  catch(err) {
-    return '';
-  }
-}
 
 function loginEndpoint(pool, mailgunEnv, request, response){
-  console.log('server - loginEndpoint called');
 
   // TODO:
   // 1. Check that the email is in the whitelist in the `researchers` database table
   // 2. Insert a new record to the `links` database table
   // 3. Send an email to the researcher with that link in it (generate email with Mustache template, send it with Mailgun)
   // 4. Return a 200 response
-  const email = checkHeader(request,'email');
-  const pass = checkHeader(request,'pass');
+  const {email} = request.body;
 
-  isOnWhitelist(pool, email, pass)
+  isOnWhitelist(pool, email)
     .then(isNotAuthorized => {
       if (isNotAuthorized) {
-        console.log('server - isNotAuthorized - returning 405');
         return response.status(405).end();
       } else {
-        console.log('server - Authorized - returning 200');
         const domain = getDomain(request);
         return createLinkAndEmail(pool, mailgunEnv, email, domain)
           .then(result => response.status(200).end());
       }
     })
     .catch(err => {
-      console.log('server - loginEndpoint returned error');
-      console.log({ error: err });
+      console.log('loginEndpoint error: ', err);
       return response.status(500).end();
-      console.log('end');
     });
 }
 
-function isOnWhitelist(pool, email, pass){
-  console.log('server - isOnWhitelist called');
-  const whitelistSQL = 'SELECT * FROM whitelist WHERE email=$1 AND pass=$2 ORDER BY id ASC LIMIT 1';
-  const whitelistValues = [email, pass];
+function isOnWhitelist(pool, email){
+  const whitelistSQL = 'SELECT * FROM whitelist WHERE email=$1 ORDER BY id ASC LIMIT 1';
+  const whitelistValues = [email];
   
   return pool.query(whitelistSQL, whitelistValues)
     .then(results => Promise.resolve(results.rowCount === 0));
 }
 
 function createLinkAndEmail(pool, mailgunEnv, email, domain) {
-  console.log('server - createLinkAndEmail');
   return insertLink(pool,email, domain)
-    .then(link => {
-      return emailLink(mailgunEnv, email, link);
-    })
+    .then(link => emailLink(mailgunEnv, email, link));
 }
 
 function emailLinkEndpoint(mailgunEnv, req, res){

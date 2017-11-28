@@ -34,12 +34,14 @@ CREATE TABLE interactions (
 );
 CREATE TABLE links (
   id serial primary key,
-  email text
-  link text
+  email text,
+  link text,
   timestampz timestamptz
 );
 CREATE TABLE whitelist (
   id serial primary key,
-  email text,
+  email text
 );
 ```
+
+If you want to run the tests, you should create a similar database called "swipe-right-db-test".
