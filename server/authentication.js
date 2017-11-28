@@ -70,6 +70,7 @@ function sha(value) {
 }
 
 function insertLink(pool, email, domain) {
+  console.log('insertLink');
   const linkToken = uuid.v4();
   //TODO: what should link look like???
   const link = `${domain}/review_link?${qs.stringify({linkToken})}`;
@@ -87,6 +88,7 @@ function insertLink(pool, email, domain) {
   }
 
   function emailLink(mailgunEnv, email, link) {
+    console.log('emailLink');
     const linkText = link;
     const loginlinkFilename = path.join(__dirname,'game/emails/loginlink.html.mustache');
     const html = renderEmail(loginlinkFilename,{linkText});
@@ -115,41 +117,57 @@ function insertLink(pool, email, domain) {
     });
   }
 
+function checkHeader(request,field){
+  try{
+    return request.body[field];
+  }
+  catch(err) {
+    return '';
+  }
+}
+
 function loginEndpoint(pool, mailgunEnv, request, response){
+  console.log('server - loginEndpoint called');
+
   // TODO:
   // 1. Check that the email is in the whitelist in the `researchers` database table
   // 2. Insert a new record to the `links` database table
   // 3. Send an email to the researcher with that link in it (generate email with Mustache template, send it with Mailgun)
   // 4. Return a 200 response
-
-  const email = request.body['email'];
-  const pass = request.body['pass'];
+  const email = checkHeader(request,'email');
+  const pass = checkHeader(request,'pass');
 
   isOnWhitelist(pool, email, pass)
     .then(isNotAuthorized => {
       if (isNotAuthorized) {
+        console.log('server - isNotAuthorized - returning 405');
         return response.status(405).end();
       } else {
+        console.log('server - Authorized - returning 200');
         const domain = getDomain(request);
         return createLinkAndEmail(pool, mailgunEnv, email, domain)
           .then(result => response.status(200).end());
       }
     })
     .catch(err => {
-      console.log('loginEndpoint returned error');
+      console.log('server - loginEndpoint returned error');
       console.log({ error: err });
-      response.status(500).end();
+      return response.status(500).end();
+      console.log('end');
     });
 }
 
 function isOnWhitelist(pool, email, pass){
+  console.log('server - isOnWhitelist called');
   const whitelistSQL = 'SELECT * FROM whitelist WHERE email=$1 AND pass=$2 ORDER BY id ASC LIMIT 1';
   const whitelistValues = [email, pass];
+  
   return pool.query(whitelistSQL, whitelistValues)
     .then(results => Promise.resolve(results.rowCount === 0));
 }
 
 function createLinkAndEmail(pool, mailgunEnv, email, domain) {
+  console.log('server - createLinkAndEmail');
   return insertLink(pool,email, domain)
     .then(link => {
       return emailLink(mailgunEnv, email, link);
