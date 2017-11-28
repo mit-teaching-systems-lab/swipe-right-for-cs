@@ -2,22 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {InteractionTypes} from '../shared/data.js';
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup, VictoryAxis, VictoryLabel} from 'victory'; 
-import _ from 'lodash';
 import BubbleChart from './BubbleChart';
-import percentRightPerProfile from './calculations';
+import {percentRightPerProfile, totalSwipes} from './calculations';
 
 // Render a list of logged user interactions
 class InteractionsView extends Component {
-  totalSwipes(interactions, key){
-    return _.countBy(interactions, row => row.interaction.turn[key]);
-  }
 
-  rightSwipes(interactions){
-    return interactions.filter(row =>{
-      if (row.interaction.type === InteractionTypes.SWIPE_RIGHT) return true;
-      return false;
-    });
-  }
   onlySwipes(){
     const interactions = this.props.interactions.filter(row =>{  
       if (row.session.workshopCode === 'foo') return false;
@@ -73,7 +63,7 @@ class InteractionsView extends Component {
   }
   renderBarChart(interactions, key, title){
     const p = percentRightPerProfile(interactions, key);
-    const swipes = this.totalSwipes(interactions, key); 
+    const swipes = totalSwipes(interactions, key); 
     var barLabels=[]; 
     var dataPoints =[]; 
     var barIndices = [];

@@ -1,13 +1,24 @@
 import _ from 'lodash';
+import {InteractionTypes} from '../shared/data.js';
 
+
+export function rightSwipes(interactions){
+  return interactions.filter(row =>{
+    if (row.interaction.type === InteractionTypes.SWIPE_RIGHT) return true;
+    return false;
+  });
+}
+export function totalSwipes(interactions, key){
+  return _.countBy(interactions, row => row.interaction.turn[key]);
+}
 
 export function percentRightPerProfile(interactions, key){
-  const numSwipes = this.totalSwipes(interactions, key);
-  const rightSwipes = _.countBy(this.rightSwipes(interactions), row => row.interaction.turn[key]);
+  const numSwipes = totalSwipes(interactions, key);
+  const rightSwipe = _.countBy(rightSwipes(interactions), row => row.interaction.turn[key]);
   var percents = {};
 
   for(var x in numSwipes){
-    percents[x] = rightSwipes[x]/numSwipes[x]*100;
+    percents[x] = rightSwipe[x]/numSwipes[x]*100;
   }
   return percents;
 }
