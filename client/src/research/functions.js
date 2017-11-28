@@ -74,6 +74,14 @@ export function onlyConsentedInteractions(interactions) {
   });
 }
 
+export function approximatedCI(p, n, options = {}) {
+  const z = {
+    p95: 1.96,
+    p99: 2.57
+  }[options.percentile || 'p95'];
+  return z * Math.sqrt((p * (1 - p) / n));
+}
+
 export function isSwipe(row) {
   const type = row.interaction.type;
   return (type === InteractionTypes.SWIPE_RIGHT || type === InteractionTypes.SWIPE_LEFT);
