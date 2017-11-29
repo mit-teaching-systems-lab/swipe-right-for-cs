@@ -13,7 +13,22 @@ class BubbleChart extends Component{
     });//lodash group by {Name1:{maker:percent},Name3:{captain:percent}} {maker:{Name1: percent, Name2:percent}}
     return groups;
   }
-
+  makeBubble(percentage){
+    const colors = ['black', 'yellow', 'orange', 'green', 'tomato', 'purple', 'Aqua','blue','violet','red'];
+    var color =  colors[Math.floor(percentage/10)];
+    if (color === undefined) {
+      color = 'black';
+      percentage = 10;
+    }
+    var styles = {
+      backgroundColor:color,
+      height:percentage,
+      width:percentage,
+      borderRadius: 100
+    };
+    var reactNode = <div style={styles}></div>;
+    return reactNode;
+  }
   render() {
     const interactions = this.props.consentedInteractions.filter(isSwipe);
     const profileKeys = _.uniq(_.map(interactions, row=>{
@@ -23,9 +38,9 @@ class BubbleChart extends Component{
     const groupedByKey = _.mapValues(groupedByName, row => {
       return percentRightPerProfile(row, 'profileKey');
     }); 
-
+    
     return (
-      <table>
+      <table align="center">
 
         <tr>
           <td>Name</td>
@@ -38,13 +53,12 @@ class BubbleChart extends Component{
             <tr>
               <td>{profileName}</td>
               {_.map(profileKeys, profileKey=>{
-                return <td>{row[profileKey]}</td>; 
+                return <td>{this.makeBubble(row[profileKey])}</td>; 
               })}
             </tr>
           );
         })}
-      </table>
-    );
+      </table> );
   } 
 }
 
