@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {percentRightPerProfile} from './calculations';
+import {
+  percentRightPerProfile,
+  totalSwipes
+} from './calculations';
 import _ from 'lodash';
 import {
-  isSwipe
+  formatPercent,
+  isSwipe,
+  approximatedCI
 } from './functions.js';
 
 class BubbleChart extends Component{
@@ -20,8 +25,11 @@ class BubbleChart extends Component{
       return row.interaction.turn.profileKey;
     }));
     const groupedByName = this.grouping(interactions, 'profileName');
-    const groupedByKey = _.mapValues(groupedByName, row => {
-      return percentRightPerProfile(row, 'profileKey');
+    const groupedByKey = _.mapValues(groupedByName, interactionsForName => {
+      return percentRightPerProfile(interactionsForName, 'profileKey');
+    }); 
+    const swipeCount = _.mapValues(groupedByName, interactionsForName => {
+      return totalSwipes(interactionsForName, 'profileKey');
     }); 
 
     return (
@@ -37,8 +45,16 @@ class BubbleChart extends Component{
           return (
             <tr>
               <td>{profileName}</td>
-              {_.map(profileKeys, profileKey=>{
-                return <td>{row[profileKey]}</td>; 
+              {_.map(profileKeys, profileKey=> {
+                const n = swipeCount[profileName][profileKey] || 0;
+                const p = n > 0 ? row[profileKey] / 100 : null;
+                const ci = n > 0 ? approximatedCI(p, n, 'p99') : null;
+                return <td style={{margin: 10}}>
+                  <div>{n > 0 && formatPercent(p)}</div>
+                  <div style={{color: '#ccc', marginLeft: 5}}>n={n}</div>
+                  <div style={{color: '#ccc', marginLeft: 5}}>ci={n > 0 ? formatPercent(ci) : 'na'}</div>
+                </td>; 
+                // return <td>{_.isNaN(p) ? '' : `${Math.round(p * 100)}+-${formatPercent(ci)}`}</td>; 
               })}
             </tr>
           );
