@@ -32,34 +32,54 @@ class BubbleChart extends Component{
       return totalSwipes(interactionsForName, 'profileKey');
     }); 
 
-    return (
-      <table>
+    // for export to R
+    const flat = _.flatten(_.map(groupedByKey, (row, profileName) => {
+      return _.map(profileKeys, profileKey => {
+        const n = swipeCount[profileName][profileKey] || 0;
+        const p = n > 0 ? row[profileKey] / 100 : null;
+        const ci = n > 0 ? approximatedCI(p, n, 'p99') : null;
+        return {
+          profileKey,
+          profileName,
+          n,
+          p,
+          ci
+        };
+      });
+    }));
 
-        <tr>
-          <td>Name</td>
-          {_.map(profileKeys, profileKey=>{
-            return <td>{profileKey}</td>;
+    return (
+      <div>
+        <table>
+          <tr>
+            <td>Name</td>
+            {_.map(profileKeys, profileKey=>{
+              return <td>{profileKey}</td>;
+            })}
+          </tr>
+          {_.map(groupedByKey, (row, profileName) => {
+            return (
+              <tr>
+                <td>{profileName}</td>
+                {_.map(profileKeys, profileKey=> {
+                  const n = swipeCount[profileName][profileKey] || 0;
+                  const p = n > 0 ? row[profileKey] / 100 : null;
+                  const ci = n > 0 ? approximatedCI(p, n, 'p99') : null;
+                  return <td style={{margin: 10}}>
+                    <div>{n > 0 && formatPercent(p)}</div>
+                    <div style={{color: '#ccc', marginLeft: 5}}>n={n}</div>
+                    <div style={{color: '#ccc', marginLeft: 5}}>ci={n > 0 ? formatPercent(ci) : 'na'}</div>
+                  </td>; 
+                  // return <td>{_.isNaN(p) ? '' : `${Math.round(p * 100)}+-${formatPercent(ci)}`}</td>; 
+                })}
+              </tr>
+            );
           })}
-        </tr>
-        {_.map(groupedByKey, (row, profileName) => {
-          return (
-            <tr>
-              <td>{profileName}</td>
-              {_.map(profileKeys, profileKey=> {
-                const n = swipeCount[profileName][profileKey] || 0;
-                const p = n > 0 ? row[profileKey] / 100 : null;
-                const ci = n > 0 ? approximatedCI(p, n, 'p99') : null;
-                return <td style={{margin: 10}}>
-                  <div>{n > 0 && formatPercent(p)}</div>
-                  <div style={{color: '#ccc', marginLeft: 5}}>n={n}</div>
-                  <div style={{color: '#ccc', marginLeft: 5}}>ci={n > 0 ? formatPercent(ci) : 'na'}</div>
-                </td>; 
-                // return <td>{_.isNaN(p) ? '' : `${Math.round(p * 100)}+-${formatPercent(ci)}`}</td>; 
-              })}
-            </tr>
-          );
-        })}
-      </table>
+        </table>
+        <div>
+          <pre>{JSON.stringify(flat, null, 2)}</pre>
+        </div>
+      </div>
     );
   } 
 }
