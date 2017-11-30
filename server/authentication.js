@@ -2,11 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const uuid = require('uuid');
 const qs = require('querystring');
-const crypto = require('crypto');
 const {sendEmail, renderEmail} = require('./util/email.js');
-
-
-
 
 // Redirect to HTTPS
 function enforceHTTPS(request, response, next) {
@@ -24,14 +20,14 @@ function sendUnauthorized(res) {
 }
 
 function getDomain(request) {
-    return (process.env.NODE_ENV === 'development')
-      ? 'http://localhost:5000'
-      : `https://${request.headers.host}`;
-  }
+  return (process.env.NODE_ENV === 'development')
+    ? 'http://localhost:5000'
+    : `https://${request.headers.host}`;
+}
 
 // Only allow folks who are authorized.  Call `next` if they are authorized,
 // and return a 404 with no body if not.
-function onlyAllowResearchers(request, response, next) {
+function onlyAllowResearchers(pool, request, response, next) {
   // TODO
   // 1. Read the token from the request header
   // 2. Check to see if the token header is in `tokens` database table and it's less than 24 hours old
@@ -39,8 +35,8 @@ function onlyAllowResearchers(request, response, next) {
 
   if (process.env.NODE_ENV === 'development') return next();
 
-  const token = req.body['token'];
-  const email = req.body['email'];
+  const token = request.body['token'];
+  const email = request.body['email'];
   const now = new Date();
 
   // Check if link is in links DB
@@ -62,15 +58,10 @@ function onlyAllowResearchers(request, response, next) {
   if (resultFound) {
     return  next();
   }
-  return sendUnauthorized(res);
-}
-
-function sha(value) { 
-  return crypto.createHash('sha256').update(value).digest('base64');
+  return sendUnauthorized(response);
 }
 
 function insertLink(pool, email, domain) {
-  console.log('insertLink');
   const linkToken = uuid.v4();
   //TODO: what should link look like???
   const link = `${domain}/review_link?${qs.stringify({linkToken})}`;
@@ -85,46 +76,49 @@ function insertLink(pool, email, domain) {
       console.log('query returned err: ', err);
       console.log({ error:err });
     });
+}
+
+function emailLink(mailgunEnv, email, link) {
+  console.log('emailLink');
+  const linkText = link;
+  const loginlinkFilename = path.join(__dirname,'game/emails/loginlink.html.mustache');
+  const html = renderEmail(loginlinkFilename,{linkText});
+
+  const info = {
+    toEmail: email,
+    fromEmail: 'swipe-right-bot@tsl.mit.edu',
+    subject: 'Swipe Right for CS: Login Link'
+  };
+
+  if (process.env.NODE_ENV === 'development') {
+    // // Save email template locally for testing
+    // fs.writeFileSync('/Users/keving17/Documents/Github/TSL/swipe-right-for-cs/server/test.html',html);
+
+    console.log('No emailing in development mode. Go to the following link to move forward.');
+    console.log(link);
+    return Promise.resolve();
   }
 
-  function emailLink(mailgunEnv, email, link) {
-    console.log('emailLink');
-    const linkText = link;
-    const loginlinkFilename = path.join(__dirname,'game/emails/loginlink.html.mustache');
-    const html = renderEmail(loginlinkFilename,{linkText});
-    fs.writeFileSync('/Users/keving17/Documents/Github/TSL/swipe-right-for-cs/server/test.html',html);
-    const info = {
-      toEmail: email,
-      fromEmail: 'swipe-right-bot@tsl.mit.edu',
-      subject: 'Swipe Right for CS: Login Link'
-    };
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log('No emailing in development mode. Go to the following link to move forward.');
-      console.log(link);
-      return Promise.resolve();
-    }
-
-    return new Promise((resolve, reject) => {
-      sendEmail(mailgunEnv, info, html, (err, mailgunResponse) => {
-        if (err) {
-          console.log("Mailgun request (err):\n  " + JSON.stringify(err, null, 2));
-          return reject(err);
-        }
-        console.log("Mailgun returned:\n  " + JSON.stringify(mailgunResponse, null, 2));
-        return resolve();   
-      });
+  return new Promise((resolve, reject) => {
+    sendEmail(mailgunEnv, info, html, (err, mailgunResponse) => {
+      if (err) {
+        console.log("Mailgun request (err):\n  " + JSON.stringify(err, null, 2));
+        return reject(err);
+      }
+      console.log("Mailgun returned:\n  " + JSON.stringify(mailgunResponse, null, 2));
+      return resolve();   
     });
-  }
+  });
+}
 
 
 function loginEndpoint(pool, mailgunEnv, request, response){
-
   // TODO:
   // 1. Check that the email is in the whitelist in the `researchers` database table
   // 2. Insert a new record to the `links` database table
   // 3. Send an email to the researcher with that link in it (generate email with Mustache template, send it with Mailgun)
   // 4. Return a 200 response
+  
   const {email} = request.body;
 
   isOnWhitelist(pool, email)
@@ -156,7 +150,7 @@ function createLinkAndEmail(pool, mailgunEnv, email, domain) {
     .then(link => emailLink(mailgunEnv, email, link));
 }
 
-function emailLinkEndpoint(mailgunEnv, req, res){
+function emailLinkEndpoint(pool, mailgunEnv, req, res){
   //This doesn't actually send emails it seems. More like tokenGeneratorEndpoint
 
   // TODO
