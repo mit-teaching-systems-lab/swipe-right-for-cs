@@ -5,14 +5,10 @@ import _ from 'lodash';
 import {
   isSwipe
 } from './functions.js';
+import './BubbleChart.css';
 
 class BubbleChart extends Component{
-  grouping(interactions, key){
-    var groups = _.groupBy(interactions, row => {
-      return row.interaction.turn[key];
-    });//lodash group by {Name1:{maker:percent},Name3:{captain:percent}} {maker:{Name1: percent, Name2:percent}}
-    return groups;
-  }
+
   makeBubble(percentage){
     const colors = ['black', 'yellow', 'orange', 'green', 'tomato', 'purple', 'Aqua','blue','violet','red'];
     var color =  colors[Math.floor(percentage/10)];
@@ -29,20 +25,28 @@ class BubbleChart extends Component{
     var reactNode = <div style={styles}></div>;
     return reactNode;
   }
+
   render() {
     const interactions = this.props.consentedInteractions.filter(isSwipe);
     const profileKeys = _.uniq(_.map(interactions, row=>{
       return row.interaction.turn.profileKey;
     }));
-    const groupedByName = this.grouping(interactions, 'profileName');
+    const groupedByName = _.groupBy(interactions, row => {
+      return row.interaction.turn['profileName'];
+    });
     const groupedByKey = _.mapValues(groupedByName, row => {
       return percentRightPerProfile(row, 'profileKey');
     }); 
     
-    return (
-      <table align="center">
+    const pics = _.mapKeys(interactions, row => {
+      console.log(row.interaction.turn['profileImageSrc']);
+      return row.interaction.turn['profileImageSrc']; 
+    }); 
 
-        <tr>
+    return (
+      <table className = "Bubble-table">
+
+        <tr className = "Bubble-row">
           <td>Name</td>
           {_.map(profileKeys, profileKey=>{
             return <td>{profileKey}</td>;
@@ -50,8 +54,8 @@ class BubbleChart extends Component{
         </tr>
         {_.map(groupedByKey, (row, profileName) => {
           return (
-            <tr>
-              <td>{profileName}</td>
+            <tr className = "Bubble-row">
+              <td>{pics[profileName]}</td>
               {_.map(profileKeys, profileKey=>{
                 return <td>{this.makeBubble(row[profileKey])}</td>; 
               })}

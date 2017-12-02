@@ -1,0 +1,13 @@
+.Bubble-table {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.Bubble-row {
+  flex-direction: row;
+  align-items: center;
+}
+.Bubble-data {
+  flex-direction: row;
+  align-items: center;
+}
