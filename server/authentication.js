@@ -79,7 +79,6 @@ function insertLink(pool, email, domain) {
 }
 
 function emailLink(mailgunEnv, email, link) {
-  console.log('emailLink');
   const linkText = link;
   const loginlinkFilename = path.join(__dirname,'game/emails/loginlink.html.mustache');
   const html = renderEmail(loginlinkFilename,{linkText});
@@ -124,6 +123,7 @@ function loginEndpoint(pool, mailgunEnv, request, response){
   isOnWhitelist(pool, email)
     .then(isNotAuthorized => {
       if (isNotAuthorized) {
+        console.log('not authorized');
         return response.status(405).end();
       } else {
         const domain = getDomain(request);
