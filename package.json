@@ -16,7 +16,7 @@
     "client": "cd client && yarn run start",
     "storybook": "cd client && yarn run storybook",
     "lint": "eslint --ext js -c server/.eslintrc server scripts",
-    "jest": "DATABASE_URL=http://localhost:5432/swipe-right-db-test jest server --watch",
+    "jest": "NODE_ENV=test DATABASE_URL=http://localhost:5432/swipe-right-db-test jest server --watch",
     "ngrok": "ngrok http 3000 -host-header=\"localhost:8080\""
   },
   "cacheDirectories": [
