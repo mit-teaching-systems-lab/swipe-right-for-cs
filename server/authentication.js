@@ -95,6 +95,11 @@ function emailLink(mailgunEnv, email, link) {
     // // Save email template locally for testing
     // fs.writeFileSync('/Users/keving17/Documents/Github/TSL/swipe-right-for-cs/server/test.html',html);
 
+    console.log('No emailing in testing mode. Go to the following link to move forward.');
+    console.log(link);
+    return Promise.resolve();
+  }
+  if (process.env.NODE_ENV === 'test') {
     console.log('No emailing in development mode. Go to the following link to move forward.');
     console.log(link);
     return Promise.resolve();
