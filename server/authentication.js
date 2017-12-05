@@ -1,8 +1,10 @@
 const path = require('path');
-const fs = require('fs');
 const uuid = require('uuid');
 const qs = require('querystring');
 const {sendEmail, renderEmail} = require('./util/email.js');
+
+// // for debugging
+// const fs = require('fs');
 
 // Redirect to HTTPS
 function enforceHTTPS(request, response, next) {
