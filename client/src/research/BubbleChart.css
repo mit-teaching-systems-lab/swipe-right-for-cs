@@ -4,8 +4,10 @@
   justify-content: space-between;
 }
 .Bubble-row {
+  display:flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-evenly;
 }
 .Bubble-data {
   flex-direction: row;

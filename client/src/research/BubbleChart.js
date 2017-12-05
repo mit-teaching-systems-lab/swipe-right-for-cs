@@ -7,6 +7,9 @@ import {
 } from './functions.js';
 import './BubbleChart.css';
 
+
+//This component creates a Bubble Chart graph which has student on the vertical axis and possible profiles for any student on the horizontal axis
+//circles on the chart represent the percentage of people who swiped right for a given student and profile
 class BubbleChart extends Component{
 
   makeBubble(percentage){
@@ -39,10 +42,8 @@ class BubbleChart extends Component{
     }); 
     
     const pics = _.mapKeys(interactions, row => {
-      console.log(row.interaction.turn['profileImageSrc']);
       return row.interaction.turn['profileImageSrc']; 
     }); 
-
     return (
       <table className = "Bubble-table">
 
@@ -55,7 +56,7 @@ class BubbleChart extends Component{
         {_.map(groupedByKey, (row, profileName) => {
           return (
             <tr className = "Bubble-row">
-              <td>{pics[profileName]}</td>
+              <td><img src={pics[profileName]} alt="" height="100" width="100"/></td>
               {_.map(profileKeys, profileKey=>{
                 return <td>{this.makeBubble(row[profileKey])}</td>; 
               })}
