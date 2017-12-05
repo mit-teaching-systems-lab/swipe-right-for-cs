@@ -10,6 +10,7 @@ import __memoize from 'lodash/memoize';
 import CountChart from './CountChart';
 import PercentageChart from './PercentageChart';
 import RatingsChart from './RatingsChart';
+import BubbleChart from './BubbleChart';
 import {Choices} from '../shared/data.js';
 import {
   isRightSwipe,
@@ -191,6 +192,7 @@ class BiasAnalysis extends React.Component {
         {this.renderExplanations()}
         {this.renderPanelFor('Name', chartDataForProfileName)}
         {this.renderPanelFor('Profile', chartDataForProfileKey)}
+        {this.renderBubbleChart(interactions)}
       </div>
     );
   }
@@ -268,6 +270,10 @@ class BiasAnalysis extends React.Component {
         />
       </div>
     );
+  }
+
+  renderBubbleChart(consentedInteractions) {
+    return <BubbleChart consentedInteractions={consentedInteractions} />;
   }
 }
 BiasAnalysis.propTypes = {

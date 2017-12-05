@@ -105,6 +105,13 @@ exports[`renders without crashing 1`] = `
     <div>
       No data points!
     </div>
+    <table>
+      <tr>
+        <td>
+          Name
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
 `;
