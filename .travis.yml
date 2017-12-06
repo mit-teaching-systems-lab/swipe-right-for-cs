@@ -7,4 +7,5 @@ branches:
     - master
 
 before_script:
+  - psql -c 'create database travis;' -U postgres 
   - yarn db-create-test

@@ -51,7 +51,7 @@ createDatabase(databaseName)
     process.exit(0); // eslint-disable-line no-process-exit
   })
   .catch(err => {
-    console.log('error', err);
+    console.log('error', err)
     process.exit(1); // eslint-disable-line no-process-exit
   });
 
