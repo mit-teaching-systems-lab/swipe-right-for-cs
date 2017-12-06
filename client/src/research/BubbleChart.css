@@ -1,15 +1,20 @@
 .Bubble-table {
-  display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
+  text-align: center;
 }
 .Bubble-row {
-  display:flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: baseline;
+  justify-content: space-between;
 }
 .Bubble-data {
-  flex-direction: row;
-  align-items: center;
+  display:flex;
+  flex-direction:column;
+  justify-content: center;
+  padding-top: 20px;
+  height: 100px;
+  width:100px;
+  margin: auto;
 }
+

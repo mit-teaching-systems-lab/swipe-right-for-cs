@@ -55,10 +55,10 @@ class BubbleChart extends Component{
         </tr>
         {_.map(groupedByKey, (row, profileName) => {
           return (
-            <tr className = "Bubble-row">
+            <tr className="Bubble-row">
               <td><img src={pics[profileName]} alt="" height="100" width="100"/></td>
               {_.map(profileKeys, profileKey=>{
-                return <td>{this.makeBubble(row[profileKey])}</td>; 
+                return <td className="Bubble-data">{this.makeBubble(row[profileKey])}</td>; 
               })}
             </tr>
           );
