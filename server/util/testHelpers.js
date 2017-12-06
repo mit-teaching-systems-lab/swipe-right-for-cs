@@ -36,7 +36,7 @@ function testPool() {
 function resetTestDatabase() {
   abortUnlessTest();
   const pool = testPool();
-  truncate(pool)
+  return truncate(pool)
     .then(results => seed(pool))
     .catch(err => console.log('resetTestDatabase error:', err));
 }

@@ -32,7 +32,6 @@ describe('loginEndpoint', () => {
         email : 'kevin@mit.edu'
       }
     });
-    console.log('kevin@mit.edu');
     const response = testResponse();
     const pool = testPool();
     const mailgunEnv = {};

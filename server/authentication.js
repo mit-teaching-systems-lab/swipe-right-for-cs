@@ -91,17 +91,11 @@ function emailLink(mailgunEnv, email, link) {
     subject: 'Swipe Right for CS: Login Link'
   };
 
-  if (process.env.NODE_ENV === 'development') {
-    // // Save email template locally for testing
-    // fs.writeFileSync('/Users/keving17/Documents/Github/TSL/swipe-right-for-cs/server/test.html',html);
-
-    console.log('No emailing in testing mode. Go to the following link to move forward.');
-    console.log(link);
-    return Promise.resolve();
-  }
-  if (process.env.NODE_ENV === 'test') {
-    console.log('No emailing in development mode. Go to the following link to move forward.');
-    console.log(link);
+  if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('No emailing except for in production mode. Go to the following link to move forward.');
+      console.log(link);
+    }
     return Promise.resolve();
   }
 
@@ -130,7 +124,6 @@ function loginEndpoint(pool, mailgunEnv, request, response){
   isOnWhitelist(pool, email)
     .then(isNotAuthorized => {
       if (isNotAuthorized) {
-        console.log('not authorized');
         return response.status(405).end();
       } else {
         const domain = getDomain(request);
@@ -149,7 +142,7 @@ function isOnWhitelist(pool, email){
   const whitelistValues = [email];
   
   return pool.query(whitelistSQL, whitelistValues)
-    .then(results => Promise.resolve(results.rowCount === 0));
+    .then(results =>Promise.resolve(results.rowCount === 0));
 }
 
 function createLinkAndEmail(pool, mailgunEnv, email, domain) {
