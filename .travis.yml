@@ -4,7 +4,7 @@ node_js:
 
 addons:
   postgresql: "9.4"
-  
+
 branches:
   only:
     - master
@@ -14,4 +14,5 @@ branches:
 # swipe-right test database and create tables.
 before_script:
   - psql -c 'create database travis;' -U postgres 
+  - psql -c 'SHOW SERVER_VERSION;' -U postgres
   - yarn db-create-test
