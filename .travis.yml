@@ -13,6 +13,4 @@ branches:
 # to postgres, and then runs the script to create the
 # swipe-right test database and create tables.
 before_script:
-  - psql -c 'create database travis;' -U postgres 
-  - psql -c 'SHOW SERVER_VERSION;' -U postgres
   - yarn db-create-test
