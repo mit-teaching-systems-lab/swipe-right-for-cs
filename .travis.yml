@@ -2,10 +2,16 @@ language: node_js
 node_js:
   - "6.11.3"
 
+addons:
+  postgresql: "9.4"
+  
 branches:
   only:
     - master
 
+# This adds a dummy travis database so that we can connect
+# to postgres, and then runs the script to create the
+# swipe-right test database and create tables.
 before_script:
   - psql -c 'create database travis;' -U postgres 
   - yarn db-create-test
