@@ -2,15 +2,16 @@ language: node_js
 node_js:
   - "6.11.3"
 
-addons:
-  postgresql: "9.6"
 
 branches:
   only:
     - master
 
-# This adds a dummy travis database so that we can connect
-# to postgres, and then runs the script to create the
-# swipe-right test database and create tables.
+# This makes sure the `jsonb` type is supported, and that the connection string
+# used in db-create-test will work.
+addons:
+  postgresql: "9.6"
+
+# This runs ascript to create the swipe-right test database and create tables.
 before_script:
   - yarn db-create-test

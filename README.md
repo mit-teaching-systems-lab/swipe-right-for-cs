@@ -37,3 +37,5 @@ $ yarn test
 ```
 
 If you want to run the tests, you should create a similar database called "swipe-right-db-test".
+
+You can also run the linter and tests independently for the server or client code, see `package.json` for commands.
