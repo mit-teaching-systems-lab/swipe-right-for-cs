@@ -20,10 +20,11 @@ class BubbleChart extends Component{
       percentage = 10;
     }
     var styles = {
-      backgroundColor:color,
+      backgroundColor:'black',
       height:percentage,
       width:percentage,
       borderRadius: 100
+      
     };
     var reactNode = <div style={styles}></div>;
     return reactNode;
@@ -48,15 +49,15 @@ class BubbleChart extends Component{
       <table className = "Bubble-table">
 
         <tr className = "Bubble-row">
-          <td>Name</td>
+          <td className="Bubble-data">Name</td>
           {_.map(profileKeys, profileKey=>{
-            return <td>{profileKey}</td>;
+            return <td className="Bubble-data">{profileKey}</td>;
           })}
         </tr>
         {_.map(groupedByKey, (row, profileName) => {
           return (
             <tr className="Bubble-row">
-              <td><img src={pics[profileName]} alt="" height="100" width="100"/></td>
+              <td className="Bubble-data"><img src={pics[profileName]} alt="" height="100" width="100"/></td>
               {_.map(profileKeys, profileKey=>{
                 return <td className="Bubble-data">{this.makeBubble(row[profileKey])}</td>; 
               })}
