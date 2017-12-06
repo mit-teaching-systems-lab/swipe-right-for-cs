@@ -23,8 +23,7 @@ class BubbleChart extends Component{
       backgroundColor:'black',
       height:percentage,
       width:percentage,
-      borderRadius: 100
-      
+      borderRadius: 100, 
     };
     var reactNode = <div style={styles}></div>;
     return reactNode;
