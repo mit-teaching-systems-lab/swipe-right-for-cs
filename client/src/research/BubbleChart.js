@@ -57,7 +57,7 @@ class BubbleChart extends Component{
         {_.map(groupedByKey, (row, profileName) => {
           return (
             <tr className="Bubble-row">
-              <td><img src={pics[profileName]} alt="" height="50" width="100"/></td>
+              <td><img src={pics[profileName]} alt="" height="100" width="100"/></td>
               {_.map(profileKeys, profileKey=>{
                 return <td className="Bubble-data">{this.makeBubble(row[profileKey], numInteractions[profileName][profileKey])}</td>; 
               })}
