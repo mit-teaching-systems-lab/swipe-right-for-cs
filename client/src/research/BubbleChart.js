@@ -13,19 +13,16 @@ import chroma from 'chroma-js';
 //circles on the chart represent the percentage of people who swiped right for a given student and profile
 class BubbleChart extends Component{
 
-  makeBubble(percentage){
-    const colors = chroma.scale(['#a50026','#006837']);
-    console.log(colors)
-    var color =  colors(percentage/100).brighten(1).hex();
-
-    // console.log(percentage)
+  makeBubble(percentage, n){
+    const colors = chroma.scale(['white','#006837']);
+    var color =  colors(n/50).brighten(1).hex();
     var styles = {
       backgroundColor:color,
       height:percentage,
       width:percentage,
       borderRadius: 100, 
     };
-    var reactNode = <div style={styles}></div>;
+    var reactNode = <div style={styles} title={`n=${n}`}></div>;
     return reactNode;
   }
   norm(){
@@ -42,7 +39,6 @@ class BubbleChart extends Component{
     const numInteractions = _.mapValues(groupedByName, row=>{
       return totalSwipes(row,'profileKey');
     });
-
     const groupedByKey = _.mapValues(groupedByName, row => {
       return percentRightPerProfile(row, 'profileKey');
     }); 
@@ -61,9 +57,9 @@ class BubbleChart extends Component{
         {_.map(groupedByKey, (row, profileName) => {
           return (
             <tr className="Bubble-row">
-              <td><img src={pics[profileName]} alt="" height="100" width="100"/></td>
+              <td><img src={pics[profileName]} alt="" height="50" width="100"/></td>
               {_.map(profileKeys, profileKey=>{
-                return <td className="Bubble-data">{this.makeBubble(row[profileKey])}</td>; 
+                return <td className="Bubble-data">{this.makeBubble(row[profileKey], numInteractions[profileName][profileKey])}</td>; 
               })}
             </tr>
           );
