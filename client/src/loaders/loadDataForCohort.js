@@ -1,5 +1,7 @@
 import __flatten from 'lodash/flatten';
 import __defaults from 'lodash/defaults';
+import __isArray from 'lodash/isArray';
+import __range from 'lodash/range';
 import parseCsvSync from 'csv-parse/lib/sync';
 import profileTemplatesFile from '../files/profileTemplates.csv';
 import sortedVariantsFile from '../files/sortedVariants.csv';
@@ -12,7 +14,8 @@ export const defaultOptions = {
   argumentCount: 4,
   cohortCount: 10,
   maxProfileCount: 10,
-  forcedProfileCount: 6
+  forcedProfileCount: 6,
+  forceCodeOrgBuckets: false
 };
 
 // Returns {cohortNumber, students}
@@ -37,18 +40,23 @@ async function fetchTexts() {
 }
 
 // Determine cohort, apply manipulations, shuffle ordering
+//
+// options.forceCodeOrgBuckets - used to force a bucketing strategy (eg in small trials, to oversample
+// particular cells if randomization doesn't balance enough).
 export function cohortCreateAndShuffle(workshopCode, profileTemplates, variants, options = {}) {
   // Tune number of arguments, cohorts, max profiles shown
   const {
     cohortCount,
     forcedProfileCount,
     maxProfileCount,
-    argumentCount
+    argumentCount,
+    forceCodeOrgBuckets
   } = __defaults({}, options, defaultOptions);
 
   // Bucket into cohort, and create profiles for cohort
   // Workshop codes are case-insensitive.
-  const cohortNumber = Math.abs(hashCode(workshopCode.toUpperCase())) % cohortCount;
+  // This also supports forcing a particular bucket, to manually rebalance from randomization.
+  const cohortNumber = chooseCohortNumber(workshopCode, {cohortCount, forceCodeOrgBuckets});
   const studentProfiles = createProfilesForCohort(cohortNumber, profileTemplates, variants, {
     maxProfileCount,
     argumentCount
@@ -103,4 +111,17 @@ export function shuffleInBuckets(items, midpoint, cohortNumber) {
     consistentShuffleForKey(items.slice(0, midpoint), cohortNumber),
     consistentShuffleForKey(items.slice(midpoint, items.length), cohortNumber)
   ]);
+}
+
+// Determine the cohortNumber.  This hashes into options.cohortCount unless
+// forceCodeOrgBuckets is passed as an array of cohortNumbers (eg, with sampling weighted
+// unevenly).
+export function chooseCohortNumber(workshopCode, options = {}) {
+  const {cohortCount, forceCodeOrgBuckets} = options;
+
+  const buckets = (forceCodeOrgBuckets !== false && __isArray(forceCodeOrgBuckets))
+    ? forceCodeOrgBuckets
+    : __range(0, cohortCount);
+  const bucketIndex = Math.abs(hashCode(workshopCode.toUpperCase())) % buckets.length;
+  return buckets[bucketIndex];
 }
