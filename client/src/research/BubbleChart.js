@@ -6,6 +6,7 @@ import {
   isSwipe
 } from './functions.js';
 import './BubbleChart.css';
+import chroma from 'chroma-js';
 
 
 //This component creates a Bubble Chart graph which has student on the vertical axis and possible profiles for any student on the horizontal axis
@@ -13,15 +14,10 @@ import './BubbleChart.css';
 class BubbleChart extends Component{
 
   makeBubble(percentage){
-    const colors = ['#a50026','#ab0726','#b00f26','#b51527','#bb1a27','#c11f27','#c62427','#cc2827','#d22c27','#d73027',
-      '#d73027','#da382a','#dd402d','#e14730','#e44e33','#e75436','#eb5b39','#ee613c','#f1673f','#f46d43',
-      '#f46d43','#f57546','#f77c49','#f8844d','#f98b50','#fa9253','#fb9a57','#fca05a','#fca75e','#fdae61',
-      '#fee08b','#fbe28b','#f8e28b','#efe78b','#eee78b','#ede88b','#e3eb8b','#e3ec8b','#daee8b','#d9ef8b',
-      '#d9ef8b','#d3ed87','#cfea84','#c8e780','#c3e57d','#bce378','#b7e175','#b1de71','#acdc6e','#a6d96a',
-      '#a6d96a','#9ed669','#98d368','#91cf68','#8bcd67','#84ca66','#7dc665','#76c365','#6fc064','#66bd63',
-      '#66bd63','#5fb961','#58b45f','#51b05d','#4aac5a','#42a958','#3aa556','#32a154','#289c52','#1a9850',
-      '#1a9850','#18934e','#158e4b','#138a48','#108546','#0d7f43','#0a7b41','#07763f','#05723c','#026c39','#006837'];
-    var color =  colors[Math.floor(percentage)];
+    const colors = chroma.scale(['#a50026','#006837']);
+    console.log(colors)
+    var color =  colors(percentage/100).brighten(1).hex();
+
     // console.log(percentage)
     var styles = {
       backgroundColor:color,
