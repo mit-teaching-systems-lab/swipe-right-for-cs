@@ -28,7 +28,7 @@ class ThanksPhase extends Component {
   // this is a problem on desktop Firefox
   doScrollHack() {
     const el = document.querySelector('.MobileSimulator-background');
-    if (el) el.scrollTo(0, 0);    
+    if (el && el.scrollTo) el.scrollTo(0, 0); // scrollTo isn't supported on older versions of IE
   }
   
   computeMoves() {

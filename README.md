@@ -1,9 +1,18 @@
 # swipe-right-for-cs
 A game for teachers to practice empathizing with young people and authentically connecting their strengths and interests to computer science.
 
-To develop locally:
+This uses a Postgres database; these `psql` commands will boostrap it for local development.
+
+
+### To setup locally:
 ```
 $ yarn install
+$ yarn db-create swipe-right-db
+```
+
+
+### To develop locally:
+```
 $ yarn start
 ```
 
@@ -20,28 +29,13 @@ $ yarn run grok
 
 Then open that URL on your phone.
 
-## Database
-This uses a Postgres database; these `psql` commands will boostrap it for local development:
 
+
+### To run tests:
 ```
-CREATE DATABASE "swipe-right-db";
-\c swipe-right-db;
-CREATE TABLE interactions (
-  id serial primary key,
-  interaction jsonb,
-  session jsonb,
-  timestampz timestamptz
-);
-CREATE TABLE links (
-  id serial primary key,
-  email text,
-  link text,
-  timestampz timestamptz
-);
-CREATE TABLE whitelist (
-  id serial primary key,
-  email text
-);
+$ yarn test
 ```
 
 If you want to run the tests, you should create a similar database called "swipe-right-db-test".
+
+You can also run the linter and tests independently for the server or client code, see `package.json` for commands.

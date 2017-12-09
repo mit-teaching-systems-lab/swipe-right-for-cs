@@ -20,7 +20,7 @@ describe('loginEndpoint', () => {
     loginEndpoint(pool, mailgunEnv, request, response);
     response.on('end', () => {
       expect(response.statusCode).toEqual(405);
-      done();
+      pool.end(done);
     });
   });
 
@@ -32,7 +32,6 @@ describe('loginEndpoint', () => {
         email : 'kevin@mit.edu'
       }
     });
-    console.log('kevin@mit.edu');
     const response = testResponse();
     const pool = testPool();
     const mailgunEnv = {};
@@ -40,7 +39,8 @@ describe('loginEndpoint', () => {
     loginEndpoint(pool, mailgunEnv, request, response);
     response.on('end', () => {
       expect(response.statusCode).toEqual(200);
-      done();
+
+      pool.end(done);
     });
   });
 });

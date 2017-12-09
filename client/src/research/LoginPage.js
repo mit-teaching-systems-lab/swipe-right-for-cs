@@ -11,18 +11,16 @@ class LoginPage extends Component {
       email: ""
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.onUpdateEmail = this.onUpdateEmail.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  handleChange(e) {
-    // console.log(this);
+  onUpdateEmail(e) {
     const { value } = e.target;
-    // console.log(e.target);
     this.setState({ email : value });
   }
 
-  handleSubmit(e) {
+  onSubmit(e) {
     e.preventDefault();
     fetch('/api/research/login', {
       headers: {
@@ -45,11 +43,16 @@ class LoginPage extends Component {
     return (
       <div className='LoginView'>
         <h3> Welcome to the Teacher Moments Researcher Portal</h3>
-        <form name="loginForm" onSubmit={this.handleSubmit}>
-          <label htmlFor="email"><b>Enter authorized email address: </b></label> <br/><br/>
-          <input type="email" placeholder="Enter email here" name="email" value={email} onChange={this.handleChange} required></input><br/><br/>
-
-          <button type="submit"> Get Link </button>
+        <form name="loginForm" onSubmit={this.onSubmit}>
+          <div className='Block'>
+            <label htmlFor="email"><b>Enter authorized email address: </b></label>
+          </div>
+          <div className='Block'>
+            <input type="email" placeholder="Enter email here" name="email" value={email} onChange={this.onUpdateEmail} required></input>
+          </div>
+          <div className='Block'>
+            <button type="submit"> Get Link </button>
+          </div>
         </form>
       </div>
     );

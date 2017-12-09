@@ -3,9 +3,6 @@ const uuid = require('uuid');
 const qs = require('querystring');
 const {sendEmail, renderEmail} = require('./util/email.js');
 
-// // for debugging
-// const fs = require('fs');
-
 // Redirect to HTTPS
 function enforceHTTPS(request, response, next) {
   if (process.env.NODE_ENV === 'development') return next();
@@ -56,7 +53,7 @@ function onlyAllowResearchers(pool, request, response, next) {
     console.log({ error: err });
   });
 
-  const resultFound = true;
+  const resultFound = false;
   if (resultFound) {
     return  next();
   }
@@ -91,17 +88,11 @@ function emailLink(mailgunEnv, email, link) {
     subject: 'Swipe Right for CS: Login Link'
   };
 
-  if (process.env.NODE_ENV === 'development') {
-    // // Save email template locally for testing
-    // fs.writeFileSync('/Users/keving17/Documents/Github/TSL/swipe-right-for-cs/server/test.html',html);
-
-    console.log('No emailing in testing mode. Go to the following link to move forward.');
-    console.log(link);
-    return Promise.resolve();
-  }
-  if (process.env.NODE_ENV === 'test') {
-    console.log('No emailing in development mode. Go to the following link to move forward.');
-    console.log(link);
+  if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('No emailing except for in production mode. Go to the following link to move forward.');
+      console.log(link);
+    }
     return Promise.resolve();
   }
 
@@ -117,20 +108,17 @@ function emailLink(mailgunEnv, email, link) {
   });
 }
 
-
+//Endpoint to handle login attempts
+//Check recieved email against autherized set of researchers on whitelist
+//Generates and records link for authorized email. 
+//Emails link for next login step
+//Returns 200 for success, 405 for unauthorized email and 500 for any errors
 function loginEndpoint(pool, mailgunEnv, request, response){
-  // TODO:
-  // 1. Check that the email is in the whitelist in the `researchers` database table
-  // 2. Insert a new record to the `links` database table
-  // 3. Send an email to the researcher with that link in it (generate email with Mustache template, send it with Mailgun)
-  // 4. Return a 200 response
-  
   const {email} = request.body;
 
   isOnWhitelist(pool, email)
     .then(isNotAuthorized => {
       if (isNotAuthorized) {
-        console.log('not authorized');
         return response.status(405).end();
       } else {
         const domain = getDomain(request);
@@ -157,9 +145,8 @@ function createLinkAndEmail(pool, mailgunEnv, email, domain) {
     .then(link => emailLink(mailgunEnv, email, link));
 }
 
+//Endpoint to check link from researchers' email
 function emailLinkEndpoint(pool, mailgunEnv, req, res){
-  //This doesn't actually send emails it seems. More like tokenGeneratorEndpoint
-
   // TODO
   // 1. Read in query string parameter to get email link id
   // 2. Read the `links` database table to see if there is such a link and it's less than an hour old
@@ -197,8 +184,6 @@ function emailLinkEndpoint(pool, mailgunEnv, req, res){
     console.log({ error:err });
   });
 
-  //TODO: How to return 200 response with token in JSON response body?
-  // think I figured it out?
   res.set('Content-Type', 'application/json');
   res.status(200);
   res.json({ 
@@ -213,6 +198,3 @@ module.exports = {
   loginEndpoint,
   emailLinkEndpoint
 };
-
-//token and link generation 
-//https://github.com/mit-teaching-systems-lab/threeflows/blob/ed1a1434c332316c27d9f8d25b0748d312d53b1a/server/endpoints/review_login.js

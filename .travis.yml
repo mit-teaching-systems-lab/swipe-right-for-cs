@@ -2,6 +2,16 @@ language: node_js
 node_js:
   - "6.11.3"
 
+
 branches:
   only:
     - master
+
+# This makes sure the `jsonb` type is supported, and that the connection string
+# used in db-create-test will work.
+addons:
+  postgresql: "9.6"
+
+# This runs ascript to create the swipe-right test database and create tables.
+before_script:
+  - yarn db-create-test
