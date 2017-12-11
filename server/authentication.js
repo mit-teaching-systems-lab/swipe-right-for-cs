@@ -3,9 +3,6 @@ const uuid = require('uuid');
 const qs = require('querystring');
 const {sendEmail, renderEmail} = require('./util/email.js');
 
-// for debugging
-const fs = require('fs');
-
 // Redirect to HTTPS
 function enforceHTTPS(request, response, next) {
   if (process.env.NODE_ENV === 'development') return next();
@@ -95,7 +92,6 @@ function emailLink(mailgunEnv, email, link) {
     if (process.env.NODE_ENV === 'development') {
       console.log('No emailing except for in production mode. Go to the following link to move forward.');
       console.log(link);
-      fs.writeFileSync('/Users/keving17/Documents/Github/TSL/swipe-right-for-cs/server/test.html',html);
     }
     return Promise.resolve();
   }
@@ -118,7 +114,6 @@ function emailLink(mailgunEnv, email, link) {
 //Emails link for next login step
 //Returns 200 for success, 405 for unauthorized email and 500 for any errors
 function loginEndpoint(pool, mailgunEnv, request, response){
-  console.log("endpoint reached");
   const {email} = request.body;
 
   isOnWhitelist(pool, email)
