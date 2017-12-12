@@ -14,6 +14,7 @@ import {
   onlyConsentedInteractions,
   formatPercent
 } from './functions';
+import './WorkshopsAnalysis.css';
 
 
 
@@ -42,6 +43,25 @@ function summarizeWorkshops(allInteractions) {
   });
 }
 
+// Returns a list of cells used in the experiment
+function summarizeCells(allInteractions) {
+  return __toPairs(__groupBy(allInteractions, row => row.session.cohortNumber)).map(pair => {
+    const [cohortNumber, rawInteractions] = pair;
+    const consentedInteractions = onlyConsentedInteractions(rawInteractions);
+    const consentedIdentifiers = __uniq(consentedInteractions.map(row => row.session.identifier)).length;
+    const allIdentifiers = __uniq(rawInteractions.map(row => row.session.identifier)).length;
+    const dateTexts = __sortBy(__uniq(rawInteractions.map(row => dateFormat(new Date(row.timestampz), 'mm/dd/yy'))));
+    const weekCount = __sortBy(__uniq(rawInteractions.map(row => dateFormat(new Date(row.timestampz), 'W')))).length;
+    return {
+      cohortNumber,
+      consentedIdentifiers,
+      consentRate: formatPercent(consentedIdentifiers / allIdentifiers),
+      weekCount: weekCount,
+      dateTexts: dateTexts.join('  ')
+    };
+  });
+}
+
 
 // Shows an analyis of what was done in code.org workshops
 class WorkshopsAnalysis extends React.Component {
@@ -52,6 +72,7 @@ class WorkshopsAnalysis extends React.Component {
       <div className="WorkshopsAnalysis">
         {this.renderSummary(codeOrgInteractions)}
         {this.renderConsentedWorkshops(codeOrgInteractions)}
+        {this.renderCells(codeOrgInteractions)}
       </div>
     );
   }
@@ -77,26 +98,60 @@ class WorkshopsAnalysis extends React.Component {
     const sortedWorkshops = __sortBy(workshops, 'timeStart');
     const marginRight = 10;
     return (
-      <div style={{marginRight, border: '1px solid #eee', fontSize: 10}}>
-        <AutoSizer disableHeight>
-          {({width}) => (
-            <Table
-              headerHeight={30}
-              height={400}
-              rowCount={sortedWorkshops.length}
-              rowGetter={({index}) => sortedWorkshops[index]}
-              rowHeight={30}
-              width={width - marginRight}
-            >
-              <Column dataKey="workshopCode" label="workshopCode" width={100} />
-              <Column dataKey="consentedIdentifiers" label="consented" width={100} />
-              <Column dataKey="consentRate" label="consentRate" width={100} />
-              <Column dataKey="unconsentedIdentifiers" label="unconsented" width={100} />
-              <Column dataKey="timeStart" label="min(time)" width={200} />
-              <Column dataKey="timeEnd" label="max(time)"  width={200} />
-            </Table>
-          )}
-        </AutoSizer>
+      <div>
+        <div className="WorkshopAnalysis-caption">Workshops</div>
+        <div className="WorkshopAnalysis-table" style={{marginRight}}>
+          <AutoSizer disableHeight>
+            {({width}) => (
+              <Table
+                headerHeight={30}
+                height={400}
+                rowCount={sortedWorkshops.length}
+                rowGetter={({index}) => sortedWorkshops[index]}
+                rowHeight={30}
+                width={width - marginRight}
+              >
+                <Column dataKey="workshopCode" label="workshopCode" width={100} />
+                <Column dataKey="consentedIdentifiers" label="consented" width={100} />
+                <Column dataKey="consentRate" label="consentRate" width={100} />
+                <Column dataKey="unconsentedIdentifiers" label="unconsented" width={100} />
+                <Column dataKey="timeStart" label="min(time)" width={200} />
+                <Column dataKey="timeEnd" label="max(time)"  width={200} />
+              </Table>
+            )}
+          </AutoSizer>
+        </div>
+      </div>
+    );
+  }
+
+  renderCells(allInteractions) {
+    const cells = summarizeCells(allInteractions);
+    const sortedCells = __sortBy(cells, 'cohortNumber');
+    const marginRight = 10;
+    return (
+      <div>
+        <div className="WorkshopAnalysis-caption">Experimental cells</div>
+        <div className="WorkshopAnalysis-table" style={{marginRight}}>
+          <AutoSizer disableHeight>
+            {({width}) => (
+              <Table
+                headerHeight={30}
+                height={400}
+                rowCount={sortedCells.length}
+                rowGetter={({index}) => sortedCells[index]}
+                rowHeight={30}
+                width={width - marginRight}
+              >
+                <Column dataKey="cohortNumber" label="cohortNumber" width={100} />
+                <Column dataKey="consentedIdentifiers" label="consented" width={100} />
+                <Column dataKey="consentRate" label="consentRate" width={100} />
+                <Column dataKey="weekCount" label="Weeks" width={100} />
+                <Column dataKey="dateTexts" label="Dates" width={300} />
+              </Table>
+            )}
+          </AutoSizer>
+        </div>
       </div>
     );
   }

@@ -36,7 +36,7 @@ class WorkshopCode extends Component {
 
   // Since there's some jank setting the focus while animating.
   onDelaySettled() {
-    this.workshopInputEl.focus();
+    if (this.workshopInputEl) this.workshopInputEl.focus();
   }
 
   onCodeTapped() {

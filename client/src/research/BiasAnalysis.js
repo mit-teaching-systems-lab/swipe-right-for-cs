@@ -26,6 +26,23 @@ import {isSwipe} from './functions';
 import './BiasAnalysis.css';
 
 
+/*
+Model paper:
+https://www.apa.org/pubs/journals/releases/apl-0000022.pdf
+
+Questions:
+We can't oversample sub-groups of teachers based on their demographics, but do we need to look at this later?
+
+Notes:
+Binomial distributions don't work across anything, since we can't assume the same underlying
+rate -  individual teachers or profiles or names will have different underlying rates.
+We did not stratify or balance the conditions across geography, program, etc.  This wouldn't have
+worked perfectly given the need for teachers in workshops to be able to communicate, and we didn't
+have enough data ahead of time with details about the workshops that were happening to do this.
+
+
+*/
+
 // This computes data for slicing by an attribute like profileKey or profileName.
 // It's computed here so that sorting can be shared across views.
 // It also supports simulating each data.
