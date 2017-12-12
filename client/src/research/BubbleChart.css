@@ -1,11 +1,7 @@
 .Bubble-table {
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
 }
 .Bubble-row {
-  display:flex;
-  flex-direction: row;
   align-items: center;
 }
 .Bubble-data {

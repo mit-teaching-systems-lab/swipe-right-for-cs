@@ -25,9 +25,7 @@ class BubbleChart extends Component{
     var reactNode = <div style={styles} title={`n=${n}`}></div>;
     return reactNode;
   }
-  norm(){
 
-  }
   render() {
     const interactions = this.props.consentedInteractions.filter(isSwipe);
     const profileKeys = _.uniq(_.map(interactions, row=>{
@@ -47,19 +45,19 @@ class BubbleChart extends Component{
     }); 
     return (
 
-      <table className = "Bubble-table">
-        <tr className = "Bubble-row">
-          <td className="Bubble-data">Student</td>
+      <table>
+        <tr>
+          <th><div className="Bubble-data"> Student </div></th>
           {_.map(profileKeys, profileKey=>{
-            return <td className="Bubble-data">{profileKey}</td>;
+            return <th><div className="Bubble-data"> {profileKey}</div></th>;
           })}
         </tr>
         {_.map(groupedByKey, (row, profileName) => {
           return (
-            <tr className="Bubble-row">
+            <tr>
               <td><img src={pics[profileName]} alt="" height="100" width="100"/></td>
               {_.map(profileKeys, profileKey=>{
-                return <td className="Bubble-data">{this.makeBubble(row[profileKey], numInteractions[profileName][profileKey])}</td>; 
+                return <td> <div className="Bubble-data">{this.makeBubble(row[profileKey], numInteractions[profileName][profileKey])}</div></td>; 
               })}
             </tr>
           );
