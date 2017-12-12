@@ -105,17 +105,15 @@ exports[`renders without crashing 1`] = `
     <div>
       No data points!
     </div>
-    <table
-      className="Bubble-table"
-    >
-      <tr
-        className="Bubble-row"
-      >
-        <td
-          className="Bubble-data"
-        >
-          Student
-        </td>
+    <table>
+      <tr>
+        <th>
+          <div
+            className="Bubble-data"
+          >
+             Student 
+          </div>
+        </th>
       </tr>
     </table>
   </div>
