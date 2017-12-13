@@ -13,11 +13,6 @@ function enforceHTTPS(request, response, next) {
   return next();
 }
 
-function sendUnauthorized(res) {
-  res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-  return res.send(401);
-}
-
 function getDomain(request) {
   return (process.env.NODE_ENV === 'development')
     ? 'http://localhost:3000'
@@ -26,38 +21,87 @@ function getDomain(request) {
 
 // Only allow folks who are authorized.  Call `next` if they are authorized,
 // and return a 404 with no body if not.
+// Middleman function to confirm authorization token is valid
+// Reads token from request header and checks against tokens in db
 function onlyAllowResearchers(pool, request, response, next) {
-  // TODO
-  // 1. Read the token from the request header
-  // 2. Check to see if the token header is in `tokens` database table and it's less than 24 hours old
+  //TODO: Is this really true?
   // 3. This code should run in both development and production.
 
-  if (process.env.NODE_ENV === 'development') return next();
+  // if (process.env.NODE_ENV === 'development') return next();
 
-  const token = request.body['token'];
-  const email = request.body['email'];
+  const token = request.headers['token'];
+  const email = request.headers['email'];
+
+  checkToken(pool, email, token)
+    .then(tokenAuthorized => {
+      if (tokenAuthorized) {
+        return next();
+      }
+      else {
+        console.log('token is incorrect');
+        return response.status(405).end();
+      }
+    })
+    .catch(err => {
+      console.log({ error: err });
+      return response.status(500).end();
+    });
+}
+
+function checkToken(pool, email, token) {
   const now = new Date();
 
-  // Check if link is in links DB
   const sql = `
     SELECT * 
     FROM tokens 
     WHERE token=$1 
       AND email=$2
-      AND TO_TIMESTAMP($3) > timestampz
-      And TO_TIMESTAMP($3) < (timestampz + INTERVAL '24 hours')
+      AND $3 > timestampz
+      And $3 < (timestampz + INTERVAL '24 hours')
     ORDER BY id ASC LIMIT 1`;
   const values = [token, email, now];
-  pool.query(sql, values).catch(err => {
-    console.log('loginEndpoint returned error');
-    console.log({ error: err });
-  });
+  return pool.query(sql, values)
+    .then(results => Promise.resolve(results.rowCount===1))
+    .catch(err => {
+      console.log('query returned err: ', err);
+    });
+}
 
-  const resultFound = false;
-  if (resultFound) {
-    return  next();
-  }
-  return sendUnauthorized(response);
+//Endpoint to handle login attempts
+//Check recieved email against autherized set of researchers on whitelist
+//Generates and records link for authorized email. 
+//Emails link for next login step
+//Returns 200 for success, 405 for unauthorized email and 500 for any errors
+function loginEndpoint(pool, mailgunEnv, request, response){
+  const {email} = request.body;
+
+  isOnWhitelist(pool, email)
+    .then(isNotAuthorized => {
+      if (isNotAuthorized) {
+        return response.status(405).end();
+      } else {
+        const domain = getDomain(request);
+        return createLinkAndEmail(pool, mailgunEnv, email, domain)
+          .then(result => response.status(200).end());
+      }
+    })
+    .catch(err => {
+      console.log('loginEndpoint error: ', err);
+      return response.status(500).end();
+    });
+}
+
+function isOnWhitelist(pool, email){
+  const whitelistSQL = 'SELECT * FROM whitelist WHERE email=$1 ORDER BY id ASC LIMIT 1';
+  const whitelistValues = [email];
+  
+  return pool.query(whitelistSQL, whitelistValues)
+    .then(results => Promise.resolve(results.rowCount === 0));
+}
+
+function createLinkAndEmail(pool, mailgunEnv, email, domain) {
+  return insertLink(pool,email, domain)
+    .then(link => emailLink(mailgunEnv, email, link));
 }
 
 function insertLink(pool, email, domain) {
@@ -106,43 +150,6 @@ function emailLink(mailgunEnv, email, link) {
       return resolve();   
     });
   });
-}
-
-//Endpoint to handle login attempts
-//Check recieved email against autherized set of researchers on whitelist
-//Generates and records link for authorized email. 
-//Emails link for next login step
-//Returns 200 for success, 405 for unauthorized email and 500 for any errors
-function loginEndpoint(pool, mailgunEnv, request, response){
-  const {email} = request.body;
-
-  isOnWhitelist(pool, email)
-    .then(isNotAuthorized => {
-      if (isNotAuthorized) {
-        return response.status(405).end();
-      } else {
-        const domain = getDomain(request);
-        return createLinkAndEmail(pool, mailgunEnv, email, domain)
-          .then(result => response.status(200).end());
-      }
-    })
-    .catch(err => {
-      console.log('loginEndpoint error: ', err);
-      return response.status(500).end();
-    });
-}
-
-function isOnWhitelist(pool, email){
-  const whitelistSQL = 'SELECT * FROM whitelist WHERE email=$1 ORDER BY id ASC LIMIT 1';
-  const whitelistValues = [email];
-  
-  return pool.query(whitelistSQL, whitelistValues)
-    .then(results => Promise.resolve(results.rowCount === 0));
-}
-
-function createLinkAndEmail(pool, mailgunEnv, email, domain) {
-  return insertLink(pool,email, domain)
-    .then(link => emailLink(mailgunEnv, email, link));
 }
 
 //Endpoint to check link from researchers' email

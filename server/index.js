@@ -56,7 +56,7 @@ app.post('/api/research/login', limiter, loginEndpoint.bind(null, pool, config.m
 app.post('/api/research/email', limiter, emailLinkEndpoint.bind(null, config.mailgunEnv));
 
 // Endpoints for authenticated researchers to access data
-app.get('/api/research/interactions', onlyAllowResearchers, interactionsEndpoint.bind(null, pool));
+app.get('/api/research/interactions', onlyAllowResearchers.bind(null, pool), interactionsEndpoint.bind(null, pool));
 
 
 // Serve any static files.
