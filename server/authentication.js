@@ -19,8 +19,6 @@ function getDomain(request) {
     : `https://${request.headers.host}`;
 }
 
-// Only allow folks who are authorized.  Call `next` if they are authorized,
-// and return a 404 with no body if not.
 // Middleman function to confirm authorization token is valid
 // Reads token from request header and checks against tokens in db
 function onlyAllowResearchers(pool, request, response, next) {
@@ -152,51 +150,77 @@ function emailLink(mailgunEnv, email, link) {
   });
 }
 
-//Endpoint to check link from researchers' email
-function emailLinkEndpoint(pool, mailgunEnv, req, res){
+// Endpoint to check link from researchers' email
+// Confirm email link is valid and generates token 
+// for user to access data. Adds token to 'tokens' database
+// 
+function emailLinkEndpoint(pool, request, response){
   // TODO
-  // 1. Read in query string parameter to get email link id
-  // 2. Read the `links` database table to see if there is such a link and it's less than an hour old
-  // 3. Insert a new token into the `tokens` database table
   // 4. Return a 200 response with {token} in a JSON response body.
 
-  const link = req.header['link'];
-  const email = req.header['email'];
+  const link = request.headers['link'];
+  const email = request.headers['email'];
+  checkLink(pool, email, link)
+    .then(linkAuthorized => {
+      if (linkAuthorized) {
+        console.log('Link Authorized');
+        const token = generateToken(pool, email);
+        response.set('Content-Type', 'application/json');
+        response.body({ 
+          status: 'ok',
+          token: token
+        });
+        return response.status(200).end();
+
+        //TODO: How to check body for token?!?!?!?!
+      }
+      else {
+        console.log('bad link');
+        return response.status(405).end();
+      }
+    })
+    .catch(err => {
+      console.log('loginEndpoint returned error');
+      console.log({ error: err });
+      return response.status(405).end();
+    });
+}
+
+function checkLink(pool, email, link) {
   const now = new Date();
 
-  // Check if link is in links DB
   const linkSQL = `
     SELECT * 
     FROM links 
     WHERE link=$1 
       AND email=$2
-      AND TO_TIMESTAMP($3) > timestampz
-      And TO_TIMESTAMP($3) < (timestampz + INTERVAL '24 hours')
+      AND $3 > timestampz
+      And $3 < (timestampz + INTERVAL '24 hours')
     ORDER BY id ASC LIMIT 1`;
   const linkValues = [link, email, now];
-  pool.query(linkSQL, linkValues).catch(err => {
-    console.log('loginEndpoint returned error');
-    console.log({ error: err });
-  });
+  return pool.query(linkSQL, linkValues)
+    .then(results => {
+      console.log(results);
+      return Promise.resolve(results.rowCount===1);
+    })
+    .catch(err => {
+      console.log('query returned err: ', err);
+    });
+}
 
-  //TODO: How to keep track of result??
-
+function generateToken(pool, email) {
+  const now = new Date();
   //Create actual token and insert into token DB
   const token = uuid.v4();
 
   const sql = `INSERT INTO tokens(email, token, timestampz) VALUES ($1, $2, $3)`;
   const values = [email, token, now];
-  pool.query(sql, values).catch(err => {
-    console.log('query returned err: ', err);
-    console.log({ error:err });
-  });
-
-  res.set('Content-Type', 'application/json');
-  res.status(200);
-  res.json({ 
-    status: 'ok',
-    token: token
-  });
+  pool.query(sql, values)
+    .then(result => token)
+    .catch(err => {
+      console.log('query returned err: ', err);
+      console.log({ error:err });
+    });
 }
 
 module.exports = {

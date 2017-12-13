@@ -53,7 +53,7 @@ app.post('/api/share', limiter, emailMyResponsesEndpoint.bind(null, config.mailg
 
 // Endpoints for researcher login
 app.post('/api/research/login', limiter, loginEndpoint.bind(null, pool, config.mailgunEnv));
-app.post('/api/research/email', limiter, emailLinkEndpoint.bind(null, config.mailgunEnv));
+app.post('/api/research/email', limiter, emailLinkEndpoint.bind(null, pool));
 
 // Endpoints for authenticated researchers to access data
 app.get('/api/research/interactions', onlyAllowResearchers.bind(null, pool), interactionsEndpoint.bind(null, pool));
