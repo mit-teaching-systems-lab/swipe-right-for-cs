@@ -195,7 +195,7 @@ class BiasAnalysis extends React.Component {
         {this.renderPanelFor('Profile', chartDataForProfileKey)}
         {this.renderBubbleChart(interactions, chartDataForProfileName, chartDataForProfileKey)}
         {this.renderBubbleChartStats(interactions, chartDataForProfileName, chartDataForProfileKey)}
-        {this.renderProfileArgumentChart(interactions)}
+        {this.renderProfileArgumentChart(interactions, chartDataForProfileName, chartDataForProfileKey)}
       </div>
     );
   }
@@ -292,10 +292,10 @@ class BiasAnalysis extends React.Component {
   }
 
   renderProfileArgumentChart(consentedInteractions, chartDataForProfileName, chartDataForProfileKey) {
-    // return <ProfileArgumentChart
-    //   consentedInteractions={consentedInteractions}
-    //   chartDataForProfileName={chartDataForProfileName}
-    //   chartDataForProfileKey={chartDataForProfileKey} />;
+    return <ProfileArgumentChart
+      consentedInteractions={consentedInteractions}
+      chartDataForProfileName={chartDataForProfileName}
+      chartDataForProfileKey={chartDataForProfileKey} />;
   }
 }
 BiasAnalysis.propTypes = {

@@ -6,13 +6,16 @@ import {
   isSwipe,
   formatPercent
 } from './functions.js';
+import './ProfileArgumentChart.css';
 import DataBubble from './DataBubble';
 
 
-// This component creates a table that shows arguments on the vertical axis and
-// student profiles on the horizontal axis.
-// Circles on the chart represent the percentage of people who swiped right for a given student and profile,
-// and coloring represents the confidence of the finding.
+// Lookup data about a data point with {labels, dataPoints}.
+function lookupDataFor(chartData, groupKey) {
+  return _.find(chartData.dataPoints, {groupKey});
+}
+//This component creates a Bubble Chart graph which has student on the vertical axis and possible profiles for any student on the horizontal axis
+//circles on the chart represent the percentage of people who swiped right for a given student and profile
 class ProfileArgumentChart extends Component{
   render() {
     const {
@@ -40,20 +43,21 @@ class ProfileArgumentChart extends Component{
       return interactions[0].interaction.turn['profileImageSrc']; 
     });
 
+    // flatten out
     const argumentsByKey = _.mapValues(_.groupBy(interactions, row => row.interaction.turn.profileKey), interactions => {
       return _.uniq(interactions.map(row => row.interaction.turn.argumentText)).sort();
     });
     console.log(argumentsByKey);
 
+
     return (
-      <table>
+      <table className="ProfileArgumentChart ProfileArgumentChart-table">
         <thead>
           <tr>
-            <th><div className="Bubble-data">Student</div></th>
-            <th><div className="Bubble-data">Summary</div></th>
+            <th><div className="ProfileArgumentChart-data">Student</div></th>
+            <th><div className="ProfileArgumentChart-data">Summary</div></th>
             {_.map(sortedProfileKeys, profileKey => {
-              const d = _.find(chartDataForProfileKey.dataPoints, { groupKey: profileKey });
-              const {swipeRightPercent, swipeCount} = d;
+              const {swipeRightPercent, swipeCount} = lookupDataFor(chartDataForProfileKey, profileKey);
               return <th key={profileKey}>{this.renderSummary(profileKey, swipeCount, swipeRightPercent)}</th>;
             })}
           </tr>
@@ -61,19 +65,16 @@ class ProfileArgumentChart extends Component{
         <tbody>
           {_.map(sortedNames, profileName => {
             const row = groupedByKey[profileName];
-            const d = _.find(chartDataForProfileName.dataPoints, { groupKey: profileName });
-            const {swipeRightPercent, swipeCount} = d;
+            const {swipeRightPercent, swipeCount} = lookupDataFor(chartDataForProfileName, profileName);
             return (
               <tr key={profileName}>
-                <td><img src={pics[profileName]} alt="" height="100" width="100"/></td>
+                <td><img src={pics[profileName]} alt={profileName} height={100} width={100} /></td>
                 <td>{this.renderSummary(profileName, swipeCount, swipeRightPercent)}</td>
                 {_.map(sortedProfileKeys, profileKey => {
                   return (
                     <td key={profileKey}>
-                      <div className="Bubble-data">
-                        <DataBubble
-                          percentage={row[profileKey]}
-                          n={numInteractions[profileName][profileKey]} />
+                      <div className="ProfileArgumentChart-data">
+                        {this.renderCell(profileKey, profileName, this.props, {row, numInteractions})}
                       </div>
                     </td>
                   );
@@ -97,6 +98,51 @@ class ProfileArgumentChart extends Component{
         {formatPercent(swipeRightPercent)}
       </div>
     );
+  }
+
+  // branch
+  renderCell(...args) {
+    return 'tbd';//this.renderCellAsNumbers(...args);
+  }
+
+  renderCellAsNumbers(profileKey, profileName, props, indexes) {
+    const {
+      chartDataForProfileKey,
+      chartDataForProfileName
+    } = props;
+
+    const {row, numInteractions} = indexes;
+    const dForKey = lookupDataFor(chartDataForProfileKey, profileKey);
+    const dForName = lookupDataFor(chartDataForProfileName, profileName);
+
+    const percentage = row[profileKey] / 100;
+    const n = numInteractions[profileName][profileKey];
+    return (
+      <div>
+        <div style={{textAlign: 'right'}}>{this.renderDelta(percentage - dForKey.swipeRightPercent, n, '↑')}</div>
+        <div>{this.renderDelta(percentage - dForName.swipeRightPercent, n, '←')}</div>
+        <div />
+        <div style={{color: '#ccc', textAlign: 'right'}}>{formatPercent(percentage)}</div>
+        <div style={{color: '#ccc', textAlign: 'right'}}>n={n}</div>
+      </div>
+    );
+  }
+
+  // renderCellAsBubble(profileKey, profileName, props, indexes) {
+  //   const {row, numInteractions} = indexes;
+  //   return (
+  //     <DataBubble
+  //       percentage={row[profileKey]}
+  //       n={numInteractions[profileName][profileKey]} />
+  //   );
+  // }
+
+  renderDelta(percentage, n, arrow) {
+    const threshold = 0.10;
+    const opacity = (Math.abs(percentage) < threshold) ? 0.15 : 1;
+    const color = (percentage > 0) ? 'green' : 'red';
+    const prefix = (percentage >= 0) ? '+' : ''; 
+    return <span style={{color, opacity}}>{arrow} {prefix}{formatPercent(percentage)}</span>;
   }
 }
 
