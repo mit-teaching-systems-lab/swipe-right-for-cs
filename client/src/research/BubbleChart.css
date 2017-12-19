@@ -1,16 +1,14 @@
-.Bubble-table {
-  justify-content: space-between;
+.BubbleChart-table {
+  width: 100%;
 }
-.Bubble-row {
+.BubbleChart-row {
   align-items: center;
 }
-.Bubble-data {
-  display:flex;
+.BubbleChart-data {
+  display: flex;
   flex-direction: row;
   align-items: center;
   height: 100px;
-  width: 100px;
   align-content: center;
   justify-content: center;
-
 }
