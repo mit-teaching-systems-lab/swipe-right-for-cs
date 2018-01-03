@@ -25,8 +25,6 @@ function onlyAllowResearchers(pool, request, response, next) {
   //TODO: Is this really true?
   // 3. This code should run in both development and production.
 
-  // if (process.env.NODE_ENV === 'development') return next();
-
   const token = request.headers['token'];
   const email = request.headers['email'];
 
@@ -155,24 +153,23 @@ function emailLink(mailgunEnv, email, link) {
 // for user to access data. Adds token to 'tokens' database
 // 
 function emailLinkEndpoint(pool, request, response){
-  // TODO
-  // 4. Return a 200 response with {token} in a JSON response body.
-
   const link = request.headers['link'];
   const email = request.headers['email'];
   checkLink(pool, email, link)
     .then(linkAuthorized => {
       if (linkAuthorized) {
         console.log('Link Authorized');
-        const token = generateToken(pool, email);
-        response.set('Content-Type', 'application/json');
-        response.body({ 
-          status: 'ok',
-          token: token
-        });
-        return response.status(200).end();
 
-        //TODO: How to check body for token?!?!?!?!
+        //TODO: feel like these promises are not done right...shouldn't have to nest things like this
+        generateToken(pool, email)
+          .then(results => {
+            const token = results;
+            response.set('Content-Type', 'application/json');
+            response.json({ 
+              token: token
+            });
+            return response.status(200).end();
+          });
       }
       else {
         console.log('bad link');
@@ -180,7 +177,7 @@ function emailLinkEndpoint(pool, request, response){
       }
     })
     .catch(err => {
-      console.log('loginEndpoint returned error');
+      console.log('emailLinkEndpoint returned error');
       console.log({ error: err });
       return response.status(405).end();
     });
@@ -200,7 +197,6 @@ function checkLink(pool, email, link) {
   const linkValues = [link, email, now];
   return pool.query(linkSQL, linkValues)
     .then(results => {
-      console.log(results);
       return Promise.resolve(results.rowCount===1);
     })
     .catch(err => {
@@ -215,7 +211,7 @@ function generateToken(pool, email) {
 
   const sql = `INSERT INTO tokens(email, token, timestampz) VALUES ($1, $2, $3)`;
   const values = [email, token, now];
-  pool.query(sql, values)
+  return pool.query(sql, values)
     .then(result => token)
     .catch(err => {
       console.log('query returned err: ', err);

@@ -5,7 +5,7 @@ const {EventEmitter} = require('events');
 
 
 function truncate(pool) {
-  return pool.query('TRUNCATE interactions; TRUNCATE links; TRUNCATE whitelist;');
+  return pool.query('TRUNCATE interactions; TRUNCATE links; TRUNCATE whitelist; TRUNCATE tokens');
 }
 
 function seed(pool) {
