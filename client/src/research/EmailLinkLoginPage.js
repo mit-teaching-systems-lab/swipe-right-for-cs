@@ -60,7 +60,7 @@ class EmailLinkLoginPage extends Component {
     const { email } = this.state;
     return (
       <div className='LoginView'>
-		<h3>Welcome back to Teacher Moments!</h3>
+        <h3>Welcome back to Teacher Moments!</h3>
         <form name="loginForm" onSubmit={this.onSubmit}>
           <div className='Block'>
             <label htmlFor="email"><b>Please enter your email below. </b></label>
