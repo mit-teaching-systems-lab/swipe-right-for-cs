@@ -7,10 +7,8 @@ class EmailLinkLoginPage extends Component {
     super(props);
 
     this.state = {
-      link: "",
       email: "",
       token: "default",
-      authenticated: false,
       status: "default"
     };
 
@@ -18,11 +16,6 @@ class EmailLinkLoginPage extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.getQueryVariable = this.getQueryVariable.bind(this);
     this.authenticate = this.authenticate.bind(this);
-  }
-
-  componentDidUpdate() {
-    //TODO: setState does not happen immediately!
-    // alert(this.state.link);
   }
 
   getQueryVariable(variable) {
@@ -39,10 +32,6 @@ class EmailLinkLoginPage extends Component {
   }
 
   authenticate(link) {
-    alert(this.state.email);
-    this.setState({ link : link });
-    alert(this.state.link);
-
     return fetch('/api/research/email', {
       headers: {
         'Accept': 'application/json',
@@ -51,9 +40,6 @@ class EmailLinkLoginPage extends Component {
       method: 'POST',
       body: JSON.stringify({
         email: this.state.email,
-
-        //setState doesn't update values immediately so this.state.link does not work
-        // link: this.state.link
         link: link
       })
     });
@@ -66,9 +52,8 @@ class EmailLinkLoginPage extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    const newValue = this.getQueryVariable('linkToken');
-    // this.setState({ link : newValue });
-    this.authenticate(newValue)
+    const linkToken = this.getQueryVariable('linkToken');
+    this.authenticate(linkToken)
       .then(result => {
         if (result.status === 200){
           this.onSubmitSuccess();
@@ -80,7 +65,6 @@ class EmailLinkLoginPage extends Component {
   }
 
   onSubmitSuccess() {
-    this.setState({ authenticated : true });
     this.setState({ status : 'success' });
   }
 
