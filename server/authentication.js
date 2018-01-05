@@ -108,7 +108,7 @@ function insertLink(pool, email, domain) {
   // Insert link into database
   const linkSQL = `INSERT INTO links(email, link, timestampz) VALUES ($1, $2, $3)`;
   const now = new Date();
-  const linkValues = [email, link, now];
+  const linkValues = [email, linkToken, now];
   return pool.query(linkSQL, linkValues)
     .then(results => link)
     .catch(err => {
@@ -153,8 +153,8 @@ function emailLink(mailgunEnv, email, link) {
 // for user to access data. Adds token to 'tokens' database
 // 
 function emailLinkEndpoint(pool, request, response){
-  const link = request.headers['link'];
-  const email = request.headers['email'];
+  const link = request.body['link'];
+  const email = request.body['email'];
   checkLink(pool, email, link)
     .then(linkAuthorized => {
       if (linkAuthorized) {
@@ -179,7 +179,7 @@ function emailLinkEndpoint(pool, request, response){
     .catch(err => {
       console.log('emailLinkEndpoint returned error');
       console.log({ error: err });
-      return response.status(405).end();
+      return response.status(500).end();
     });
 }
 
