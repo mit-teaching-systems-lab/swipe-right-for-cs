@@ -56,6 +56,10 @@ class EmailLinkLoginPage extends Component {
     this.authenticate(linkToken)
       .then(result => {
         if (result.status === 200){
+          result.json()
+            .then(result => {
+              this.setState({token:result.token});
+            });
           this.onSubmitSuccess();
         }else{
           this.onSubmitError();
@@ -113,6 +117,7 @@ class EmailLinkLoginPage extends Component {
       return (
         <div className='LoginView'>
           <h3>Success! What to do now?</h3>
+          <h3>Token: {this.state.token}</h3>
         </div>
       );
     } else{
