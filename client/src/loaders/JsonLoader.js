@@ -21,9 +21,7 @@ class JsonLoader extends Component {
       : `${path}?${qs.stringify(query)}`;
     return fetch(url, options)
       .then(r => r.json())
-      .catch(err => {
-        console.log({ error: err });
-      });
+      .catch();
   }
 
   render() {
