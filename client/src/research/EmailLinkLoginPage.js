@@ -11,7 +11,8 @@ class EmailLinkLoginPage extends Component {
     this.state = {
       email: "",
       token: "default",
-      status: "default"
+      status: "default",
+      message: "Welcome back to Teacher Moments!"
     };
 
     this.onUpdateEmail = this.onUpdateEmail.bind(this);
@@ -72,50 +73,17 @@ class EmailLinkLoginPage extends Component {
 
   onSubmitSuccess() {
     this.setState({ status : 'success' });
+    this.setState({message: "Welcome back to Teacher Moments!"});
   }
 
   onSubmitError() {
     this.setState({ status : 'error' });
-
+    this.setState({message: "There was a problem with your request. Make sure inputted email is the same email link was sent to."});
   }
 
   render() {
     const { email } = this.state;
-    if (this.state.status === 'default') {
-      return (
-        <div className='LoginView'>
-          <h3>Welcome back to Teacher Moments!</h3>
-          <form name="loginForm" onSubmit={this.onSubmit}>
-            <div className='Block'>
-              <label htmlFor="email"><b>Please enter your email below. </b></label>
-            </div>
-            <div className='Block'>
-              <input type="email" id='email' placeholder="Enter email here" name="email" value={email} onChange={this.onUpdateEmail} required></input>
-            </div>
-            <div className='Block'>
-              <button type="submit"> Get Link </button>
-            </div>
-          </form>
-        </div>
-      );
-    } else if (this.state.status === 'error') {
-      return (
-        <div className='LoginView'>
-          <h3>There was a problem with your request. Make sure inputted email is the same email link was sent to.</h3>
-          <form name="loginForm" onSubmit={this.onSubmit}>
-            <div className='Block'>
-              <label htmlFor="email"><b>Please enter your email below. </b></label>
-            </div>
-            <div className='Block'>
-              <input type="email" id='email' placeholder="Enter email here" name="email" value={email} onChange={this.onUpdateEmail} required></input>
-            </div>
-            <div className='Block'>
-              <button type="submit"> Get Link </button>
-            </div>
-          </form>
-        </div>
-      );
-    } else if (this.state.status === 'success') {
+    if (this.state.status === 'success') {
       if ((this.state.email !=="")&&(this.state.token !== "default")){
         return (
           <Interactions email={this.state.email} token={this.state.token}/>
@@ -123,13 +91,24 @@ class EmailLinkLoginPage extends Component {
       }else {
         return null;
       }
-    } else{
+    } else {
       return (
         <div className='LoginView'>
-          <h3>Should never get here</h3>
+          <h3>{this.state.message}</h3>
+          <form name="loginForm" onSubmit={this.onSubmit}>
+            <div className='Block'>
+              <label htmlFor="email"><b>Please enter your email below. </b></label>
+            </div>
+            <div className='Block'>
+              <input type="email" id='email' placeholder="Enter email here" name="email" value={email} onChange={this.onUpdateEmail} required></input>
+            </div>
+            <div className='Block'>
+              <button type="submit"> Get Link </button>
+            </div>
+          </form>
         </div>
       );
-    }
+    } 
   }
 }
 
