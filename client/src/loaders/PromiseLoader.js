@@ -31,9 +31,7 @@ class PromiseLoader extends React.Component {
           this.onRejected(result);
         }
       })
-      .catch(err => {
-        console.log({ error: err });
-      });
+      .catch();
   }
 
   onResolved(resolve) {
