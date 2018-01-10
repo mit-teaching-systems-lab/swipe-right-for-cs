@@ -18,7 +18,6 @@ class EmailLinkLoginPage extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.getQueryVariable = this.getQueryVariable.bind(this);
     this.authenticate = this.authenticate.bind(this);
-    this.moveForward = this.moveForward.bind(this);
   }
 
   getQueryVariable(variable) {
@@ -45,18 +44,6 @@ class EmailLinkLoginPage extends Component {
         email: this.state.email,
         link: link
       })
-    });
-  }
-
-  moveForward() {
-    return fetch('/api/research/interactions', {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'email': this.state.email,
-        'token': this.state.token
-      },
-      method: 'GET'
     });
   }
 
@@ -129,9 +116,13 @@ class EmailLinkLoginPage extends Component {
         </div>
       );
     } else if (this.state.status === 'success') {
-      return (
-        <Interactions email={this.state.email} token={this.state.token}/>
-      );
+      if ((this.state.email !=="")&&(this.state.token !== "default")){
+        return (
+          <Interactions email={this.state.email} token={this.state.token}/>
+        );
+      }else {
+        return null;
+      }
     } else{
       return (
         <div className='LoginView'>

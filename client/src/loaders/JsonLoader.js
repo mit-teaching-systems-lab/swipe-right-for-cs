@@ -20,7 +20,13 @@ class JsonLoader extends Component {
       ? path
       : `${path}?${qs.stringify(query)}`;
     return fetch(url, options)
-      .then(r => r.json())
+      .then(r => {
+        if (r.status === 200){
+          return r.json();
+        } else{
+          return {};
+        }
+      })
       .catch();
   }
 
