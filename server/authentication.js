@@ -30,12 +30,17 @@ function onlyAllowResearchers(pool, request, response, next) {
 
   checkToken(pool, email, token)
     .then(tokenAuthorized => {
+      console.log('tokenAuthorized:',tokenAuthorized);
       if (tokenAuthorized) {
         return next();
       }
-      else {
+      else if (tokenAuthorized===false){
         console.log('token is incorrect');
         return response.status(405).end();
+      }
+      else {
+        console.log('something went wrong');
+        return response.status(500).end();
       }
     })
     .catch(err => {

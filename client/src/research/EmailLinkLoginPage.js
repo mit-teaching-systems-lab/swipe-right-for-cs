@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './LoginPage.css';
+import Interactions from './Interactions.js';
+
 
 // The page for users to login for accessing research data.
 class EmailLinkLoginPage extends Component {
@@ -16,6 +18,7 @@ class EmailLinkLoginPage extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.getQueryVariable = this.getQueryVariable.bind(this);
     this.authenticate = this.authenticate.bind(this);
+    this.moveForward = this.moveForward.bind(this);
   }
 
   getQueryVariable(variable) {
@@ -42,6 +45,18 @@ class EmailLinkLoginPage extends Component {
         email: this.state.email,
         link: link
       })
+    });
+  }
+
+  moveForward() {
+    return fetch('/api/research/interactions', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'email': this.state.email,
+        'token': this.state.token
+      },
+      method: 'GET'
     });
   }
 
@@ -115,10 +130,14 @@ class EmailLinkLoginPage extends Component {
       );
     } else if (this.state.status === 'success') {
       return (
-        <div className='LoginView'>
-          <h3>Success! What to do now?</h3>
-          <h3>Token: {this.state.token}</h3>
-        </div>
+        <Interactions />
+        // <div className='LoginView'>
+        //   <h3>Success! What to do now?</h3>
+        //   <h3>Token: {this.state.token}</h3>
+        //   <div className='Block'>
+        //     <button type="See Data" onClick={this.moveForward}> See Data </button>
+        //   </div>
+        // </div>
       );
     } else{
       return (

@@ -13,12 +13,29 @@ class JsonLoader extends Component {
     this.fetchJson = this.fetchJson.bind(this);
   }
 
+  //TODO: JSON is sent and recieved now. Not sure what happens after that
   fetchJson() {
     const {path, query, options} = this.props;
     const url = (_.isEmpty(query))
       ? path
       : `${path}?${qs.stringify(query)}`;
-    return fetch(url, options).then(r => r.json());
+    return fetch(url, options)
+      .then(r => {
+        console.log('jsonloader');
+        console.log(r);
+        r.json()
+          .then(result => {
+            console.log(result);
+            return 'hello';
+          })
+          .catch(err =>{
+            console.log({ error: err });
+          });
+      })
+      .catch(err => {
+        console.log('out');
+        console.log({ error: err });
+      });
   }
 
   render() {
