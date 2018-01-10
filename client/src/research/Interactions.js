@@ -11,8 +11,17 @@ class Interactions extends Component {
   }
 
   render() {
+    const opt = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'email': 'kevin@mit.edu',
+        'token': 'd66bec94-2f39-4ba2-950b-6ec96f34a9b8'
+      },
+      method: 'GET'
+    };
     return (
-      <JsonLoader path="/api/research/interactions">
+      <JsonLoader path="/api/research/interactions" options={opt}>
         {this.renderInteractions}
       </JsonLoader>
     );
