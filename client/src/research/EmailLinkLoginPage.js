@@ -131,13 +131,6 @@ class EmailLinkLoginPage extends Component {
     } else if (this.state.status === 'success') {
       return (
         <Interactions />
-        // <div className='LoginView'>
-        //   <h3>Success! What to do now?</h3>
-        //   <h3>Token: {this.state.token}</h3>
-        //   <div className='Block'>
-        //     <button type="See Data" onClick={this.moveForward}> See Data </button>
-        //   </div>
-        // </div>
       );
     } else{
       return (

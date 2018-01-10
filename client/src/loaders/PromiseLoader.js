@@ -22,25 +22,26 @@ class PromiseLoader extends React.Component {
   }
 
   componentDidMount() {
-    console.log('promiseloader');
     const {promiseFn} = this.props;
     promiseFn()
-      .then(this.onResolved)
-      .catch(this.onRejected);
+      .then(result => {
+        if (result.length > 0) {
+          this.onResolved(result);
+        } else{
+          this.onRejected(result);
+        }
+      })
+      .catch(err => {
+        console.log({ error: err });
+      });
   }
 
   onResolved(resolve) {
-    console.log('resolved',resolve);
-    const {dataP} = this.state;
-    console.log('datap',dataP);
-    this.setState({ dataP: {...dataP, resolve} });
-    // this.setState({ dataP: promiseState(false, resolve, undefined) });
+    this.setState({ dataP: promiseState(false, resolve, undefined) });
   }
 
   onRejected(reject) {
-    console.log('rejected');
-    const {dataP} = this.state;
-    this.setState({ dataP: {...dataP, reject} });
+    this.setState({ dataP: promiseState(false, false, true) });
   }
 
   render() {

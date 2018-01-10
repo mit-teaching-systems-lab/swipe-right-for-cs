@@ -19,7 +19,7 @@ class Interactions extends Component {
   }
 
   renderInteractions(json) {
-    const {interactions} = json;
+    const interactions = json;
     return <InteractionsView interactions={interactions} />;
   }
 }
