@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-function promiseState() {
+function promiseState(isPending, resolve, reject) {
   return {
-    isPending: true,
-    resolve: undefined,
-    reject: undefined
+    isPending: isPending,
+    resolve: resolve,
+    reject: reject
   };
 }
 
@@ -15,25 +15,30 @@ class PromiseLoader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataP: promiseState()
+      dataP: promiseState(true, undefined, undefined)
     };
     this.onResolved = this.onResolved.bind(this);
     this.onRejected = this.onRejected.bind(this);
   }
 
   componentDidMount() {
+    console.log('promiseloader');
     const {promiseFn} = this.props;
     promiseFn()
       .then(this.onResolved)
-      .then(this.onRejected);
+      .catch(this.onRejected);
   }
 
   onResolved(resolve) {
+    console.log('resolved',resolve);
     const {dataP} = this.state;
+    console.log('datap',dataP);
     this.setState({ dataP: {...dataP, resolve} });
+    // this.setState({ dataP: promiseState(false, resolve, undefined) });
   }
 
   onRejected(reject) {
+    console.log('rejected');
     const {dataP} = this.state;
     this.setState({ dataP: {...dataP, reject} });
   }

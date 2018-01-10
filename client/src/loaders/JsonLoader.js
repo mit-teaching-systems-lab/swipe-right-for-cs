@@ -20,18 +20,7 @@ class JsonLoader extends Component {
       ? path
       : `${path}?${qs.stringify(query)}`;
     return fetch(url, options)
-      .then(r => {
-        console.log('jsonloader');
-        console.log(r);
-        r.json()
-          .then(result => {
-            console.log(result);
-            return 'hello';
-          })
-          .catch(err =>{
-            console.log({ error: err });
-          });
-      })
+      .then(r => r.json())
       .catch(err => {
         console.log('out');
         console.log({ error: err });
@@ -47,6 +36,7 @@ class JsonLoader extends Component {
   }
 
   renderPromiseStates(promiseState) {
+    console.log('promiseState',promiseState);
     if (promiseState.isPending) return <div>Loading...</div>;
     if (promiseState.reject) return <div>There was an error.</div>;
     return this.renderJson(promiseState.resolve);
