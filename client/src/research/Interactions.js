@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import JsonLoader from '../loaders/JsonLoader.js';
 import InteractionsView from './InteractionsView.js';
+import PropTypes from 'prop-types';
 
 
 // Show all interactions, allow filtering, etc.
@@ -11,12 +12,13 @@ class Interactions extends Component {
   }
 
   render() {
+    const {email, token} = this.props;
     const opt = {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'email': 'kevin@mit.edu',
-        'token': 'd66bec94-2f39-4ba2-950b-6ec96f34a9b8'
+        'email': email,
+        'token': token
       },
       method: 'GET'
     };
@@ -32,5 +34,15 @@ class Interactions extends Component {
     return <InteractionsView interactions={interactions} />;
   }
 }
+
+Interactions.propTypes = {
+  email: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired
+};
+
+Interactions.defaultProps = {
+  email: "",
+  token: ""
+};
 
 export default Interactions;

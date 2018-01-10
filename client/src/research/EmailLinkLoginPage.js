@@ -130,7 +130,7 @@ class EmailLinkLoginPage extends Component {
       );
     } else if (this.state.status === 'success') {
       return (
-        <Interactions />
+        <Interactions email={this.state.email} token={this.state.token}/>
       );
     } else{
       return (
