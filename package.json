@@ -18,6 +18,7 @@
     "lint": "eslint --ext js -c server/.eslintrc server scripts",
     "jest": "NODE_ENV=test DATABASE_URL=http://localhost:5432/swipe-right-db-test jest server --ci",
     "ngrok": "ngrok http 3000 -host-header=\"localhost:8080\"",
+    "db-create": "node scripts/db-create.js swipe-right-db",
     "db-create-dev": "node scripts/db-create.js swipe-right-db-test"
   },
   "cacheDirectories": [
