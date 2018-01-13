@@ -10,7 +10,8 @@ import {
   loadDataForCohort,
   defaultOptions,
   rotatedVariantsForProfiles,
-  shuffleInBuckets
+  shuffleInBuckets,
+  chooseCohortNumber
 } from './loadDataForCohort.js';
 
 function mockCsvFetches() {
@@ -42,6 +43,18 @@ describe('loadDataForCohort', () => {
       runs.push((await loadDataForCohort(uuid.v4(), defaultOptions)).cohortNumber);
     }
     expect(__uniq(runs).sort()).toEqual(__range(0, 10));
+  });
+
+  it('respects forceCodeOrgBuckets', async () => {
+    const forceCodeOrgBuckets = [3, 7];
+    const options = {...defaultOptions, forceCodeOrgBuckets};
+    
+    const runs = [];
+    for (var i = 0; i < 100; i++) {
+      mockCsvFetches();  
+      runs.push((await loadDataForCohort(uuid.v4(), options)).cohortNumber);
+    }
+    expect(__uniq(runs).sort()).toEqual([3, 7]);
   });
 });
 
@@ -136,5 +149,17 @@ describe('rotatedVariantsForProfiles', () => {
     expect(rotatedVariantsForProfiles(0, profiles, variants)).toEqual(['x','y']);
     expect(rotatedVariantsForProfiles(1, profiles, variants)).toEqual(['y','z']);
     expect(rotatedVariantsForProfiles(2, profiles, variants)).toEqual(['z','x']);
+  });
+});
+
+describe('chooseCohortNumber', () => {
+  const forceCodeOrgBuckets = [1, 7, 8];
+  const forcingOptions = {...defaultOptions, forceCodeOrgBuckets};
+
+  it('respects forceCodeOrgBuckets', () => {
+    expect(chooseCohortNumber('abcd', defaultOptions)).toEqual(3);
+    expect(chooseCohortNumber('abcd', forcingOptions)).toEqual(7);
+    expect(chooseCohortNumber('JFDI', defaultOptions)).toEqual(2);
+    expect(chooseCohortNumber('JFDI', forcingOptions)).toEqual(8);
   });
 });
