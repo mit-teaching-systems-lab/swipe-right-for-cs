@@ -3,7 +3,9 @@ import './LoginPage.css';
 import Interactions from './Interactions.js';
 
 
-// The page for users to login for accessing research data.
+// This is the landing page users reach when clicking on a login 
+// link from their email. Users can confirm their email to get 
+// access to participant data.
 class EmailLinkLoginPage extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +14,7 @@ class EmailLinkLoginPage extends Component {
       email: "",
       token: "default",
       status: "default",
-      message: "Welcome back to Teacher Moments!"
+      message: "Welcome back to Swipe Right!"
     };
 
     this.onUpdateEmail = this.onUpdateEmail.bind(this);
@@ -45,7 +47,19 @@ class EmailLinkLoginPage extends Component {
         email: this.state.email,
         link: link
       })
-    });
+    })
+      .then(result => {
+        console.log('fetch result',result);
+        if (result.status === 200){
+          return result.json();
+        } else {
+          console.log('fetch not success');
+          throw new Error('failed to fetch');
+        }
+      })
+      .catch(err => {
+        console.log('email or link is incorrect');
+      });
   }
 
   onUpdateEmail(e) {
@@ -56,29 +70,31 @@ class EmailLinkLoginPage extends Component {
   onSubmit(e) {
     e.preventDefault();
     const linkToken = this.getQueryVariable('linkToken');
+    console.log('linkToken',linkToken);
     this.authenticate(linkToken)
       .then(result => {
-        if (result.status === 200){
-          result.json()
-            .then(result => {
-              this.setState({token:result.token});
-            });
-          this.onSubmitSuccess();
-        }else{
-          this.onSubmitError();
-        }
+        console.log('onSubmit token',result.token);
+        this.setState({token:result.token});
+        this.onSubmitSuccess();
       })
-      .catch(this.onSubmitError());
+      .catch(err => {
+        console.log('catch in onSubmit');
+        this.onSubmitError();
+      });
   }
 
   onSubmitSuccess() {
-    this.setState({ status : 'success' });
-    this.setState({message: "Welcome back to Teacher Moments!"});
+    this.setState({ 
+      status : 'success' ,
+      message: "Welcome back to Swipe Right!"
+    });
   }
 
   onSubmitError() {
-    this.setState({ status : 'error' });
-    this.setState({message: "There was a problem with your request. Make sure inputted email is the same email link was sent to."});
+    this.setState({ 
+      status : 'error' ,
+      message: "There was a problem with your request. Make sure inputted email is the same email link was sent to."
+    });
   }
 
   render() {
@@ -94,7 +110,7 @@ class EmailLinkLoginPage extends Component {
     } else {
       return (
         <div className='LoginView'>
-          <h3>{this.state.message}</h3>
+          <h2>{this.state.message}</h2>
           <form name="loginForm" onSubmit={this.onSubmit}>
             <div className='Block'>
               <label htmlFor="email"><b>Please enter your email below. </b></label>
@@ -103,7 +119,7 @@ class EmailLinkLoginPage extends Component {
               <input type="email" id='email' placeholder="Enter email here" name="email" value={email} onChange={this.onUpdateEmail} required></input>
             </div>
             <div className='Block'>
-              <button type="submit"> Get Link </button>
+              <button type="submit"> Login </button>
             </div>
           </form>
         </div>

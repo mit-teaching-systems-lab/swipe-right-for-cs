@@ -8,7 +8,8 @@ class LoginPage extends Component {
     super(props);
 
     this.state = {
-      email: ""
+      email: "",
+      message: ""
     };
 
     this.onUpdateEmail = this.onUpdateEmail.bind(this);
@@ -31,7 +32,17 @@ class LoginPage extends Component {
       body: JSON.stringify({
         email: this.state.email
       })
-    });
+    })
+      .then(result => {
+        if (result.status === 200) {
+          this.setState({message: "Check your email, "+this.state.email+" for a login link!"});
+        } else{
+          this.setState({message: "Your email does not seem to be authorized to view user data."});
+        }
+      })
+      .catch(err => {
+        this.setState({message: "An error occurred. Make sure your email address is authorized and try again!"});
+      });
   }
 
   //Should there be something when email is not valid?
@@ -39,10 +50,11 @@ class LoginPage extends Component {
   //or make it send an email saying email is not valid?
 
   render() {
-    const { email } = this.state;
+    const email = this.state.email;
     return (
       <div className='LoginView'>
-        <h3> Welcome to the Teacher Moments Researcher Portal</h3>
+        <h2> Welcome to the Teacher Moments Researcher Portal</h2>
+        <h3>{this.state.message}</h3>
         <form name="loginForm" onSubmit={this.onSubmit}>
           <div className='Block'>
             <label htmlFor="email"><b>Enter authorized email address: </b></label>

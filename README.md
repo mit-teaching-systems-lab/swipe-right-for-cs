@@ -7,7 +7,7 @@ This uses a Postgres database; these `psql` commands will boostrap it for local 
 ### To setup locally:
 ```
 $ yarn install
-$ yarn db-create swipe-right-db
+$ yarn db-create-dev
 ```
 
 

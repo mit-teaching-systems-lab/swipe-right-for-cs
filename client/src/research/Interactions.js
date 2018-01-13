@@ -17,8 +17,8 @@ class Interactions extends Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'email': email,
-        'token': token
+        'x-swiperight-email': email,
+        'x-swiperight-token': token
       },
       method: 'GET'
     };

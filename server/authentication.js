@@ -20,31 +20,30 @@ function getDomain(request) {
 }
 
 // Middleman function to confirm authorization token is valid
-// Reads token from request header and checks against tokens in db
+// Reads token from request header and checks against tokens in db.
+// Runs in both development and production
 function onlyAllowResearchers(pool, request, response, next) {
-  //TODO: Is this really true?
-  // 3. This code should run in both development and production.
+  const token = request.headers['x-swiperight-token'];
+  const email = request.headers['x-swiperight-email'];
 
-  const token = request.headers['token'];
-  const email = request.headers['email'];
+  console.log(token,email);
 
   checkToken(pool, email, token)
-    .then(tokenAuthorized => {
-      console.log('tokenAuthorized:',tokenAuthorized);
-      if (tokenAuthorized) {
+    .then(istokenAuthorized => {
+      if (istokenAuthorized) {
+        console.log('email/token authorized');
         return next();
       }
-      else if (tokenAuthorized===false){
-        console.log('token is incorrect');
+      else if (istokenAuthorized===false){
+        console.log('onlyAllowResearchers false');
         return response.status(405).end();
       }
       else {
-        console.log('something went wrong');
         return response.status(500).end();
       }
     })
     .catch(err => {
-      console.log({ error: err });
+      console.log('Something went wrong in onlyAllowResearchers after checkToken: ', err);
       return response.status(500).end();
     });
 }
@@ -61,10 +60,11 @@ function checkToken(pool, email, token) {
       And $3 < (timestampz + INTERVAL '24 hours')
     ORDER BY id ASC LIMIT 1`;
   const values = [token, email, now];
+  console.log(values);
   return pool.query(sql, values)
     .then(results => Promise.resolve(results.rowCount===1))
     .catch(err => {
-      console.log('query returned err: ', err);
+      console.log('checkToken query returned err looking up login token: ', err);
     });
 }
 
@@ -87,7 +87,7 @@ function loginEndpoint(pool, mailgunEnv, request, response){
       }
     })
     .catch(err => {
-      console.log('loginEndpoint error: ', err);
+      console.log('query error in checking email against whitelist: ', err);
       return response.status(500).end();
     });
 }
@@ -117,8 +117,7 @@ function insertLink(pool, email, domain) {
   return pool.query(linkSQL, linkValues)
     .then(results => link)
     .catch(err => {
-      console.log('query returned err: ', err);
-      console.log({ error:err });
+      console.log('query error in inserting new link into database: ', err);
     });
 }
 
@@ -130,7 +129,7 @@ function emailLink(mailgunEnv, email, link) {
   const info = {
     toEmail: email,
     fromEmail: 'swipe-right-bot@tsl.mit.edu',
-    subject: 'Swipe Right for CS: Login Link'
+    subject: 'Swipe Right: Login Link'
   };
 
   if (process.env.NODE_ENV !== 'production') {
@@ -177,13 +176,12 @@ function emailLinkEndpoint(pool, request, response){
           });
       }
       else {
-        console.log('bad link');
+        console.log('Unauthorized link:', link, '\n and email: ',email);
         return response.status(405).end();
       }
     })
     .catch(err => {
-      console.log('emailLinkEndpoint returned error');
-      console.log({ error: err });
+      console.log('emailLinkEndpoint returned error: ', err);
       return response.status(500).end();
     });
 }
@@ -205,7 +203,7 @@ function checkLink(pool, email, link) {
       return Promise.resolve(results.rowCount===1);
     })
     .catch(err => {
-      console.log('query returned err: ', err);
+      console.log('query error in confirming email with login link: ', err);
     });
 }
 
@@ -219,8 +217,7 @@ function generateToken(pool, email) {
   return pool.query(sql, values)
     .then(result => token)
     .catch(err => {
-      console.log('query returned err: ', err);
-      console.log({ error:err });
+      console.log('query error in inserting new token into database: ', err);
     });
 }
 
