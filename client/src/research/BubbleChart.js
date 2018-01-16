@@ -28,7 +28,7 @@ class BubbleChart extends Component{
     return reactNode;
   } 
   makeNormBubble(percentage, n){
-    var color = (percentage>0)? "black": "green";
+    var color = (percentage>0)? "green": "black";
     var dimensions = Math.abs(percentage)*100/65; //resize bubbles: 65% will take up a full bubble. from Milkman   
     var styles = {
       backgroundColor:color,
@@ -45,6 +45,7 @@ class BubbleChart extends Component{
         return profilePercent - allPercents[name][profile];
       });
     });
+    console.log(allPercents, normedPercents)
     return normedPercents; 
   }
   onNameClick(profileName, e){
