@@ -18,20 +18,13 @@ class JsonLoader extends Component {
     const url = (_.isEmpty(query))
       ? path
       : `${path}?${qs.stringify(query)}`;
-    console.log(url,options);
     return fetch(url, options)
       .then(r => {
-        console.log(r);
         if (r.status === 200){
-          console.log('JsonLoader success');
           return r.json();
         } else{
-          console.log('else JsonLoader');
           return {};
         }
-      })
-      .catch(err => {
-        console.log('catch JsonLoader');
       });
   }
 

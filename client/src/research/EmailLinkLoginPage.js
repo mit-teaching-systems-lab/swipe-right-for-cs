@@ -49,16 +49,11 @@ class EmailLinkLoginPage extends Component {
       })
     })
       .then(result => {
-        console.log('fetch result',result);
         if (result.status === 200){
           return result.json();
         } else {
-          console.log('fetch not success');
           throw new Error('failed to fetch');
         }
-      })
-      .catch(err => {
-        console.log('email or link is incorrect');
       });
   }
 
@@ -70,15 +65,12 @@ class EmailLinkLoginPage extends Component {
   onSubmit(e) {
     e.preventDefault();
     const linkToken = this.getQueryVariable('linkToken');
-    console.log('linkToken',linkToken);
     this.authenticate(linkToken)
       .then(result => {
-        console.log('onSubmit token',result.token);
         this.setState({token:result.token});
         this.onSubmitSuccess();
       })
       .catch(err => {
-        console.log('catch in onSubmit');
         this.onSubmitError();
       });
   }
