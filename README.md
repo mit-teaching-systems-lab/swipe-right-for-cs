@@ -15,7 +15,7 @@ Here are links to the [facilitator lesson plan](https://curriculum.code.org/plcs
 To setup locally:
 ```
 $ yarn install
-$ yarn db-create 
+$ yarn db-create-dev 
 ```
 
 ### To develop locally:
@@ -41,7 +41,7 @@ Then open that URL on your phone.
 
 ### To run tests:
 ```
-$ yarn db-create-dev
+$ yarn db-create-test
 $ yarn test
 ```
 
