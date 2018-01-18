@@ -1,20 +1,10 @@
-.LoginView {
+.LoginPage {
   width: 100%;
   margin: 10px;
   display: block;
 }
 
-.LoginView-analysis {
-  margin: 20px;
-  margin-bottom: 100px;
-}
-
-.Block {
-  width: 100%;
-  margin: 10px;
-  display: block;
-}
-.SubmitButton {
+.LoginPage-Block {
   width: 100%;
   margin: 10px;
   display: block;

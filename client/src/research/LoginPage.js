@@ -44,21 +44,21 @@ class LoginPage extends Component {
         this.setState({message: "An error occurred. Make sure your email address is authorized and try again!"});
       });
   }
-  
+
   render() {
     const email = this.state.email;
     return (
-      <div className='LoginView'>
+      <div className='LoginPage'>
         <h2> Welcome to the Teacher Moments Researcher Portal</h2>
         <h3>{this.state.message}</h3>
         <form name="loginForm" onSubmit={this.onSubmit}>
-          <div className='Block'>
+          <div className='LoginPage-Block'>
             <label htmlFor="email"><b>Enter authorized email address: </b></label>
           </div>
-          <div className='Block'>
+          <div className='LoginPage-Block'>
             <input type="email" placeholder="Enter email here" name="email" value={email} onChange={this.onUpdateEmail} required></input>
           </div>
-          <div className='Block'>
+          <div className='LoginPage-Block'>
             <button type="submit"> Get Link </button>
           </div>
         </form>
