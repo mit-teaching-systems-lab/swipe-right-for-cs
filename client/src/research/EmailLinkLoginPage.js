@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './LoginPage.css';
 import Interactions from './Interactions.js';
-
+import queryString from 'query-string';
 
 // This is the landing page users reach when clicking on a login 
 // link from their email. Users can confirm their email to get 
@@ -24,16 +24,8 @@ class EmailLinkLoginPage extends Component {
   }
 
   getQueryVariable(variable) {
-    const params = {};
-    const rawParam = window.location.search;
-    if (rawParam) {
-      const rawParams = rawParam.substring(1); // gets rid of ?
-      rawParams.split("&").forEach(function(v) {
-        const varAndVal = v.split("=");
-        params[decodeURIComponent(varAndVal[0])] = decodeURIComponent(varAndVal[1]);
-      });
-    }
-    return params[variable];
+    const query = queryString.parse(window.location.search);
+    return query[variable];
   }
 
   authenticate(link) {
