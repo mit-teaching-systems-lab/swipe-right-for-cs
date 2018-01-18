@@ -30,14 +30,14 @@ class LoginPage extends Component {
       },
       method: 'POST',
       body: JSON.stringify({
-        email: this.state.email
+        email: this.state.email.toLowerCase()
       })
     })
       .then(result => {
         if (result.status === 200) {
           this.setState({message: "Check your email, "+this.state.email+" for a login link!"});
         } else{
-          this.setState({message: "Your email does not seem to be authorized to view user data."});
+          this.setState({message: "Your email, "+this.state.email+", does not seem to be authorized to view user data."});
         }
       })
       .catch(err => {

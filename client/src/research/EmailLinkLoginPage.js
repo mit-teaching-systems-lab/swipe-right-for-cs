@@ -44,7 +44,7 @@ class EmailLinkLoginPage extends Component {
       },
       method: 'POST',
       body: JSON.stringify({
-        email: this.state.email,
+        email: this.state.email.toLowerCase(),
         link: link
       })
     })
@@ -94,7 +94,7 @@ class EmailLinkLoginPage extends Component {
     if (this.state.status === 'success') {
       if ((this.state.email !=="")&&(this.state.token !== "default")){
         return (
-          <Interactions email={this.state.email} token={this.state.token}/>
+          <Interactions email={this.state.email.toLowerCase()} token={this.state.token}/>
         );
       }else {
         return null;
