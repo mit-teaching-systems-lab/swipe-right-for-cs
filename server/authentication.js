@@ -26,16 +26,12 @@ function onlyAllowResearchers(pool, request, response, next) {
   const token = request.headers['x-swiperight-token'];
   const email = request.headers['x-swiperight-email'];
 
-  console.log(token,email);
-
   checkToken(pool, email, token)
     .then(istokenAuthorized => {
       if (istokenAuthorized) {
-        console.log('email/token authorized');
         return next();
       }
       else if (istokenAuthorized===false){
-        console.log('onlyAllowResearchers false');
         return response.status(405).end();
       }
       else {
@@ -43,7 +39,6 @@ function onlyAllowResearchers(pool, request, response, next) {
       }
     })
     .catch(err => {
-      console.log('Something went wrong in onlyAllowResearchers after checkToken: ', err);
       return response.status(500).end();
     });
 }

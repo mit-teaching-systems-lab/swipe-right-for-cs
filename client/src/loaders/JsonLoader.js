@@ -23,7 +23,7 @@ class JsonLoader extends Component {
         if (r.status === 200){
           return r.json();
         } else{
-          return {};
+          return Promise.reject({error: "Could not parse JSON response"});
         }
       });
   }

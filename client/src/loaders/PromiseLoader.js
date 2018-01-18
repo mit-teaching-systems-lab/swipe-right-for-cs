@@ -24,13 +24,8 @@ class PromiseLoader extends React.Component {
   componentDidMount() {
     const {promiseFn} = this.props;
     promiseFn()
-      .then(result => {
-        if (result.length > 0) {
-          this.onResolved(result);
-        } else{
-          this.onRejected(result);
-        }
-      });
+      .then(this.onResolved)
+      .catch(this.onRejected);
   }
 
   onResolved(resolve) {

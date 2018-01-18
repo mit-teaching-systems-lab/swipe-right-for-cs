@@ -44,11 +44,7 @@ class LoginPage extends Component {
         this.setState({message: "An error occurred. Make sure your email address is authorized and try again!"});
       });
   }
-
-  //Should there be something when email is not valid?
-  //then we'd have to wait for promise to return.....
-  //or make it send an email saying email is not valid?
-
+  
   render() {
     const email = this.state.email;
     return (
