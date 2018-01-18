@@ -93,16 +93,16 @@ class EmailLinkLoginPage extends Component {
       }
     } else {
       return (
-        <div className='LoginView'>
+        <div className='LoginPage'>
           <h2>{this.state.message}</h2>
           <form name="loginForm" onSubmit={this.onSubmit}>
-            <div className='Block'>
+            <div className='LoginPage-Block'>
               <label htmlFor="email"><b>Please enter your email below. </b></label>
             </div>
-            <div className='Block'>
+            <div className='LoginPage-Block'>
               <input type="email" id='email' placeholder="Enter email here" name="email" value={email} onChange={this.onUpdateEmail} required></input>
             </div>
-            <div className='Block'>
+            <div className='LoginPage-Block'>
               <button type="submit"> Login </button>
             </div>
           </form>
