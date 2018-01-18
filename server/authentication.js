@@ -171,7 +171,7 @@ function emailLinkEndpoint(pool, request, response){
           });
       }
       else {
-        console.log('Unauthorized link:', link, '\n and email: ',email);
+        console.log('Unauthorized link:', link);
         return response.status(405).end();
       }
     })
