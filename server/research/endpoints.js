@@ -5,7 +5,7 @@ function interactionsEndpoint(pool, req, res) {
   pool.query(sql)
     .then(results => {
       res.set('Content-Type', 'application/json');
-      res.json({rows:results.rows});
+      res.json(results.rows);
       return res.status(200).end();
 
     })

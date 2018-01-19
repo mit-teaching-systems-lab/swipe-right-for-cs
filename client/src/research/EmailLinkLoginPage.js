@@ -70,7 +70,7 @@ class EmailLinkLoginPage extends Component {
   onSubmitSuccess() {
     this.setState({ 
       status : 'success' ,
-      message: "Welcome back to Swipe Right!"
+      message: ""
     });
   }
 
@@ -94,7 +94,8 @@ class EmailLinkLoginPage extends Component {
     } else {
       return (
         <div className='LoginPage'>
-          <h2>{this.state.message}</h2>
+          <h2>Welcome back to Swipe Right!</h2>
+          <h3>{this.state.message}</h3>
           <form name="loginForm" onSubmit={this.onSubmit}>
             <div className='LoginPage-Block'>
               <label htmlFor="email"><b>Please enter your email below. </b></label>

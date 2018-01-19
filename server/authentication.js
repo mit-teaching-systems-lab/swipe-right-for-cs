@@ -55,7 +55,6 @@ function checkToken(pool, email, token) {
       And $3 < (timestampz + INTERVAL '24 hours')
     ORDER BY id ASC LIMIT 1`;
   const values = [token, email, now];
-  console.log(values);
   return pool.query(sql, values)
     .then(results => Promise.resolve(results.rowCount===1))
     .catch(err => {
@@ -152,14 +151,12 @@ function emailLink(mailgunEnv, email, link) {
 // for user to access data. Adds token to 'tokens' database
 // 
 function emailLinkEndpoint(pool, request, response){
-  const link = request.body['link'];
+  const linkToken = request.body['link'];
   const email = request.body['email'];
-  checkLink(pool, email, link)
-    .then(linkAuthorized => {
-      if (linkAuthorized) {
-        console.log('Link Authorized');
-
-        //TODO: feel like these promises are not done right...shouldn't have to nest things like this
+  checkLink(pool, email, linkToken)
+    .then(isLinkTokenAuthorized => {
+      if (isLinkTokenAuthorized) {
+        console.log('LinkToken Authorized');
         generateToken(pool, email)
           .then(results => {
             const token = results;
@@ -171,7 +168,7 @@ function emailLinkEndpoint(pool, request, response){
           });
       }
       else {
-        console.log('Unauthorized link:', link);
+        console.log('Unauthorized linkToken:', linkToken);
         return response.status(405).end();
       }
     })
