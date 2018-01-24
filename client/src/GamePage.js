@@ -35,7 +35,7 @@ const Phases = {
 class GamePage extends Component {
   constructor(props) {
     super(props);
-    const isCodeOrg = props.isCodeOrg;
+    const {isCodeOrg, defaultWorkshopCode} = props;
     const query = queryString.parse(window.location.search);
 
     // 12/8 This is a patch to rebalance cells for remaining trials, oversampling from
@@ -56,7 +56,9 @@ class GamePage extends Component {
       identifier: (isCodeOrg)
         ? query.cuid || Session.unknownIdentifier()
         : Session.unknownIdentifier(),
-      workshopCode: ['DEMO', uuid.v4()].join(':'), // for code.org, set in initial screens
+      workshopCode: (defaultWorkshopCode !== undefined)
+        ? defaultWorkshopCode
+        : ['DEMO', uuid.v4()].join(':'), // for code.org, set in initial screens
       cohortNumber: null, // set when data is loaded, based on workhopCode
       phase: (isCodeOrg) ? Phases.WORKSHOP_CODE : Phases.TITLE,
       students: null,
@@ -250,7 +252,11 @@ class GamePage extends Component {
   }
 }
 GamePage.propTypes = {
-  isCodeOrg: PropTypes.bool.isRequired
+  isCodeOrg: PropTypes.bool.isRequired,
+  defaultWorkshopCode: PropTypes.string
+};
+GamePage.defaultProps = {
+  defaultWorkshopCode: undefined
 };
 
 export default GamePage;
