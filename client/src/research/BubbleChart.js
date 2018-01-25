@@ -9,7 +9,8 @@ import './BubbleChart.css';
 import chroma from 'chroma-js';
 
 //This component creates a Bubble Chart graph which has student on the vertical axis and possible profiles for any student on the horizontal axis
-//circles on the chart represent the percentage of people who swiped right for a given student and profile
+//circles on the chart represent the percentage of people who swiped right for a given student and profile.
+//For the normed bubble chart, the values can be normed to a particular student by clicking on that student's picture.
 class BubbleChart extends Component{
   constructor(props){
     super(props);
@@ -17,27 +18,25 @@ class BubbleChart extends Component{
   }
   makeBubble(percentage, n){
     const colors = chroma.scale(['white','#006837']);
-    var color =  colors(n/50).brighten(1).hex();
-    var styles = {
+    const color =  colors(n/50).brighten(1).hex();
+    const styles = {
       backgroundColor:color,
       height:percentage,
       width:percentage,
       borderRadius: 100, 
     };
-    var reactNode = <div style={styles} title={`n=${n}`}></div>;
-    return reactNode;
+    return <div style={styles} title={`n=${n}`}></div>;
   } 
   makeNormBubble(percentage, n){
-    var color = (percentage>0)? "green": "black";
-    var dimensions = Math.abs(percentage)*100/65; //resize bubbles: 65% will take up a full bubble. from Milkman   
-    var styles = {
+    const color = (percentage>0)? "black": "green";
+    const dimensions = Math.abs(percentage)*100/65; //resize bubbles: 65% will take up a full bubble. from Milkman   
+    const styles = {
       backgroundColor:color,
       height:dimensions,
       width:dimensions,
       borderRadius: 100, 
     };
-    var reactNode = <div style={styles} title={`n=${n}`}></div>;
-    return reactNode;
+    return <div style={styles} title={`n=${n}`}></div>;
   }
   norm(allPercents,name){
     const normedPercents = _.mapValues(allPercents, (percentages, person) =>{
@@ -45,7 +44,6 @@ class BubbleChart extends Component{
         return profilePercent - allPercents[name][profile];
       });
     });
-    console.log(allPercents, normedPercents)
     return normedPercents; 
   }
   onNameClick(profileName, e){
