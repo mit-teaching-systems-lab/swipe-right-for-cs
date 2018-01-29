@@ -12,7 +12,6 @@ import PercentageChart from './PercentageChart';
 import RatingsChart from './RatingsChart';
 import BubbleChart from './BubbleChart';
 import InteractiveBubbleChart from './InteractiveBubbleChart';
-import ProfileArgumentChart from './ProfileArgumentChart';
 import {Choices} from '../shared/data.js';
 import {
   isRightSwipe,
@@ -197,7 +196,6 @@ class BiasAnalysis extends React.Component {
         {this.renderInteractiveBubbleChart(interactions)}
         {this.renderBubbleChart(interactions, chartDataForProfileName, chartDataForProfileKey)}
         {this.renderBubbleChartStats(interactions, chartDataForProfileName, chartDataForProfileKey)}
-        {this.renderProfileArgumentChart(interactions, chartDataForProfileName, chartDataForProfileKey)}
       </div>
     );
   }
@@ -295,13 +293,6 @@ class BiasAnalysis extends React.Component {
       chartDataForProfileName={chartDataForProfileName}
       chartDataForProfileKey={chartDataForProfileKey}
       cellKey="numbers" />;
-  }
-
-  renderProfileArgumentChart(consentedInteractions, chartDataForProfileName, chartDataForProfileKey) {
-    return <ProfileArgumentChart
-      consentedInteractions={consentedInteractions}
-      chartDataForProfileName={chartDataForProfileName}
-      chartDataForProfileKey={chartDataForProfileKey} />;
   }
 }
 BiasAnalysis.propTypes = {
