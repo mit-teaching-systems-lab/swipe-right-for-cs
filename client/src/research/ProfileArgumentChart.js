@@ -7,7 +7,6 @@ import {
   formatPercent
 } from './functions.js';
 import './ProfileArgumentChart.css';
-import DataBubble from './DataBubble';
 
 
 // Lookup data about a data point with {labels, dataPoints}.
@@ -47,8 +46,6 @@ class ProfileArgumentChart extends Component{
     const argumentsByKey = _.mapValues(_.groupBy(interactions, row => row.interaction.turn.profileKey), interactions => {
       return _.uniq(interactions.map(row => row.interaction.turn.argumentText)).sort();
     });
-    console.log(argumentsByKey);
-
 
     return (
       <table className="ProfileArgumentChart ProfileArgumentChart-table">
