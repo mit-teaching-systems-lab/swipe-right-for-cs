@@ -11,6 +11,7 @@ import CountChart from './CountChart';
 import PercentageChart from './PercentageChart';
 import RatingsChart from './RatingsChart';
 import BubbleChart from './BubbleChart';
+import InteractiveBubbleChart from './InteractiveBubbleChart';
 import {Choices} from '../shared/data.js';
 import {
   isRightSwipe,
@@ -192,7 +193,9 @@ class BiasAnalysis extends React.Component {
         {this.renderExplanations()}
         {this.renderPanelFor('Name', chartDataForProfileName)}
         {this.renderPanelFor('Profile', chartDataForProfileKey)}
-        {this.renderBubbleChart(interactions)}
+        {this.renderInteractiveBubbleChart(interactions)}
+        {this.renderBubbleChart(interactions, chartDataForProfileName, chartDataForProfileKey)}
+        {this.renderBubbleChartStats(interactions, chartDataForProfileName, chartDataForProfileKey)}
       </div>
     );
   }
@@ -272,8 +275,24 @@ class BiasAnalysis extends React.Component {
     );
   }
 
-  renderBubbleChart(consentedInteractions) {
-    return <BubbleChart consentedInteractions={consentedInteractions} />;
+  renderInteractiveBubbleChart(consentedInteractions) {
+    return <InteractiveBubbleChart consentedInteractions={consentedInteractions} />;
+  }
+
+  renderBubbleChart(consentedInteractions, chartDataForProfileName, chartDataForProfileKey) {
+    return <BubbleChart
+      consentedInteractions={consentedInteractions}
+      chartDataForProfileName={chartDataForProfileName}
+      chartDataForProfileKey={chartDataForProfileKey}
+      cellKey="bubbles" />;
+  }
+
+  renderBubbleChartStats(consentedInteractions, chartDataForProfileName, chartDataForProfileKey) {
+    return <BubbleChart
+      consentedInteractions={consentedInteractions}
+      chartDataForProfileName={chartDataForProfileName}
+      chartDataForProfileKey={chartDataForProfileKey}
+      cellKey="numbers" />;
   }
 }
 BiasAnalysis.propTypes = {

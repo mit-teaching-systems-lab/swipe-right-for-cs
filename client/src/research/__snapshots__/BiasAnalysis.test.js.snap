@@ -105,16 +105,67 @@ exports[`renders without crashing 1`] = `
     <div>
       No data points!
     </div>
-    <table>
-      <tr>
-        <th>
-          <div
-            className="Bubble-data"
-          >
-             Student 
-          </div>
-        </th>
-      </tr>
+    <table
+      className="InteractiveBubbleChart InteractiveBubbleChart-table"
+    >
+      <thead>
+        <tr>
+          <th>
+            <div
+              className="InteractiveBubbleChart-data"
+            >
+               Student 
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody />
+    </table>
+    <table
+      className="BubbleChart BubbleChart-table"
+    >
+      <thead>
+        <tr>
+          <th>
+            <div
+              className="BubbleChart-data"
+            >
+              Student
+            </div>
+          </th>
+          <th>
+            <div
+              className="BubbleChart-data"
+            >
+              Summary
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody />
+    </table>
+    <table
+      className="BubbleChart BubbleChart-table"
+    >
+      <thead>
+        <tr>
+          <th>
+            <div
+              className="BubbleChart-data"
+            >
+              Student
+            </div>
+          </th>
+          <th>
+            <div
+              className="BubbleChart-data"
+            >
+              Summary
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody />
     </table>
   </div>
 </div>
