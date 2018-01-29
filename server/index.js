@@ -35,10 +35,10 @@ app.use(bodyParser.json());
 app.use(enforceHTTPS);
 const pool = createPool(config.postgresUrl);
 
-// As a precaution for emailing routes
+// As a precaution for emailing and authentication routes
 const limiter = new RateLimit({
   windowMs: 60*60*1000, // 60 minutes
-  max: 10, // limit each IP to 10 requests per windowMs
+  max: 100, // limit each IP to n requests per windowMs
   delayMs: 0, // disable delaying - full speed until the max limit is reached
   onLimitReached: (req, res, options) => {
     console.log('RateLimit reached!');
@@ -51,13 +51,16 @@ app.post('/api/log', logEndpoint.bind(null, pool));
 app.get('/api/peers/:workshopCode', peerResponsesEndpoint.bind(null, pool));
 app.post('/api/share', limiter, emailMyResponsesEndpoint.bind(null, config.mailgunEnv));
 
-// Endpoints for researcher login
-app.post('/api/research/login', limiter, loginEndpoint);
-app.post('/api/research/email', limiter, emailLinkEndpoint);
 
-// Endpoints for authenticated researchers to access data
-app.get('/api/research/interactions', onlyAllowResearchers, interactionsEndpoint.bind(null, pool));
+// Wrap researcher access in global kill switch
+if (process.env.ENABLE_RESEARCHER_ACCESS && process.env.ENABLE_RESEARCHER_ACCESS.toLowerCase() === 'true') {
+  // Endpoints for researcher login
+  app.post('/api/research/login', limiter, loginEndpoint.bind(null, pool, config.mailgunEnv));
+  app.post('/api/research/email', limiter, emailLinkEndpoint.bind(null, pool));
 
+  // Endpoints for authenticated researchers to access data
+  app.get('/api/research/interactions', [limiter, onlyAllowResearchers.bind(null, pool)], interactionsEndpoint.bind(null, pool));
+}
 
 // Serve any static files.
 // Route other requests return the React app, so it can handle routing.

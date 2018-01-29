@@ -12,9 +12,14 @@ This was originally developed in partnership with Code.org for use in quarterly 
 Here are links to the [facilitator lesson plan](https://curriculum.code.org/plcsp/q2/6/), a [link to the game](https://studio.code.org/levels/10398) that requires Code Studio login and a [link to the game that anyone can try](https://swipe-right-for-cs.herokuapp.com/play?github) as a demo or for use in PLCs or other workshop formats.
 
 ## Development
-To develop locally:
+To setup locally:
 ```
 $ yarn install
+$ yarn db-create-dev 
+```
+
+### To develop locally:
+```
 $ yarn start
 ```
 
@@ -24,6 +29,7 @@ Note that the site is responsive and will include a fake frame for an iPhone 5 r
 
 Running `yarn start` will also start a [storybook](https://github.com/storybooks/storybook) server on port 9001.  You can use this to create "stories" iterate on UI features.
 
+
 To develop on device:
 ```
 $ yarn run grok
@@ -31,19 +37,17 @@ $ yarn run grok
 
 Then open that URL on your phone.
 
-## Database
-This uses a Postgres database; these `psql` commands will boostrap it for local development:
 
+
+### To run tests:
 ```
-CREATE DATABASE "swipe-right-db";
-\c swipe-right-db;
-CREATE TABLE interactions (
-  id serial primary key,
-  interaction jsonb,
-  session jsonb,
-  timestampz timestamptz
-);
+$ yarn db-create-test
+$ yarn test
 ```
+
+If you want to run the tests, you should create a similar database called "swipe-right-db-test".
+
+You can also run the linter and tests independently for the server or client code, see `package.json` for commands.
 
 ## Profiles and arguments
 These are created in spreadsheet and then imported into the app as CSV files.  If you'd like to revise these or create new profiles or arguments, open an issue or reach out at krob@mit.edu or [@mit_tsl](https://twitter.com/mit_tsl)!

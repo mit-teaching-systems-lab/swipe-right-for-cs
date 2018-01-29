@@ -18,7 +18,14 @@ class JsonLoader extends Component {
     const url = (_.isEmpty(query))
       ? path
       : `${path}?${qs.stringify(query)}`;
-    return fetch(url, options).then(r => r.json());
+    return fetch(url, options)
+      .then(r => {
+        if (r.status === 200){
+          return r.json();
+        } else{
+          return Promise.reject({error: "Could not parse JSON response"});
+        }
+      });
   }
 
   render() {
