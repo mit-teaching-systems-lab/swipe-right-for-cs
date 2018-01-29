@@ -34,14 +34,11 @@ class LoginPage extends Component {
       })
     })
       .then(result => {
-        if (result.status === 200) {
-          this.setState({message: "Check your email, "+this.state.email+" for a login link!"});
-        } else{
-          this.setState({message: "Your email, "+this.state.email+", does not seem to be authorized to view user data."});
-        }
+        // The server shouldn't leak whether it's a whitelisted email address or not
+        this.setState({ message: "Check your email.  If you are authorized, you should see a login link within a few seconds!"});
       })
       .catch(err => {
-        this.setState({message: "An error occurred. Make sure your email address is authorized and try again!"});
+        this.setState({ message: "An error occurred."});
       });
   }
 
