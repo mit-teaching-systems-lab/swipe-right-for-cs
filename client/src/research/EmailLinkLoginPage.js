@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import queryString from 'query-string';
 import './LoginPage.css';
 import Interactions from './Interactions.js';
-import queryString from 'query-string';
+
 
 // This is the landing page users reach when clicking on a login 
 // link from their email. Users can confirm their email to get 
@@ -12,6 +13,7 @@ class EmailLinkLoginPage extends Component {
 
     this.state = {
       email: "",
+      linkToken: this.readLinkToken(),
       token: "default",
       status: "default",
       message: "Welcome back to Swipe Right!"
@@ -19,16 +21,19 @@ class EmailLinkLoginPage extends Component {
 
     this.onUpdateEmail = this.onUpdateEmail.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.getQueryVariable = this.getQueryVariable.bind(this);
     this.authenticate = this.authenticate.bind(this);
   }
 
-  getQueryVariable(variable) {
+  // Also remove login token from URL bar in browser
+  readLinkToken() {
     const query = queryString.parse(window.location.search);
-    return query[variable];
+    const urlWithoutQuery = window.location.href.slice(0, window.location.href.indexOf(window.location.search));
+    window.history.replaceState({}, "", urlWithoutQuery);
+    return query.linkToken;
   }
 
-  authenticate(link) {
+  authenticate() {
+    const {email, linkToken} = this.state;
     return fetch('/api/research/email', {
       headers: {
         'Accept': 'application/json',
@@ -36,8 +41,8 @@ class EmailLinkLoginPage extends Component {
       },
       method: 'POST',
       body: JSON.stringify({
-        email: this.state.email.toLowerCase(),
-        link: link
+        email: email.toLowerCase(),
+        link: linkToken
       })
     })
       .then(result => {
@@ -51,24 +56,19 @@ class EmailLinkLoginPage extends Component {
 
   onUpdateEmail(e) {
     const { value } = e.target;
-    this.setState({ email : value });
+    this.setState({ email: value });
   }
 
   onSubmit(e) {
     e.preventDefault();
-    const linkToken = this.getQueryVariable('linkToken');
-    this.authenticate(linkToken)
-      .then(result => {
-        this.setState({token:result.token});
-        this.onSubmitSuccess();
-      })
-      .catch(err => {
-        this.onSubmitError();
-      });
+    this.authenticate()
+      .then(result => this.onSubmitSuccess(result.token))
+      .catch(err => this.onSubmitError());
   }
 
-  onSubmitSuccess() {
-    this.setState({ 
+  onSubmitSuccess(token) {
+    this.setState({
+      token,
       status : 'success' ,
       message: ""
     });
@@ -82,34 +82,34 @@ class EmailLinkLoginPage extends Component {
   }
 
   render() {
-    const { email } = this.state;
-    if (this.state.status === 'success') {
-      if ((this.state.email !=="")&&(this.state.token !== "default")){
+    const {email, status, token, message} = this.state;
+    if (status === 'success') {
+      if ((email !=="") && (token !== "default")){
         return (
-          <Interactions email={this.state.email.toLowerCase()} token={this.state.token}/>
+          <Interactions email={email.toLowerCase()} token={token}/>
         );
       }else {
         return null;
       }
-    } else {
-      return (
-        <div className='LoginPage'>
-          <h2>Welcome back to Swipe Right!</h2>
-          <h3>{this.state.message}</h3>
-          <form name="loginForm" onSubmit={this.onSubmit}>
-            <div className='LoginPage-Block'>
-              <label htmlFor="email"><b>Please enter your email below. </b></label>
-            </div>
-            <div className='LoginPage-Block'>
-              <input type="email" id='email' placeholder="Enter email here" name="email" value={email} onChange={this.onUpdateEmail} required></input>
-            </div>
-            <div className='LoginPage-Block'>
-              <button type="submit"> Login </button>
-            </div>
-          </form>
-        </div>
-      );
-    } 
+    }
+    
+    return (
+      <div className='LoginPage'>
+        <h2>Welcome back to Swipe Right!</h2>
+        <h3>{message}</h3>
+        <form name="loginForm" onSubmit={this.onSubmit}>
+          <div className='LoginPage-Block'>
+            <label htmlFor="email"><b>Please enter your email below. </b></label>
+          </div>
+          <div className='LoginPage-Block'>
+            <input type="email" id='email' placeholder="Enter email here" name="email" value={email} onChange={this.onUpdateEmail} required></input>
+          </div>
+          <div className='LoginPage-Block'>
+            <button type="submit"> Login </button>
+          </div>
+        </form>
+      </div>
+    );
   }
 }
 
