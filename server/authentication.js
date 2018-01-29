@@ -186,7 +186,7 @@ function checkLink(pool, email, link) {
     WHERE link=$1 
       AND email=$2
       AND $3 > timestampz
-      And $3 < (timestampz + INTERVAL '24 hours')
+      And $3 < (timestampz + INTERVAL '5 minutes')
     ORDER BY id ASC LIMIT 1`;
   const linkValues = [link, email, now];
   return pool.query(linkSQL, linkValues)

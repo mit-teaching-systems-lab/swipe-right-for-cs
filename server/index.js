@@ -51,13 +51,16 @@ app.post('/api/log', logEndpoint.bind(null, pool));
 app.get('/api/peers/:workshopCode', peerResponsesEndpoint.bind(null, pool));
 app.post('/api/share', limiter, emailMyResponsesEndpoint.bind(null, config.mailgunEnv));
 
-// Endpoints for researcher login
-app.post('/api/research/login', limiter, loginEndpoint.bind(null, pool, config.mailgunEnv));
-app.post('/api/research/email', limiter, emailLinkEndpoint.bind(null, pool));
 
-// Endpoints for authenticated researchers to access data
-app.get('/api/research/interactions', [limiter, onlyAllowResearchers.bind(null, pool)], interactionsEndpoint.bind(null, pool));
+// Wrap researcher access in global kill switch
+if (process.env.ENABLE_RESEARCHER_ACCESS && process.env.ENABLE_RESEARCHER_ACCESS.toLowerCase() === 'true') {
+  // Endpoints for researcher login
+  app.post('/api/research/login', limiter, loginEndpoint.bind(null, pool, config.mailgunEnv));
+  app.post('/api/research/email', limiter, emailLinkEndpoint.bind(null, pool));
 
+  // Endpoints for authenticated researchers to access data
+  app.get('/api/research/interactions', [limiter, onlyAllowResearchers.bind(null, pool)], interactionsEndpoint.bind(null, pool));
+}
 
 // Serve any static files.
 // Route other requests return the React app, so it can handle routing.
