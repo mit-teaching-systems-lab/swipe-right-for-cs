@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {BrowserRouter, Route} from 'react-router-dom';
 import GamePage from './GamePage';
 import LoginPage from './research/LoginPage';
+import EmailLinkLoginPage from './research/EmailLinkLoginPage';
 import ResearchPage from './research/ResearchPage';
 
 
@@ -13,7 +14,9 @@ class App extends Component {
         <div className="App">
           <Route exact path="/research" component={ResearchPage} />
           <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/login_from_email" component={EmailLinkLoginPage} />
           <Route exact path="/play" render={this.renderDemo} />
+          <Route exact path="/group/:code" render={this.renderDemoForGroup} />
           <Route exact path="/start" render={this.renderCodeOrg} />
           <Route exact path="/" render={this.renderCodeOrg} />
         </div>
@@ -21,8 +24,16 @@ class App extends Component {
     );
   }
 
+  // Random workshop code and student profiles
   renderDemo(props) {
     return <GamePage {...props} isCodeOrg={false} />;
+  }
+
+  // For stable workshop codes and consistent student profiles
+  // for a cohort.
+  renderDemoForGroup(props) {
+    const {code} = props.match.params;
+    return <GamePage {...props} isCodeOrg={false} defaultWorkshopCode={code} />;
   }
 
   renderCodeOrg(props) {

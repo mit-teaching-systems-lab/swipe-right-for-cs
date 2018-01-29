@@ -10,14 +10,16 @@
     "start": "yarn run dev",
     "test": "yarn run lint && yarn run jest && cd client && yarn run test",
     "heroku-postbuild": "cd client && yarn run build",
-    "dev": "concurrently \"NODE_ENV=development yarn run server-dev\" \"yarn run client\" \"yarn run storybook\"",
+    "dev": "concurrently \"yarn run server-dev\" \"yarn run client\" \"yarn run storybook\"",
     "server": "node server/index.js",
-    "server-dev": "NODE_ENV=development DATABASE_URL=http://localhost:5432/swipe-right-db yarn run server",
+    "server-dev": "NODE_ENV=development DATABASE_URL=http://localhost:5432/swipe-right-db ENABLE_RESEARCHER_ACCESS=true yarn run server",
     "client": "cd client && yarn run start",
     "storybook": "cd client && yarn run storybook",
     "lint": "eslint --ext js -c server/.eslintrc server scripts",
-    "jest": "jest server",
-    "ngrok": "ngrok http 3000 -host-header=\"localhost:8080\""
+    "jest": "NODE_ENV=test DATABASE_URL=http://localhost:5432/swipe-right-db-test jest server --ci",
+    "ngrok": "ngrok http 3000 -host-header=\"localhost:8080\"",
+    "db-create-dev": "node scripts/db-create.js swipe-right-db",
+    "db-create-test": "node scripts/db-create.js swipe-right-db-test"
   },
   "cacheDirectories": [
     "node_modules",
@@ -34,7 +36,8 @@
     "node-mocks-http": "^1.6.6",
     "pg": "^7.3.0",
     "react": "16",
-    "superagent": "^3.6.3"
+    "superagent": "^3.6.3",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "concurrently": "^3.5.0",

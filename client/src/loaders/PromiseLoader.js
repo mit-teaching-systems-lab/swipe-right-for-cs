@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-function promiseState() {
+function initialPromiseState() {
   return {
     isPending: true,
     resolve: undefined,
@@ -15,7 +15,7 @@ class PromiseLoader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataP: promiseState()
+      promiseData: initialPromiseState()
     };
     this.onResolved = this.onResolved.bind(this);
     this.onRejected = this.onRejected.bind(this);
@@ -25,24 +25,32 @@ class PromiseLoader extends React.Component {
     const {promiseFn} = this.props;
     promiseFn()
       .then(this.onResolved)
-      .then(this.onRejected);
+      .catch(this.onRejected);
   }
 
   onResolved(resolve) {
-    const {dataP} = this.state;
-    this.setState({ dataP: {...dataP, resolve} });
+    const {promiseData} = this.state;
+    this.setState({ promiseData: {
+      ...promiseData,
+      isPending: false,
+      resolve
+    }});
   }
 
   onRejected(reject) {
-    const {dataP} = this.state;
-    this.setState({ dataP: {...dataP, reject} });
+    const {promiseData} = this.state;
+    this.setState({ promiseData: {
+      ...promiseData,
+      isPending:false,
+      reject
+    }});
   }
 
   render() {
-    const {dataP} = this.state;
+    const {promiseData} = this.state;
     const {children} = this.props;
 
-    return children(dataP);
+    return children(promiseData);
   }
 }
 PromiseLoader.propTypes = {
