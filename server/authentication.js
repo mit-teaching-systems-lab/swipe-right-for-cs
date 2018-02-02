@@ -28,14 +28,11 @@ function onlyAllowResearchers(pool, request, response, next) {
 
   checkToken(pool, email, token)
     .then(istokenAuthorized => {
+      // Don't leak whether this is a whitelisted email address in the response
       if (istokenAuthorized) {
         return next();
-      }
-      else if (istokenAuthorized===false){
+      } else {
         return response.status(405).end();
-      }
-      else {
-        return response.status(500).end();
       }
     })
     .catch(err => {
@@ -70,10 +67,13 @@ function checkToken(pool, email, token) {
 function loginEndpoint(pool, mailgunEnv, request, response){
   const {email} = request.body;
 
+  
   isOnWhitelist(pool, email)
     .then(isNotAuthorized => {
       if (isNotAuthorized) {
-        return response.status(405).end();
+        // Don't leak whether this is a whitelisted email address in the response
+        console.log('Unauthorized access attempted by email: ', email);
+        return response.status(200).end();
       } else {
         const domain = getDomain(request);
         return createLinkAndEmail(pool, mailgunEnv, email, domain)
@@ -87,7 +87,7 @@ function loginEndpoint(pool, mailgunEnv, request, response){
 }
 
 function isOnWhitelist(pool, email){
-  const whitelistSQL = 'SELECT * FROM whitelist WHERE email=$1 ORDER BY id ASC LIMIT 1';
+  const whitelistSQL = 'SELECT email FROM whitelist WHERE email=$1 ORDER BY id ASC LIMIT 1';
   const whitelistValues = [email];
   
   return pool.query(whitelistSQL, whitelistValues)
@@ -101,7 +101,6 @@ function createLinkAndEmail(pool, mailgunEnv, email, domain) {
 
 function insertLink(pool, email, domain) {
   const linkToken = uuid.v4();
-  //TODO: what should link look like???
   const link = `${domain}/login_from_email?${qs.stringify({linkToken})}`;
 
   // Insert link into database
@@ -115,10 +114,9 @@ function insertLink(pool, email, domain) {
     });
 }
 
-function emailLink(mailgunEnv, email, link) {
-  const linkText = link;
+function emailLink(mailgunEnv, email, linkHref) {
   const loginlinkFilename = path.join(__dirname,'game/emails/loginlink.html.mustache');
-  const html = renderEmail(loginlinkFilename,{linkText});
+  const html = renderEmail(loginlinkFilename,{linkHref});
 
   const info = {
     toEmail: email,
@@ -129,7 +127,7 @@ function emailLink(mailgunEnv, email, link) {
   if (process.env.NODE_ENV !== 'production') {
     if (process.env.NODE_ENV === 'development') {
       console.log('No emailing except for in production mode. Go to the following link to move forward.');
-      console.log(link);
+      console.log(linkHref);
     }
     return Promise.resolve();
   }
@@ -156,7 +154,7 @@ function emailLinkEndpoint(pool, request, response){
   checkLink(pool, email, linkToken)
     .then(isLinkTokenAuthorized => {
       if (isLinkTokenAuthorized) {
-        console.log('LinkToken Authorized');
+        console.log('Accessed with linkToken: ', linkToken);
         generateToken(pool, email)
           .then(results => {
             const token = results;
@@ -164,11 +162,12 @@ function emailLinkEndpoint(pool, request, response){
             response.json({ 
               token: token
             });
+            console.log('Granted access token...');
             return response.status(200).end();
           });
       }
       else {
-        console.log('Unauthorized linkToken:', linkToken);
+        console.log(`Unauthorized access attempt, email: ${email}, linkToken: ${linkToken}`);
         return response.status(405).end();
       }
     })
@@ -187,7 +186,7 @@ function checkLink(pool, email, link) {
     WHERE link=$1 
       AND email=$2
       AND $3 > timestampz
-      And $3 < (timestampz + INTERVAL '24 hours')
+      And $3 < (timestampz + INTERVAL '5 minutes')
     ORDER BY id ASC LIMIT 1`;
   const linkValues = [link, email, now];
   return pool.query(linkSQL, linkValues)
