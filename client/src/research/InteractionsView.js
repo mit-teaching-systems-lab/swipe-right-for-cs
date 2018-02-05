@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import DownloadCsvLinks from '../components/DownloadCsvLinks';
 import WorkshopsAnalysis from './WorkshopsAnalysis';
 import BiasAnalysis from './BiasAnalysis';
 import RawInteractionsTable from './RawInteractionsTable';
@@ -35,8 +36,24 @@ class InteractionsView extends Component {
         <div className="InteractionView-analysis">
           <div style={{marginBottom: 20, color: 'red'}}>Warning: this includes unconsented data as well.</div>
           <RawInteractionsTable interactions={rawInteractions} />
+          {this.renderDownloadCsvButton(rawInteractions)}
         </div>
       </div>
+    );
+  }
+
+  renderDownloadCsvButton(rawInteractions) {
+    const dateText = 'foo';
+    const filename = `swipe-right-${dateText}.tsv`;
+    const headers = ['ID', 'SESSION', 'INTERACTION', 'TIMESTAMPZ'];
+    return (
+      <DownloadCsvLinks
+        filename={filename}
+        headers={headers}
+        rows={rawInteractions}
+        toLine={row => {
+          return [row.id, JSON.stringify(row.session), JSON.stringify(row.interaction), row.timestampz];
+        }} />
     );
   }
 }
