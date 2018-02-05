@@ -16,7 +16,7 @@ class EmailLinkLoginPage extends Component {
       linkToken: this.readLinkToken(),
       token: "default",
       status: "default",
-      message: "Welcome back to Swipe Right!"
+      message: ""
     };
 
     this.onUpdateEmail = this.onUpdateEmail.bind(this);
