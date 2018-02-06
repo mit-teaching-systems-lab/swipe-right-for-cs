@@ -59,7 +59,7 @@ if (process.env.ENABLE_RESEARCHER_ACCESS && process.env.ENABLE_RESEARCHER_ACCESS
   app.post('/api/research/email', limiter, emailLinkEndpoint.bind(null, pool));
 
   // Endpoints for authenticated researchers to access data
-  app.get('/api/research/interactions', [limiter, onlyAllowResearchers.bind(null, pool)], interactionsEndpoint.bind(null, pool));
+  app.get('/api/research/interactions', [limiter, onlyAllowResearchers.bind(null, pool, config.mailgunEnv)], interactionsEndpoint.bind(null, pool));
 }
 
 // Serve any static files.

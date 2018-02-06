@@ -19,10 +19,35 @@ function getDomain(request) {
     : `https://${request.headers.host}`;
 }
 
+function notifyResearcherAccessGranted(mailgunEnv, email) {
+  notify(mailgunEnv, 'Researcher access granted', `Researcher access granted for: ${email}`);
+}
+function notifyResearcherAccessDenied(mailgunEnv, email) {
+  notify(mailgunEnv, 'Researcher access denied', `Researcher access denied for: ${email}`);
+}
+function notifyLoginAttempt(mailgunEnv, email) {
+  notify(mailgunEnv, 'Researcher login attempt', `Researcher login attempt by: ${email}`);
+}
+
+// Fire and forget sending the email
+function notify(mailgunEnv, title, notificationText) {
+  const toEmail = process.env.NOTIFY_EMAIL;
+  if (!toEmail || !toEmail.length || toEmail.length === 0) return;
+
+  const filename = path.join(__dirname, 'research/notification.html.mustache');
+  const html = renderEmail(filename, {notificationText});
+  const info = {
+    toEmail,
+    fromEmail: 'swipe-right-bot@tsl.mit.edu',
+    subject: `Swipe Right Notification: ${title}`
+  };
+  sendEmail(mailgunEnv, info, html, function() {});
+}
+
 // Middleman function to confirm authorization token is valid
 // Reads token from request header and checks against tokens in db.
 // Runs in both development and production
-function onlyAllowResearchers(pool, request, response, next) {
+function onlyAllowResearchers(pool, mailgunEnv, request, response, next) {
   const token = request.headers['x-swiperight-token'];
   const email = request.headers['x-swiperight-email'];
 
@@ -30,8 +55,10 @@ function onlyAllowResearchers(pool, request, response, next) {
     .then(istokenAuthorized => {
       // Don't leak whether this is a whitelisted email address in the response
       if (istokenAuthorized) {
+        notifyResearcherAccessGranted(mailgunEnv, email);
         return next();
       } else {
+        notifyResearcherAccessDenied(mailgunEnv, email);
         return response.status(405).end();
       }
     })
@@ -67,7 +94,7 @@ function checkToken(pool, email, token) {
 function loginEndpoint(pool, mailgunEnv, request, response){
   const {email} = request.body;
 
-  
+  notifyLoginAttempt(mailgunEnv, email);
   isOnWhitelist(pool, email)
     .then(isNotAuthorized => {
       if (isNotAuthorized) {
@@ -115,8 +142,8 @@ function insertLink(pool, email, domain) {
 }
 
 function emailLink(mailgunEnv, email, linkHref) {
-  const loginlinkFilename = path.join(__dirname,'game/emails/loginlink.html.mustache');
-  const html = renderEmail(loginlinkFilename,{linkHref});
+  const filename = path.join(__dirname, 'research/loginlink.html.mustache');
+  const html = renderEmail(filename, {linkHref});
 
   const info = {
     toEmail: email,
@@ -126,7 +153,7 @@ function emailLink(mailgunEnv, email, linkHref) {
 
   if (process.env.NODE_ENV !== 'production') {
     if (process.env.NODE_ENV === 'development') {
-      console.log('No emailing except for in production mode. Go to the following link to move forward.');
+      console.log('No email login except for in production mode. Go to the following link to move forward.');
       console.log(linkHref);
     }
     return Promise.resolve();
