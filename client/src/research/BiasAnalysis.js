@@ -201,11 +201,19 @@ class BiasAnalysis extends React.Component {
   }
 
   renderSimulationPanel() {
+    const {simulateSeed} = this.state;
+    const realStyle = (simulateSeed === null)
+      ? { background: 'orange', border: '2px solid red' }
+      : { background: 'none' };
+    const randomStyle = (simulateSeed !== null)
+      ? { background: 'orange', border: '2px solid red' }
+      : { background: 'none' };
+
     return (
       <div>
-        <div className="BiasAnalysis-data-sources">Data</div>
-        <div className="BiasAnalysis-button" onClick={this.onSimulateClicked}>simulate!</div>
-        <div className="BiasAnalysis-button" onClick={this.onRealDataClicked}>real data please!</div>
+        <div className="BiasAnalysis-data-sources">Data source:</div>
+        <div className="BiasAnalysis-button" style={randomStyle} onClick={this.onSimulateClicked}>simulated data!</div>
+        <div className="BiasAnalysis-button" style={realStyle} onClick={this.onRealDataClicked}>real data please!</div>
       </div>
     );
   }
