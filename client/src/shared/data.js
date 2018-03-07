@@ -22,7 +22,8 @@ const InteractionTypes = [
   'DONE_REVIEW_PHASE',
   'STUDENT_RATING',
   'SHARE',
-  'FORUMS'
+  'FORUMS',
+  'OPEN_RESPONSE'
 ].reduce((map, value) => {
   map[value] = [value, sha(value)].join(':');
   return map;
@@ -77,6 +78,15 @@ const Interactions = {
       choiceText,
       student,
       type: InteractionTypes.STUDENT_RATING
+    };
+  },
+  openResponse(params) {
+    const {prompt, student, openResponseText} = params;
+    return {
+      prompt,
+      openResponseText,
+      student,
+      type: InteractionTypes.OPEN_RESPONSE
     };
   },
   share(params) {

@@ -35,7 +35,7 @@ class StudentsPhase extends Component {
   }
 
   render() {
-    const {onInteraction} = this.props;
+    const {onInteraction, shouldAskOpenResponse} = this.props;
     const student = this.currentStudent();
     return (
       <div className="StudentsPhase">
@@ -45,6 +45,7 @@ class StudentsPhase extends Component {
           {...student}
           onInteraction={onInteraction}
           onDone={this.onDoneStudent}
+          shouldAskOpenResponse={shouldAskOpenResponse}
         />
       </div>
     );
@@ -74,7 +75,8 @@ StudentsPhase.propTypes = {
   students: PropTypes.arrayOf(PropTypes.object).isRequired,
   allowSkipAfter: PropTypes.number.isRequired,
   onInteraction: PropTypes.func.isRequired,
-  onDone: PropTypes.func.isRequired
+  onDone: PropTypes.func.isRequired,
+  shouldAskOpenResponse: PropTypes.bool
 };
 
 export default StudentsPhase;

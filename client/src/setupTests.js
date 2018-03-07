@@ -2,6 +2,7 @@
 // See https://github.com/facebookincubator/create-react-app/pull/548
 import raf from 'raf';
 global.requestAnimationFrame = raf; // eslint-disable-line no-undef
+global.cancelAnimationFrame = raf; // eslint-disable-line no-undef
 
 
 // https://github.com/jefflau/jest-fetch-mock
