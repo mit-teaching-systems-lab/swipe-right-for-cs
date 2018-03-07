@@ -30,10 +30,16 @@ class App extends Component {
   }
 
   // For stable workshop codes and consistent student profiles
-  // for a cohort.
+  // for a cohort.  Optionally asks open-response questions for each
+  // student.
   renderDemoForGroup(props) {
     const {code} = props.match.params;
-    return <GamePage {...props} isCodeOrg={false} defaultWorkshopCode={code} />;
+    const {open} = props.match.params;
+    return <GamePage
+      {...props}
+      isCodeOrg={false}
+      shouldAskOpenResponse={open !== undefined}
+      defaultWorkshopCode={code} />;
   }
 
   renderCodeOrg(props) {

@@ -216,12 +216,14 @@ class GamePage extends Component {
   }
 
   renderStudents(phase) {
+    const {shouldAskOpenResponse} = this.props;
     const {students, config} = this.state;
     const {forcedProfileCount} = config;
     return (
       <StudentsPhase
         students={students}
         allowSkipAfter={forcedProfileCount}
+        shouldAskOpenResponse={shouldAskOpenResponse}
         onInteraction={this.onInteraction}
         onDone={() => this.setState({phase})} />
     );
@@ -253,6 +255,7 @@ class GamePage extends Component {
 }
 GamePage.propTypes = {
   isCodeOrg: PropTypes.bool.isRequired,
+  shouldAskOpenResponse: PropTypes.bool,
   defaultWorkshopCode: PropTypes.string
 };
 GamePage.defaultProps = {

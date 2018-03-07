@@ -23,4 +23,14 @@ storiesOf('StudentsPhase', module) //eslint-disable-line no-undef
         onInteraction={(action('onInteraction'))}
         onDone={action('onDone')} />
     );
+  })
+  .add('shouldAskOpenResponse', () => {
+    return withFrameSwitcher(
+      <StudentsPhase
+        students={storybookStudents}
+        allowSkipAfter={5}
+        shouldAskOpenResponse={true}
+        onInteraction={(action('onInteraction'))}
+        onDone={action('onDone')} />
+    );
   });

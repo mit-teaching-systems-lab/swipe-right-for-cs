@@ -16,12 +16,19 @@ class Student extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      swipesMade: 0
+      swipesMade: 0,
+      hasMadeRating: false,
+      openResponseText: ''
     };
     this.onSwipeLeft = this.onSwipeLeft.bind(this);
     this.onSwipeRight = this.onSwipeRight.bind(this);
     this.onSwipe = this.onSwipe.bind(this);
     this.onChoiceTapped = this.onChoiceTapped.bind(this);
+    this.onOpenResponseChanged = this.onOpenResponseChanged.bind(this);
+  }
+
+  componentDidUpdate() {
+    if (this.openResponseEl) this.openResponseEl.focus();
   }
 
   currentSwipeTurn() {
@@ -34,6 +41,23 @@ class Student extends Component {
       profileText,
       profileImageSrc
     }; 
+  }
+
+  // Return the same shape for logging
+  student() {
+    const {
+      profileName,
+      profileKey,
+      profileText,
+      profileImageSrc
+    } = this.props;
+
+    return {
+      profileName,
+      profileKey,
+      profileText,
+      profileImageSrc
+    };
   }
 
   currentArgumentText() {
@@ -58,31 +82,52 @@ class Student extends Component {
   }
 
   onChoiceTapped(choices, choiceText, choiceIndex) {
-    const {onDone, onInteraction} = this.props;
-    const {
-      profileName,
-      profileKey,
-      profileText,
-      profileImageSrc
-    } = this.props;
+    const {onDone, onInteraction, shouldAskOpenResponse} = this.props;
+    const student = this.student();
     const interaction = Interactions.studentRating({
       choices,
       choiceIndex,
       choiceText,
-      student: {
-        profileName,
-        profileKey,
-        profileText,
-        profileImageSrc
-      }
+      student
+    });
+    onInteraction(interaction);
+
+    // Depending on the props passed, this may end the round
+    // for the student, or move on to asking an open-response question.
+    if (shouldAskOpenResponse) {
+      this.setState({hasMadeRating: true});
+    } else {
+      onDone();
+    }
+  }
+
+  onOpenResponseChanged(event) {
+    const openResponseText = event.target.value;
+    this.setState({openResponseText});
+  }
+
+  // For the enter keypress
+  onOpenResponseKeypress(prompt, event) {
+    if (event.which === 13) {
+      event.preventDefault();
+      this.onOpenResponseDone(prompt);
+    }
+  }
+
+  onOpenResponseDone(prompt) {
+    const {onDone, onInteraction} = this.props;
+    const {openResponseText} = this.state;
+    const student = this.student();
+    const interaction = Interactions.openResponse({
+      prompt,
+      openResponseText,
+      student
     });
     onInteraction(interaction);
     onDone();
   }
 
   render() {
-    const {argumentTexts} = this.props;
-    const {swipesMade} = this.state;
     const {profileImageSrc, profileName, profileText} = this.props;
     
     return (
@@ -93,12 +138,19 @@ class Student extends Component {
             profileImageSrc={profileImageSrc}
             profileName={profileName}
             profileText={profileText} />
-          {(swipesMade < argumentTexts.length)
-            ? this.renderSwipeTurn()
-            : this.renderHowLikely()}
+          {this.renderAction()}
         </div>
       </div>
     );
+  }
+
+  // Three phases: swiping, rating, open response, with last phase optional.
+  renderAction() {
+    const {argumentTexts} = this.props;
+    const {swipesMade, hasMadeRating} = this.state;
+    if (swipesMade < argumentTexts.length) return this.renderSwipeTurn();
+    if (!hasMadeRating) return this.renderHowLikely();
+    return this.renderOpenResponse();
   }
 
   renderSwipeTurn() {
@@ -131,7 +183,7 @@ class Student extends Component {
     ];
 
     return (
-      <Bounceable height={swipeHeight}>
+      <Bounceable key="how-likely" height={swipeHeight}>
         <div className="Student-choices-container" style={{height: swipeHeight}}>
           <div>How likely are they to take CS?</div>
           <div className="Student-choices">
@@ -139,7 +191,7 @@ class Student extends Component {
               return (
                 <TappableButton
                   key={choice}
-                  style={styles.button}
+                  style={styles.howLikelyButton}
                   outerStyle={styles.buttonOuter}
                   onClick={this.onChoiceTapped.bind(this, choices, choice, choiceIndex)}>
                   {choice}
@@ -147,6 +199,36 @@ class Student extends Component {
               );
             })}
           </div>
+        </div>
+      </Bounceable>
+    );
+  }
+
+  renderOpenResponse() {
+    const {swipeHeight} = this.props;
+    const {openResponseText} = this.state;
+    const prompt = `What else do you want to know?`;
+
+    return (
+      <Bounceable key="open-response" height={swipeHeight}>
+        <div
+          className="Student-open-response-container"
+          style={{height: swipeHeight}}>
+          <button type="submit" style={{display: 'none'}} />
+          <div className="Student-open-response-prompt">{prompt}</div>
+          <textarea
+            className="Student-open-response-textarea"
+            rows={2}
+            ref={el => this.openResponseEl = el}
+            value={openResponseText}
+            onKeyPress={this.onOpenResponseKeypress.bind(this, prompt)}
+            onChange={this.onOpenResponseChanged} />
+          <TappableButton
+            style={styles.openResponseButton}
+            outerStyle={styles.openResponseButtonOuter}
+            onClick={this.onOpenResponseDone.bind(this, prompt)}>
+            OK
+          </TappableButton>
         </div>
       </Bounceable>
     );
@@ -161,21 +243,30 @@ Student.propTypes = {
   argumentTexts: PropTypes.arrayOf(PropTypes.string).isRequired,
   onInteraction: PropTypes.func.isRequired,
   onDone: PropTypes.func.isRequired,
-  swipeHeight: PropTypes.number
+  swipeHeight: PropTypes.number,
+  shouldAskOpenResponse: PropTypes.bool
 };
 Student.defaultProps = {
-  swipeHeight: 140
+  swipeHeight: 140,
+  shouldAskOpenResponse: false
 };
 
 const styles = {
   buttonOuter: {
     flex: 1
   },
-  button: {
+  howLikelyButton: {
     height: '3.8em',
     padding: 3,
     fontSize: 13,
     margin: 10,
+  },
+  openResponseButton: {
+    height: '0.75em',
+    fontSize: 13
+  },
+  openResponseButtonOuter: {
+    width: '30%'
   }
 };
 
