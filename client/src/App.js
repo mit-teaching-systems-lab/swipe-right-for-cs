@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {BrowserRouter, Route} from 'react-router-dom';
+import qs from 'query-string';
 import GamePage from './GamePage';
 import LoginPage from './research/LoginPage';
 import EmailLinkLoginPage from './research/EmailLinkLoginPage';
@@ -34,11 +35,11 @@ class App extends Component {
   // student.
   renderDemoForGroup(props) {
     const {code} = props.match.params;
-    const {open} = props.match.params;
+    const query = qs.parse(props.location.search);
     return <GamePage
       {...props}
       isCodeOrg={false}
-      shouldAskOpenResponse={open !== undefined}
+      shouldAskOpenResponse={'open' in query}
       defaultWorkshopCode={code} />;
   }
 

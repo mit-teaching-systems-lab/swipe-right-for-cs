@@ -266,7 +266,7 @@ const styles = {
     fontSize: 13
   },
   openResponseButtonOuter: {
-    width: '30%'
+    width: '93%'
   }
 };
 
