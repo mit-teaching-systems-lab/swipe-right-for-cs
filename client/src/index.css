@@ -14,9 +14,12 @@ body {
 }
 
 html, body, #root, .Global-root-for-testing {
-  color: #383838;
   display: flex;
   flex: 1;
+}
+
+html, body, textarea, input, #root, .Global-root-for-testing {
+  color: #383838;
 }
 
 .Global-background-color {

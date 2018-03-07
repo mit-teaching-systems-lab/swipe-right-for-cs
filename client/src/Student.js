@@ -7,6 +7,7 @@ import Swipeable from './components/Swipeable.js';
 import TappableButton from './components/TappableButton.js';
 import StudentProfile from './StudentProfile.js';
 import {Interactions} from './shared/data.js';
+import isIosSafari from './util/isIosSafari.js';
 import './Student.css';
 
 
@@ -106,7 +107,9 @@ class Student extends Component {
     this.setState({openResponseText});
   }
 
-  // For the enter keypress
+  // For the enter keypress on Desktop.
+  // This doesn't work on iOS Safari; it seems you can't get both "enter to submit" and
+  // "multiline text" so here we went with multiline.
   onOpenResponseKeypress(prompt, event) {
     if (event.which === 13) {
       event.preventDefault();
@@ -208,7 +211,7 @@ class Student extends Component {
     const {swipeHeight} = this.props;
     const {openResponseText} = this.state;
     const prompt = `What else do you want to know?`;
-
+    const fontSize = isIosSafari() ? 16 : 14; // see https://stackoverflow.com/a/16255670
     return (
       <Bounceable key="open-response" height={swipeHeight}>
         <div
@@ -219,6 +222,7 @@ class Student extends Component {
           <textarea
             className="Student-open-response-textarea"
             rows={2}
+            style={{fontSize}}
             ref={el => this.openResponseEl = el}
             value={openResponseText}
             onKeyPress={this.onOpenResponseKeypress.bind(this, prompt)}
