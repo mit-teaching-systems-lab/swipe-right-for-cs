@@ -17,7 +17,11 @@ function testProps() {
     workshopCode: "foo",
     students: storybookStudents,
     onDone: jest.fn(),
-    onInteraction: jest.fn()
+    onInteraction: jest.fn(),
+    reviewPhaseOptions: {
+      showPercents: true,
+      copyVersion: 'unknown'
+    }
   };
 }
 
