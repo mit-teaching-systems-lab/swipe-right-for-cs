@@ -8,6 +8,27 @@ import Swipeable from './components/Swipeable.js';
 import {Interactions} from './shared/data.js';
 import './ReviewPhaseView.css';
 
+
+function copyFor(copyVersion) {
+  // for JLT playest iteration on 3/22
+  if (copyVersion === 'jlt1') {
+    return (
+      <div>
+        <p>{"Here are the top three arguments for each student, based on how other folks in the workshop responded."}</p>
+        <p>{"Why do you think folks chose different arguments for different students?"}</p>
+      </div>
+    );
+  }
+
+  // Default copy
+  return (
+    <div>
+      <p>{"Here are the top three arguments for each student, based on how other folks in the workshop responded."}</p>
+      <p>{"How would you approach recruiting conversations differently with different students?"}</p>
+    </div>
+  );
+}
+
 // Review peer responses within the workshop.
 class ReviewPhaseView extends Component {
   constructor(props) {
@@ -22,13 +43,14 @@ class ReviewPhaseView extends Component {
   }
 
   render() {
-    const {students} = this.props;
+    const {students, reviewPhaseOptions} = this.props;
+    const {copyVersion} = reviewPhaseOptions;
+    const copyEl = copyFor(copyVersion);
     return (
       <div className="ReviewPhaseView">
         <div className="ReviewPhaseView-content">
           <p className="Global-header-font">Round 3: Review</p>
-          <p>{"Here are the top three arguments for each student, based on how other folks in the workshop responded."}</p>
-          <p>{"How would you approach recruiting conversations differently with different students?"}</p>
+          {copyEl}
         </div>
         <div className="ReviewPhaseView-students">
           {students.map((student) => {
@@ -61,7 +83,8 @@ class ReviewPhaseView extends Component {
   }
 
   renderPeerResponses(student) {
-    const {peerResponses} = this.props;
+    const {peerResponses, reviewPhaseOptions} = this.props;
+    const {showPercents} = reviewPhaseOptions; // added for disabling on JLT playest iteration on 3/22
     const topN = 3;
     const rows = __groupBy(peerResponses, 'profileName')[student.profileName] || [];
     const sortedRows = __orderBy(rows, ['percentageRight'], ['desc']);
@@ -70,9 +93,11 @@ class ReviewPhaseView extends Component {
         {sortedRows.slice(0, topN).map(row =>
           <div key={row.argumentText} className="ReviewPhaseView-argument-container">
             <Bubble>{row.argumentText}</Bubble>
-            <div className="ReviewPhaseView-percentage" style={{width: `${row.percentageRight}%`}}>
-              <div className="ReviewPhaseView-percentage-text">{row.percentageRight}%</div>
-            </div>
+            {showPercents && (
+              <div className="ReviewPhaseView-percentage" style={{width: `${row.percentageRight}%`}}>
+                <div className="ReviewPhaseView-percentage-text">{row.percentageRight}%</div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -85,7 +110,11 @@ ReviewPhaseView.propTypes = {
   students: PropTypes.arrayOf(PropTypes.object).isRequired,
   peerResponses: PropTypes.arrayOf(PropTypes.object).isRequired,
   onInteraction: PropTypes.func.isRequired,
-  onDone: PropTypes.func.isRequired
+  onDone: PropTypes.func.isRequired,
+  reviewPhaseOptions: PropTypes.shape({
+    showPercents: PropTypes.bool.isRequired,
+    copyVersion: PropTypes.string.isRequired
+  })
 };
 
 export default ReviewPhaseView;

@@ -31,12 +31,16 @@ const Phases = {
   THANKS: 'THANKS'
 };
 
+// See https://github.com/sindresorhus/query-string/issues/50
+function queryHasKey(query, key) {
+  return Object.prototype.hasOwnProperty.call(query, key);
+}
 
 class GamePage extends Component {
   constructor(props) {
     super(props);
     const {isCodeOrg, defaultWorkshopCode} = props;
-    const query = queryString.parse(window.location.search);
+    const query = queryString.parse(window.location.search) || {};
 
     // 12/8 This is a patch to rebalance cells for remaining trials, oversampling from
     // those that have been undersampled to this point due to randomness.  Going forward
@@ -53,8 +57,12 @@ class GamePage extends Component {
         forceCodeOrgBuckets
       },
       sessionId: uuid.v4(),
+      reviewPhaseOptions: {
+        showPercents: !queryHasKey(query, 'reviewnopercents'),
+        copyVersion: query['reviewcopyversion'] || '0'
+      },
       identifier: (isCodeOrg)
-        ? query.cuid || Session.unknownIdentifier()
+        ? query['cuid'] || Session.unknownIdentifier()
         : Session.unknownIdentifier(),
       workshopCode: (defaultWorkshopCode !== undefined)
         ? defaultWorkshopCode
@@ -238,11 +246,12 @@ class GamePage extends Component {
   }
 
   renderReview(phase) {
-    const {students, workshopCode} = this.state;
+    const {students, workshopCode, reviewPhaseOptions} = this.state;
     return <ReviewPhase
       workshopCode={workshopCode}
       students={students}
       onInteraction={this.onInteraction}
+      reviewPhaseOptions={reviewPhaseOptions}
       onDone={() => this.setState({phase})} />;
   }
 
