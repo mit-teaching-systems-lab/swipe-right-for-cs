@@ -13,11 +13,13 @@ class WorkshopCode extends Component {
     super(props);
     this.state = {
       workshopCode: '',
+      tableNumber: '',
       isWarningDismissed: false
     };
     this.onDelayDone = this.onDelayDone.bind(this);
     this.onDelaySettled = this.onDelaySettled.bind(this);
     this.onChangeWorkshopCode = this.onChangeWorkshopCode.bind(this);
+    this.onChangeTableNumber = this.onChangeTableNumber.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onStart = this.onStart.bind(this);
     this.onDismissWarningClicked = this.onDismissWarningClicked.bind(this);
@@ -25,8 +27,8 @@ class WorkshopCode extends Component {
   }
 
   isReadyToSubmit() {
-    const {workshopCode} = this.state;
-    return (workshopCode !== "");
+    const {workshopCode, tableNumber} = this.state;
+    return (workshopCode !== '') && (tableNumber !== '');
   }
   
   onDelayDone() {
@@ -47,10 +49,14 @@ class WorkshopCode extends Component {
     this.setState({ isWarningDismissed: true });
   }
 
-
   onChangeWorkshopCode(event) {
     const workshopCode = event.target.value.toUpperCase(); // case matters
     this.setState({workshopCode});
+  }
+
+  onChangeTableNumber(event) {
+    const tableNumber = event.target.value;
+    this.setState({tableNumber});
   }
 
   // For the enter keypress
@@ -63,8 +69,16 @@ class WorkshopCode extends Component {
 
   onStart() {
     const {onDone} = this.props;
-    const {workshopCode} = this.state;
-    onDone(workshopCode);
+    const {workshopCode, tableNumber} = this.state;
+
+    // Here, we translate the actual text they entered into
+    // a string key that will represent what logical "group"
+    // they are in.  In this case, we use both bits and pass
+    // them back as "workshopCode".  The intention here is that
+    // each (workshop, table) is consistently hashed into the same
+    // cohort.
+    const perTableWorkshopCode = `v3:${workshopCode}/${tableNumber}`;
+    onDone(perTableWorkshopCode);
   }
 
   render() {
@@ -82,15 +96,15 @@ class WorkshopCode extends Component {
   }
 
   renderForm() {
-    const {workshopCode} = this.state;
-    const height = 200;
+    const {workshopCode, tableNumber} = this.state;
+    const height = 300;
 
     return (
       <Delay key="form" wait={250} onDone={this.onDelayDone}>
         <Bounceable height={height}>
           <form className="WorkshopCode-form" onSubmit={this.onSubmit}>
             <button type="submit" style={{display: 'none'}} />
-            <div className="WorkshopCode-instructions">Please enter the code you used when taking attendance at the start of the workshop.</div>
+            <div className="WorkshopCode-instructions-code">Please enter the workshop code you used when taking attendance.</div>
             <input
               ref={(input) => { this.workshopInputEl = input; }} 
               className="WorkshopCode-input WorkshopCode-workshop"
@@ -98,6 +112,13 @@ class WorkshopCode extends Component {
               placeholder="WXYZ"
               value={workshopCode}
               onChange={this.onChangeWorkshopCode} />
+            <div className="WorkshopCode-instructions-table">And your table number.</div>
+            <input
+              className="WorkshopCode-input WorkshopCode-workshop"
+              type="text"
+              placeholder=""
+              value={tableNumber}
+              onChange={this.onChangeTableNumber} />
             <TappableButton
               disabled={!this.isReadyToSubmit()}
               onClick={this.onStart}
