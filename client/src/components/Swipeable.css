@@ -27,11 +27,13 @@
 
 .Swipeable-arrow-for-swipe-left {
   position: absolute;
+  cursor: pointer;
   color: rgb(226, 170, 22);
-  left: 0;
+  left: 1px;
   top: 0;
   bottom: 0;
-  width: 20px;
+  font-size: 16px;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -39,11 +41,13 @@
 
 .Swipeable-arrow-for-swipe-right {
   position: absolute;
+  cursor: pointer;
   color: rgb(37, 214, 137);
-  right: 0;
+  right: 1px;
   top: 0;
   bottom: 0;
-  width: 20px;
+  font-size: 16px;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: flex-end;

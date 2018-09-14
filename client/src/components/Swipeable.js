@@ -52,10 +52,10 @@ class Swipeable extends Component {
   }
 
   render() {
-    const {height} = this.props;
+    const {height, style} = this.props;
 
     return (
-      <div className="Swipeable" style={{height: height}}>
+      <div className="Swipeable" style={{...style, height}}>
         <Bounceable height={height}>
           {this.renderSwipeable()}
         </Bounceable>
@@ -113,7 +113,8 @@ Swipeable.propTypes = {
   children: PropTypes.node.isRequired,
   height: PropTypes.number.isRequired,
   onSwipeRight: PropTypes.func.isRequired,
-  onSwipeLeft: PropTypes.func
+  onSwipeLeft: PropTypes.func,
+  style: PropTypes.object
 };
 
 export default Swipeable;
