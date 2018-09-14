@@ -42,13 +42,16 @@ class GamePage extends Component {
     const {isCodeOrg, defaultWorkshopCode} = props;
     const query = queryString.parse(window.location.search) || {};
 
-    // 12/8 This is a patch to rebalance cells for remaining trials, oversampling from
+    // 12/8/17 This is a patch to rebalance cells for remaining trials, oversampling from
     // those that have been undersampled to this point due to randomness.  Going forward
     // with other experiments, we should switch strategies so that we generate the
     // experimental cells and then pull from them for each new workshop identifier we see,
     // to force balance across experimental cells.  This is a workaround for the remaining
     // sessions of the study that's already underway.
-    const forceCodeOrgBuckets = (isCodeOrg) ? [2, 3, 3, 4, 6, 7] : false;
+    // const forceCodeOrgBuckets = (isCodeOrg) ? [2, 3, 3, 4, 6, 7] : false;
+
+    // 9/12/18 This patch was removed for the Q2 2018 run.
+    const forceCodeOrgBuckets = false;
     
     this.state = {
       isCodeOrg,

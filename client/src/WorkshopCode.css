@@ -10,7 +10,6 @@
   flex: 1;
   font-size: 48px;
   margin: 20px;
-  margin-top: 60px;
   display: flex;
   text-align: center;
   width: 100%;
@@ -22,13 +21,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  padding: 10px 40px;
+  padding: 10px 30px;
   background: white;
   z-index: 10;
 }
 
-.WorkshopCode-instructions {
-  margin-bottom: 10px;
+.WorkshopCode-instructions-code {
+  margin-bottom: 0px;
+}
+
+.WorkshopCode-instructions-table {
+  margin-top: 20px;
+  margin-bottom: 0px;
 }
 
 .WorkshopCode-input {
