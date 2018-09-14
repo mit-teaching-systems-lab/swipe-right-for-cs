@@ -34,6 +34,7 @@ class Title extends Component {
         </p>
         <Delay wait={250}>
           <Swipeable
+            style={{width: '100%'}}
             height={swipeHeight}
             onSwipeRight={this.onSwipeRight}>
             <div className="Title-swipe">
