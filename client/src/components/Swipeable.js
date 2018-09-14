@@ -77,7 +77,17 @@ class Swipeable extends Component {
     
     const elements = __compact([
       <div key="left" className="Swipeable-left">&nbsp;</div>,
-      <div key="children" className="Swipeable-children">{children}</div>,
+      <div key="children" className="Swipeable-children">
+        {onSwipeLeft && (
+          <div
+            className="Swipeable-arrow-for-swipe-left" 
+            onClick={() => this.onChangeIndex(2)}>◀</div>
+        )}
+        {children}
+        <div
+          className="Swipeable-arrow-for-swipe-right"
+          onClick={() => this.onChangeIndex(0)}>▶</div>
+      </div>,
       onSwipeLeft && <div key="right" className="Swipeable-right">&nbsp;</div>
     ]);
     return (

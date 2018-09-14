@@ -1,7 +1,6 @@
-.Swipeable {
+.Swipeable {  
   display: flex;
   align-items: center;
-  width: 100%;
   overflow-y: hidden;
 }
 
@@ -21,14 +20,41 @@
   background-color: rgb(37, 214, 137);
 }
 
+.Swipeable-right {
+  flex: 1;
+  background-color: rgb(226, 170, 22);
+}
+
+.Swipeable-arrow-for-swipe-left {
+  position: absolute;
+  color: rgb(226, 170, 22);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Swipeable-arrow-for-swipe-right {
+  position: absolute;
+  color: rgb(37, 214, 137);
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .Swipeable-children {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
 }
 
-.Swipeable-right {
-  flex: 1;
-  background-color: rgb(226, 170, 22);
-}
+
