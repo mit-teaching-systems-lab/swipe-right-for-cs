@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReviewPhaseView from './ReviewPhaseView.js';
 import {error} from './shared/log.js';
+import qs from 'query-string';
+
 
 // Review peer responses within the workshop.
 class ReviewPhase extends Component {
@@ -16,7 +18,7 @@ class ReviewPhase extends Component {
 
   componentDidMount() {
     const {workshopCode} = this.props;
-    fetch(`/api/peers/${workshopCode}`)
+    fetch(`/api/peers?${qs.stringify({workshopCode})}`)
       .then(r => r.json())
       .then(this.onDataLoaded)
       .catch(this.onDataError);

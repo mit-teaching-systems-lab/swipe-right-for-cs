@@ -31,7 +31,7 @@ function logEndpoint(pool, req, res) {
 function peerResponsesEndpoint(pool, req, res) {
   res.set('Content-Type', 'application/json');
   
-  const {workshopCode} = req.params;
+  const {workshopCode} = req.query;
   queryForGroupedResponses(pool, workshopCode)
     .catch(err => {
       console.log('query returned err: ', err);
