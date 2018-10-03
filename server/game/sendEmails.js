@@ -44,12 +44,12 @@ function sendConsentEmail(mailgunEnv, email) {
 }
 
 // Send email to self with responses
-function sendResponsesEmail(email, moves, mailgunEnv) {
+function sendResponsesEmail(email, moves, domain, mailgunEnv) {
   console.log('Sending responses email, email hash: ' + sha(email));
 
   const hereYouGoText = 'Here are your responses from the game.';
   const responsesFilename = path.join(__dirname, '/emails/responses.html.mustache');
-  const html = renderEmail(responsesFilename, {hereYouGoText, moves});
+  const html = renderEmail(responsesFilename, {hereYouGoText, moves, domain});
   const info = {
     toEmail: email,
     fromEmail: 'swipe-right-bot@tsl.mit.edu',

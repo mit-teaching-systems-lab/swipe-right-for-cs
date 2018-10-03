@@ -243,5 +243,6 @@ module.exports = {
   enforceHTTPS,
   onlyAllowResearchers,
   loginEndpoint,
-  emailLinkEndpoint
+  emailLinkEndpoint,
+  getDomain
 };
