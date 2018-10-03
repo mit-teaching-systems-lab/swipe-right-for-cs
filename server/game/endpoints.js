@@ -1,6 +1,6 @@
 const {queryForGroupedResponses} = require('./peerResponses.js');
 const {sendResponsesEmail} = require('./sendEmails.js');
-
+const {getDomain} = require('../authentication.js');
 
 // For receiving log data from the client
 function logEndpoint(pool, req, res) {
@@ -49,7 +49,8 @@ function emailMyResponsesEndpoint(mailgunEnv, req, res) {
   const {moves, email} = req.body;
 
   // Send email with responses
-  sendResponsesEmail(email, moves, mailgunEnv);
+  const domain = getDomain(req);
+  sendResponsesEmail(email, moves, domain, mailgunEnv);
 
   // Return success no matter what
   res.set('Content-Type', 'application/json');
