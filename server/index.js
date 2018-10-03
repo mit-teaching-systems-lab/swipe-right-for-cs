@@ -48,7 +48,7 @@ const limiter = new RateLimit({
 
 // Endpoints for the game
 app.post('/api/log', logEndpoint.bind(null, pool));
-app.get('/api/peers/:workshopCode', peerResponsesEndpoint.bind(null, pool));
+app.get('/api/peers', peerResponsesEndpoint.bind(null, pool));
 app.post('/api/share', limiter, emailMyResponsesEndpoint.bind(null, config.mailgunEnv));
 
 
