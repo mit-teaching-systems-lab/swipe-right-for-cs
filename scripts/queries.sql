@@ -9,9 +9,10 @@ SELECT
 FROM interactions
 WHERE 1=1
   AND session->>'workshopCode' NOT LIKE 'DEMO%'
+  AND session->>'workshopCode' NOT LIKE 'v3:DEMO%'
   AND session->>'workshopCode' NOT IN ('foo', 'demo', 'code.org')
   AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
-  -- AND timestampz > '2017-10-28 00:00:00.000+00'
+  AND timestampz > '2018-09-01 00:00:00.000+00'
 GROUP BY cohort_number
 ORDER BY cohort_number ASC, identifier_count DESC;
 
@@ -25,7 +26,9 @@ SELECT
   CONCAT(MIN(timestampz),' - ', MAX(timestampz)) as time_range
 FROM interactions
 WHERE 1=1
+  AND timestampz > '2018-09-01 00:00:00.000+00'
   AND session->>'workshopCode' NOT LIKE 'DEMO%'
+  AND session->>'workshopCode' NOT LIKE 'v3:DEMO%'
   AND session->>'workshopCode' NOT IN ('foo', 'demo', 'code.org')
   AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
 GROUP BY workshop_code
@@ -38,6 +41,7 @@ SELECT
   session->>'identifier' as identifier
 FROM interactions
 WHERE 1=1
+  AND timestampz > '2018-09-01 00:00:00.000+00'
   AND session->>'workshopCode' NOT IN ('foo', 'demo', 'code.org')
   AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
 GROUP BY identifier;
@@ -56,24 +60,30 @@ ORDER BY interaction_count DESC;
 
 
 --- show me an individual session (or identifier)
-SELECT * FROM interactions where session->>'sessionId' = 'xyz';
+SELECT * FROM interactions where
+where 1=1
+  AND timestampz > '2018-09-01 00:00:00.000+00'
+  AND session->>'sessionId' = 'xyz';
 
 
 --- how many code.org gave consent versus declined?
 SELECT count(*) as consented FROM interactions
 where 1=1
+  AND timestampz > '2018-09-01 00:00:00.000+00'
   AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
   AND interaction->>'type' = 'GAVE_CONSENT:nQddiko2aPPOfmKy8pC3r//eBr82OzD9smVMJPdUZRo=';
 
 SELECT count(*) as declined FROM interactions
 where 1=1
-  AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
-  AND interaction->>'type' LIKE '%CONSENT%';
-
-SELECT count(*) as declined FROM interactions
-where 1=1
+  AND timestampz > '2018-09-01 00:00:00.000+00'
   AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
   AND interaction->>'type' = 'DECLINED_CONSENT:96D+jgR6SglT5cPrdtiLk9oY2FScLr5eMFTwBpISylU=';
+
+SELECT count(*) as consent_opportunities FROM interactions
+where 1=1
+  AND timestampz > '2018-09-01 00:00:00.000+00'
+  AND session->>'identifier' NOT IN ('UNKNOWN_IDENTIFIER', '', 'kevin')
+  AND interaction->>'type' LIKE '%CONSENT%';
 
 
 --- consent overall?
