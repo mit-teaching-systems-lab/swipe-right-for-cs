@@ -31,8 +31,10 @@ class WorkshopCode extends Component {
     return (workshopCode !== '') && (tableNumber !== '');
   }
   
+  // disble dragscroll on these
   onDelayDone() {
-    this.workshopInputEl.setAttribute('nochilddrag', 'nochilddrag');
+    if (this.workshopInputEl) this.workshopInputEl.setAttribute('nochilddrag', 'nochilddrag');
+    if (this.tableNumberEl) this.tableNumberEl.setAttribute('nochilddrag', 'nochilddrag');
     window.setTimeout(this.onDelaySettled, 100);
   }
 
@@ -106,7 +108,7 @@ class WorkshopCode extends Component {
             <button type="submit" style={{display: 'none'}} />
             <div className="WorkshopCode-instructions-code">Please enter the workshop code you used when taking attendance.</div>
             <input
-              ref={(input) => { this.workshopInputEl = input; }} 
+              ref={input => this.workshopInputEl = input} 
               className="WorkshopCode-input WorkshopCode-workshop"
               type="text"
               placeholder="WXYZ"
@@ -114,6 +116,7 @@ class WorkshopCode extends Component {
               onChange={this.onChangeWorkshopCode} />
             <div className="WorkshopCode-instructions-table">And your table number.</div>
             <input
+              ref={input => this.tableNumberEl = input} 
               className="WorkshopCode-input WorkshopCode-workshop"
               type="text"
               placeholder=""
