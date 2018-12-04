@@ -12,6 +12,7 @@
   margin: 20px;
   display: flex;
   text-align: center;
+  justify-content: center;
   width: 100%;
 }
 
